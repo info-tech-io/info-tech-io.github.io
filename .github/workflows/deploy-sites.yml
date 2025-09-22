@@ -1,0 +1,316 @@
+name: Deploy InfoTech.io Sites
+
+on:
+  repository_dispatch:
+    types: [
+      corporate-site-updated,
+      quiz-docs-updated,
+      hugo-docs-updated,
+      web-terminal-docs-updated,
+      cli-docs-updated
+    ]
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Which site to rebuild (all, corporate, quiz, hugo, terminal, cli)'
+        required: false
+        default: 'all'
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  determine-scope:
+    runs-on: ubuntu-latest
+    outputs:
+      rebuild_corporate: ${{ steps.scope.outputs.rebuild_corporate }}
+      rebuild_quiz: ${{ steps.scope.outputs.rebuild_quiz }}
+      rebuild_hugo: ${{ steps.scope.outputs.rebuild_hugo }}
+      rebuild_terminal: ${{ steps.scope.outputs.rebuild_terminal }}
+      rebuild_cli: ${{ steps.scope.outputs.rebuild_cli }}
+    steps:
+      - name: Determine rebuild scope
+        id: scope
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Event type: ${{ github.event.action }}"
+
+          # Default to rebuild all
+          rebuild_corporate=true
+          rebuild_quiz=true
+          rebuild_hugo=true
+          rebuild_terminal=true
+          rebuild_cli=true
+
+          # Determine scope based on event
+          case "${{ github.event.action }}" in
+            corporate-site-updated)
+              rebuild_corporate=true
+              rebuild_quiz=false
+              rebuild_hugo=false
+              rebuild_terminal=false
+              rebuild_cli=false
+              ;;
+            quiz-docs-updated)
+              rebuild_corporate=false
+              rebuild_quiz=true
+              rebuild_hugo=false
+              rebuild_terminal=false
+              rebuild_cli=false
+              ;;
+            hugo-docs-updated)
+              rebuild_corporate=false
+              rebuild_quiz=false
+              rebuild_hugo=true
+              rebuild_terminal=false
+              rebuild_cli=false
+              ;;
+            web-terminal-docs-updated)
+              rebuild_corporate=false
+              rebuild_quiz=false
+              rebuild_hugo=false
+              rebuild_terminal=true
+              rebuild_cli=false
+              ;;
+            cli-docs-updated)
+              rebuild_corporate=false
+              rebuild_quiz=false
+              rebuild_hugo=false
+              rebuild_terminal=false
+              rebuild_cli=true
+              ;;
+          esac
+
+          # Override with manual input if provided
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            case "${{ github.event.inputs.site }}" in
+              corporate)
+                rebuild_corporate=true
+                rebuild_quiz=false
+                rebuild_hugo=false
+                rebuild_terminal=false
+                rebuild_cli=false
+                ;;
+              quiz)
+                rebuild_corporate=false
+                rebuild_quiz=true
+                rebuild_hugo=false
+                rebuild_terminal=false
+                rebuild_cli=false
+                ;;
+              hugo)
+                rebuild_corporate=false
+                rebuild_quiz=false
+                rebuild_hugo=true
+                rebuild_terminal=false
+                rebuild_cli=false
+                ;;
+              terminal)
+                rebuild_corporate=false
+                rebuild_quiz=false
+                rebuild_hugo=false
+                rebuild_terminal=true
+                rebuild_cli=false
+                ;;
+              cli)
+                rebuild_corporate=false
+                rebuild_quiz=false
+                rebuild_hugo=false
+                rebuild_terminal=false
+                rebuild_cli=true
+                ;;
+              all|*)
+                rebuild_corporate=true
+                rebuild_quiz=true
+                rebuild_hugo=true
+                rebuild_terminal=true
+                rebuild_cli=true
+                ;;
+            esac
+          fi
+
+          echo "rebuild_corporate=$rebuild_corporate" >> $GITHUB_OUTPUT
+          echo "rebuild_quiz=$rebuild_quiz" >> $GITHUB_OUTPUT
+          echo "rebuild_hugo=$rebuild_hugo" >> $GITHUB_OUTPUT
+          echo "rebuild_terminal=$rebuild_terminal" >> $GITHUB_OUTPUT
+          echo "rebuild_cli=$rebuild_cli" >> $GITHUB_OUTPUT
+
+          echo "🎯 Rebuild scope:"
+          echo "  Corporate: $rebuild_corporate"
+          echo "  Quiz: $rebuild_quiz"
+          echo "  Hugo: $rebuild_hugo"
+          echo "  Terminal: $rebuild_terminal"
+          echo "  CLI: $rebuild_cli"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: determine-scope
+    steps:
+      - name: Checkout hub repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.110.0'
+          extended: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Checkout hugo-templates
+        uses: actions/checkout@v4
+        with:
+          repository: info-tech-io/hugo-templates
+          token: ${{ secrets.PAT_TOKEN }}
+          path: hugo-templates
+
+      - name: Prepare build directory
+        run: |
+          mkdir -p build-output
+          cd hugo-templates
+          npm install
+
+      - name: Build Corporate Site
+        if: needs.determine-scope.outputs.rebuild_corporate == 'true'
+        run: |
+          echo "🏢 Building Corporate Site..."
+
+          # Checkout content
+          git clone https://github.com/info-tech-io/info-tech.git content-corporate
+
+          # Build site
+          cd hugo-templates
+          chmod +x scripts/build.sh
+          scripts/build.sh \
+            --template corporate \
+            --content ../content-corporate/docs/content \
+            --base-url "https://info-tech-io.github.io" \
+            --output ../build-output/corporate
+
+          # Move to root for GitHub Pages
+          cd ..
+          cp -r build-output/corporate/* build-output/
+
+      - name: Build Quiz Documentation
+        if: needs.determine-scope.outputs.rebuild_quiz == 'true'
+        run: |
+          echo "🧩 Building Quiz Documentation..."
+
+          # Checkout content
+          git clone https://github.com/info-tech-io/quiz.git content-quiz
+
+          # Build site
+          cd hugo-templates
+          scripts/build.sh \
+            --template documentation \
+            --content ../content-quiz/docs/content \
+            --base-url "https://info-tech-io.github.io/quiz" \
+            --output ../build-output/quiz
+
+      - name: Build Hugo Templates Documentation
+        if: needs.determine-scope.outputs.rebuild_hugo == 'true'
+        run: |
+          echo "🔧 Building Hugo Templates Documentation..."
+
+          # Checkout content
+          git clone https://github.com/info-tech-io/hugo-templates.git content-hugo-templates
+
+          # Build site
+          cd hugo-templates
+          scripts/build.sh \
+            --template documentation \
+            --content ../content-hugo-templates/docs/content \
+            --base-url "https://info-tech-io.github.io/hugo" \
+            --output ../build-output/hugo
+
+      - name: Build Web Terminal Documentation
+        if: needs.determine-scope.outputs.rebuild_terminal == 'true'
+        run: |
+          echo "💻 Building Web Terminal Documentation..."
+
+          # Checkout content
+          git clone https://github.com/info-tech-io/web-terminal.git content-web-terminal
+
+          # Build site
+          cd hugo-templates
+          scripts/build.sh \
+            --template documentation \
+            --content ../content-web-terminal/docs/content \
+            --base-url "https://info-tech-io.github.io/terminal" \
+            --output ../build-output/terminal
+
+      - name: Build CLI Documentation
+        if: needs.determine-scope.outputs.rebuild_cli == 'true'
+        run: |
+          echo "⚙️ Building CLI Documentation..."
+
+          # Checkout content
+          git clone https://github.com/info-tech-io/info-tech-cli.git content-cli
+
+          # Build site
+          cd hugo-templates
+          scripts/build.sh \
+            --template documentation \
+            --content ../content-cli/docs/content \
+            --base-url "https://info-tech-io.github.io/cli" \
+            --output ../build-output/cli
+
+      - name: Create site index
+        run: |
+          echo "📋 Creating site index..."
+
+          # Create index.html if corporate site wasn't built
+          if [[ ! -f "build-output/index.html" ]]; then
+            cat > build-output/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>InfoTech.io - Open Source Educational Technology</title>
+              <meta http-equiv="refresh" content="0; url=https://info-tech.io">
+              <link rel="canonical" href="https://info-tech.io">
+          </head>
+          <body>
+              <h1>InfoTech.io</h1>
+              <p>Redirecting to <a href="https://info-tech.io">info-tech.io</a>...</p>
+
+              <h2>Available Sites:</h2>
+              <ul>
+                  <li><a href="/quiz/">Quiz Engine Documentation</a></li>
+                  <li><a href="/hugo/">Hugo Templates Documentation</a></li>
+                  <li><a href="/terminal/">Web Terminal Documentation</a></li>
+                  <li><a href="/cli/">CLI Documentation</a></li>
+              </ul>
+          </body>
+          </html>
+          EOF
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build-output
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
