@@ -1,0 +1,91 @@
+name: Simple Test Deploy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Create simple test site
+        run: |
+          mkdir -p build-output
+          cat > build-output/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>InfoTech.io - Test Site</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  .container { max-width: 800px; margin: 0 auto; }
+                  .header { color: #333; }
+                  .status { color: #28a745; }
+                  .links { margin-top: 30px; }
+                  .links a { display: block; margin: 10px 0; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1 class="header">InfoTech.io</h1>
+                  <p class="status">✅ GitHub Pages Hub is working!</p>
+
+                  <h2>Organization</h2>
+                  <p>Open Source Educational Technology Organization</p>
+
+                  <h2>Our Products</h2>
+                  <div class="links">
+                      <a href="https://infotecha.ru">🎓 ИНФОТЕКА - Educational Platform</a>
+                      <a href="/quiz/">📝 Quiz Engine Documentation</a>
+                      <a href="/hugo/">🏗️ Hugo Templates Documentation</a>
+                      <a href="/terminal/">💻 Web Terminal Documentation</a>
+                      <a href="/cli/">⚙️ CLI Tools Documentation</a>
+                  </div>
+
+                  <h2>For Developers</h2>
+                  <div class="links">
+                      <a href="https://github.com/info-tech-io">🐙 GitHub Organization</a>
+                      <a href="/contributing/">🤝 Contributing Guide</a>
+                      <a href="/architecture/">🏛️ Architecture Overview</a>
+                  </div>
+
+                  <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+                      <p>Generated: $(date)</p>
+                      <p>🤖 Built with <a href="https://claude.ai/code">Claude Code</a></p>
+                  </footer>
+              </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build-output
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
