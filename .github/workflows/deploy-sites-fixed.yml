@@ -74,6 +74,7 @@ jobs:
           echo "🏢 Building Corporate Site..."
 
           # Checkout content
+          rm -rf content-corporate
           git clone https://github.com/info-tech-io/info-tech.git content-corporate
 
           # Build site using module.json configuration
