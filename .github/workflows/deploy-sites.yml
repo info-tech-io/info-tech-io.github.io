@@ -191,14 +191,15 @@ jobs:
           # Checkout content
           git clone https://github.com/info-tech-io/info-tech.git content-corporate
 
-          # Build site
+          # Build site using module.json configuration
           cd hugo-templates
           chmod +x scripts/build.sh
-          scripts/build.sh \
-            --template corporate \
-            --content ../content-corporate/docs/content \
-            --base-url "https://info-tech-io.github.io" \
-            --output ../build-output/corporate
+
+          # Copy content as module
+          cp -r ../content-corporate/docs ./module-content
+
+          # Build using module.json configuration
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/corporate
 
           # Move to root for GitHub Pages
           cd ..
