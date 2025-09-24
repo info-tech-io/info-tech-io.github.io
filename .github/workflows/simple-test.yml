@@ -52,17 +52,17 @@ jobs:
                   <h2>Our Products</h2>
                   <div class="links">
                       <a href="https://infotecha.ru">🎓 ИНФОТЕКА - Educational Platform</a>
-                      <a href="/quiz/">📝 Quiz Engine Documentation</a>
-                      <a href="/hugo/">🏗️ Hugo Templates Documentation</a>
-                      <a href="/terminal/">💻 Web Terminal Documentation</a>
-                      <a href="/cli/">⚙️ CLI Tools Documentation</a>
+                      <a href="/docs/quiz/">📝 Quiz Engine Documentation</a>
+                      <a href="/docs/hugo-templates/">🏗️ Hugo Templates Documentation</a>
+                      <a href="/docs/web-terminal/">💻 Web Terminal Documentation</a>
+                      <a href="/docs/info-tech-cli/">⚙️ InfoTech CLI Documentation</a>
                   </div>
 
                   <h2>For Developers</h2>
                   <div class="links">
                       <a href="https://github.com/info-tech-io">🐙 GitHub Organization</a>
-                      <a href="/contributing/">🤝 Contributing Guide</a>
-                      <a href="/architecture/">🏛️ Architecture Overview</a>
+                      <a href="/docs/">📚 All Documentation</a>
+                      <a href="/products/">📦 Product Overview</a>
                   </div>
 
                   <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
