@@ -1,0 +1,372 @@
+name: Deploy InfoTech.io Complete Sites with Proper Repository Names
+
+on:
+  repository_dispatch:
+    types: [
+      corporate-site-updated,
+      quiz-docs-updated,
+      hugo-docs-updated,
+      web-terminal-docs-updated,
+      cli-docs-updated
+    ]
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Which site to rebuild (all, info-tech, quiz, hugo-templates, web-terminal, info-tech-cli)'
+        required: false
+        default: 'all'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hub repository
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.110.0'
+          extended: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Checkout hugo-templates for building
+        uses: actions/checkout@v4
+        with:
+          repository: info-tech-io/hugo-templates
+          token: ${{ secrets.PAT_TOKEN }}
+          path: hugo-templates
+
+      - name: Prepare build environment
+        run: |
+          mkdir -p build-output/docs
+          cd hugo-templates
+          npm install || echo "npm install failed, continuing..."
+
+      # ========== Corporate Site (info-tech) ==========
+      - name: Build Corporate Site
+        if: ${{ github.event.inputs.site == 'all' || github.event.inputs.site == 'info-tech' || github.event_name == 'repository_dispatch' }}
+        run: |
+          echo "🏢 Building Corporate Site (info-tech)..."
+
+          # Clone corporate content
+          git clone https://github.com/info-tech-io/info-tech.git content-info-tech
+
+          # Build corporate site to root
+          cd hugo-templates
+          chmod +x scripts/build.sh
+          cp -r ../content-info-tech/docs ./module-content
+          scripts/build.sh --config ./module-content/module.json --output ../build-output
+          cd ..
+
+          echo "✅ Corporate site (info-tech) built to /"
+
+      # ========== Quiz Engine Documentation ==========
+      - name: Build Quiz Engine Documentation
+        if: ${{ github.event.inputs.site == 'all' || github.event.inputs.site == 'quiz' || github.event_name == 'repository_dispatch' }}
+        run: |
+          echo "📝 Building Quiz Engine Documentation..."
+
+          # Clone quiz content
+          git clone https://github.com/info-tech-io/quiz.git content-quiz
+
+          # Build quiz docs to /docs/quiz/
+          cd hugo-templates
+          rm -rf ./module-content
+          cp -r ../content-quiz/docs ./module-content
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz
+          cd ..
+
+          echo "✅ Quiz Engine documentation built to /docs/quiz/"
+
+      # ========== Hugo Templates Factory Documentation ==========
+      - name: Build Hugo Templates Documentation
+        if: ${{ github.event.inputs.site == 'all' || github.event.inputs.site == 'hugo-templates' || github.event_name == 'repository_dispatch' }}
+        run: |
+          echo "🏗️ Building Hugo Templates Factory Documentation..."
+
+          # Clone hugo-templates content
+          git clone https://github.com/info-tech-io/hugo-templates.git content-hugo-templates
+
+          # Build hugo-templates docs to /docs/hugo-templates/
+          cd hugo-templates
+          rm -rf ./module-content
+          cp -r ../content-hugo-templates/docs ./module-content
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/hugo-templates
+          cd ..
+
+          echo "✅ Hugo Templates Factory documentation built to /docs/hugo-templates/"
+
+      # ========== Web Terminal Documentation ==========
+      - name: Build Web Terminal Documentation
+        if: ${{ github.event.inputs.site == 'all' || github.event.inputs.site == 'web-terminal' || github.event_name == 'repository_dispatch' }}
+        run: |
+          echo "💻 Building Web Terminal Documentation..."
+
+          # Clone web-terminal content
+          git clone https://github.com/info-tech-io/web-terminal.git content-web-terminal
+
+          # Build web-terminal docs to /docs/web-terminal/
+          cd hugo-templates
+          rm -rf ./module-content
+          cp -r ../content-web-terminal/docs ./module-content
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/web-terminal
+          cd ..
+
+          echo "✅ Web Terminal documentation built to /docs/web-terminal/"
+
+      # ========== InfoTech CLI Documentation ==========
+      - name: Build InfoTech CLI Documentation
+        if: ${{ github.event.inputs.site == 'all' || github.event.inputs.site == 'info-tech-cli' || github.event_name == 'repository_dispatch' }}
+        run: |
+          echo "⚙️ Building InfoTech CLI Documentation..."
+
+          # Clone info-tech-cli content
+          git clone https://github.com/info-tech-io/info-tech-cli.git content-info-tech-cli
+
+          # Build cli docs to /docs/info-tech-cli/
+          cd hugo-templates
+          rm -rf ./module-content
+          cp -r ../content-info-tech-cli/docs ./module-content
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/info-tech-cli
+          cd ..
+
+          echo "✅ InfoTech CLI documentation built to /docs/info-tech-cli/"
+
+      # ========== Create Documentation Index ==========
+      - name: Create Documentation Index
+        run: |
+          echo "📚 Creating Documentation Index..."
+
+          cat > build-output/docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>InfoTech.io Documentation</title>
+              <meta name="description" content="Technical documentation for all InfoTech.io products">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                      margin: 0;
+                      padding: 40px;
+                      background: #fafafa;
+                  }
+                  .container {
+                      max-width: 1000px;
+                      margin: 0 auto;
+                      background: white;
+                      border-radius: 12px;
+                      padding: 40px;
+                      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+                  }
+                  .header { color: #333; margin-bottom: 20px; }
+                  .subtitle { color: #666; margin-bottom: 40px; font-size: 18px; }
+                  .product-grid {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                      gap: 24px;
+                      margin: 40px 0;
+                  }
+                  .product-card {
+                      border: 1px solid #e1e8ed;
+                      border-radius: 8px;
+                      padding: 24px;
+                      transition: all 0.2s ease;
+                      text-decoration: none;
+                      color: inherit;
+                  }
+                  .product-card:hover {
+                      border-color: #1da1f2;
+                      transform: translateY(-2px);
+                      box-shadow: 0 4px 20px rgba(29, 161, 242, 0.1);
+                  }
+                  .product-icon { font-size: 32px; margin-bottom: 16px; }
+                  .product-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #333; }
+                  .product-subtitle { font-size: 14px; color: #999; margin-bottom: 12px; font-family: 'Monaco', monospace; }
+                  .product-description { color: #666; line-height: 1.5; }
+                  .breadcrumb {
+                      color: #666;
+                      margin-bottom: 20px;
+                      font-size: 14px;
+                  }
+                  .breadcrumb a { color: #1da1f2; text-decoration: none; }
+                  .breadcrumb a:hover { text-decoration: underline; }
+                  @media (max-width: 768px) {
+                      body { padding: 20px; }
+                      .container { padding: 20px; }
+                      .product-grid { grid-template-columns: 1fr; }
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <div class="breadcrumb">
+                      <a href="/">InfoTech.io</a> → Documentation
+                  </div>
+
+                  <h1 class="header">📚 Technical Documentation</h1>
+                  <p class="subtitle">Comprehensive documentation for all InfoTech.io products and tools</p>
+
+                  <div class="product-grid">
+                      <a href="/docs/quiz/" class="product-card">
+                          <div class="product-icon">📝</div>
+                          <h3 class="product-title">Quiz Engine</h3>
+                          <div class="product-subtitle">Repository: quiz</div>
+                          <p class="product-description">
+                              Interactive testing system for creating quizzes and assessments.
+                              Lightweight, embeddable, with real-time scoring.
+                          </p>
+                      </a>
+
+                      <a href="/docs/hugo-templates/" class="product-card">
+                          <div class="product-icon">🏗️</div>
+                          <h3 class="product-title">Hugo Templates Factory</h3>
+                          <div class="product-subtitle">Repository: hugo-templates</div>
+                          <p class="product-description">
+                              Flexible framework for rapid creation of Hugo-based static sites
+                              with various templates and themes.
+                          </p>
+                      </a>
+
+                      <a href="/docs/web-terminal/" class="product-card">
+                          <div class="product-icon">💻</div>
+                          <h3 class="product-title">Web Terminal</h3>
+                          <div class="product-subtitle">Repository: web-terminal</div>
+                          <p class="product-description">
+                              Browser-based interactive terminal environment for hands-on learning.
+                              Docker-powered, secure, collaborative.
+                          </p>
+                      </a>
+
+                      <a href="/docs/info-tech-cli/" class="product-card">
+                          <div class="product-icon">⚙️</div>
+                          <h3 class="product-title">InfoTech CLI</h3>
+                          <div class="product-subtitle">Repository: info-tech-cli</div>
+                          <p class="product-description">
+                              Command-line tools for automating InfoTech.io development workflows
+                              and site management.
+                          </p>
+                      </a>
+                  </div>
+
+                  <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666; text-align: center;">
+                      <p>
+                          🏠 <a href="/" style="color: #1da1f2;">Return to InfoTech.io</a> •
+                          🐙 <a href="https://github.com/info-tech-io" style="color: #1da1f2;">GitHub Organization</a> •
+                          📖 <a href="/products/" style="color: #1da1f2;">Product Overview</a>
+                      </p>
+                      <p><small>Documentation paths match repository names • Updated automatically via GitHub Actions</small></p>
+                  </div>
+              </div>
+          </body>
+          </html>
+          EOF
+
+          echo "✅ Documentation index created with proper repository names"
+
+      # ========== Update Corporate Site Links ==========
+      - name: Update Corporate Site Links
+        run: |
+          echo "🔗 Updating corporate site links to use proper repository names..."
+
+          # Update any existing HTML files to use correct paths
+          find build-output -name "*.html" -type f -exec sed -i 's|href="/quiz/"|href="/docs/quiz/"|g' {} \;
+          find build-output -name "*.html" -type f -exec sed -i 's|href="/hugo/"|href="/docs/hugo-templates/"|g' {} \;
+          find build-output -name "*.html" -type f -exec sed -i 's|href="/terminal/"|href="/docs/web-terminal/"|g' {} \;
+          find build-output -name "*.html" -type f -exec sed -i 's|href="/cli/"|href="/docs/info-tech-cli/"|g' {} \;
+
+      # ========== Create fallback index if needed ==========
+      - name: Create fallback index if needed
+        run: |
+          if [ ! -f "build-output/index.html" ]; then
+            echo "📝 Creating fallback corporate index with proper repository paths..."
+            cat > build-output/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>InfoTech.io - Open Source Educational Technology</title>
+              <meta name="description" content="Building the future of open source education technology">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  .container { max-width: 800px; margin: 0 auto; }
+                  .header { color: #333; }
+                  .status { color: #28a745; }
+                  .links { margin-top: 30px; }
+                  .links a { display: block; margin: 10px 0; color: #1da1f2; text-decoration: none; }
+                  .links a:hover { text-decoration: underline; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1 class="header">InfoTech.io</h1>
+                  <p class="status">🚀 Open Source Educational Technology Organization</p>
+
+                  <h2>Our Mission</h2>
+                  <p>We create open educational technologies that make quality IT education accessible to everyone.</p>
+
+                  <h2>Our Products</h2>
+                  <div class="links">
+                      <a href="https://infotecha.ru">🎓 ИНФОТЕКА - Educational Platform</a>
+                      <a href="/docs/quiz/">📝 Quiz Engine Documentation</a>
+                      <a href="/docs/hugo-templates/">🏗️ Hugo Templates Factory Documentation</a>
+                      <a href="/docs/web-terminal/">💻 Web Terminal Documentation</a>
+                      <a href="/docs/info-tech-cli/">⚙️ InfoTech CLI Documentation</a>
+                  </div>
+
+                  <h2>For Developers</h2>
+                  <div class="links">
+                      <a href="https://github.com/info-tech-io">🐙 GitHub Organization</a>
+                      <a href="/docs/">📚 All Documentation</a>
+                      <a href="/products/">📦 Product Overview</a>
+                  </div>
+
+                  <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+                      <p>🤖 Built with <a href="https://claude.ai/code" style="color: #1da1f2;">Claude Code</a></p>
+                      <p><small>Documentation paths match GitHub repository names</small></p>
+                  </footer>
+              </div>
+          </body>
+          </html>
+          EOF
+          fi
+
+      - name: Build Summary
+        run: |
+          echo "🎯 Build Summary:"
+          echo "📁 Directory structure:"
+          find build-output -type d | sort
+          echo ""
+          echo "📄 Generated files:"
+          find build-output -name "*.html" | head -20
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build-output
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
