@@ -1,0 +1,148 @@
+name: Debug Corporate Site Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-debug"
+  cancel-in-progress: false
+
+jobs:
+  debug-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hub repository
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.110.0'
+          extended: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Checkout hugo-templates for building
+        uses: actions/checkout@v4
+        with:
+          repository: info-tech-io/hugo-templates
+          token: ${{ secrets.PAT_TOKEN }}
+          path: hugo-templates
+
+      - name: Debug - Check hugo-templates structure
+        run: |
+          echo "📁 Hugo templates structure:"
+          ls -la hugo-templates/
+          echo ""
+          echo "📁 Available templates:"
+          ls -la hugo-templates/templates/
+          echo ""
+          echo "📁 Corporate template:"
+          ls -la hugo-templates/templates/corporate/
+          echo ""
+          echo "📁 Build script:"
+          ls -la hugo-templates/scripts/
+
+      - name: Prepare build environment (without creating build-output)
+        run: |
+          cd hugo-templates
+          npm install || echo "npm install failed, continuing..."
+
+      - name: Clone corporate content
+        run: |
+          echo "🏢 Cloning corporate content..."
+          git clone https://github.com/info-tech-io/info-tech.git content-info-tech
+
+          echo "📁 Content structure:"
+          find content-info-tech/docs -type f -name "*.json" | head -5
+          find content-info-tech/docs -type f -name "*.md" | head -10
+
+      - name: Debug - Build Corporate Site Step by Step
+        run: |
+          echo "🏗️ Testing build script step by step..."
+          cd hugo-templates
+
+          echo "📍 Current directory:"
+          pwd
+          ls -la
+
+          echo ""
+          echo "📍 Making build script executable:"
+          chmod +x scripts/build.sh
+          ls -la scripts/build.sh
+
+          echo ""
+          echo "📍 Copying content:"
+          cp -r ../content-info-tech/docs ./module-content
+          echo "Content copied to module-content:"
+          ls -la ./module-content/
+
+          echo ""
+          echo "📍 Checking module.json:"
+          cat ./module-content/module.json | head -20
+
+          echo ""
+          echo "📍 Testing build script with verbose flag:"
+          ./scripts/build.sh --config ./module-content/module.json --output ../debug-build-output --verbose || {
+            echo "❌ Build script failed with exit code $?"
+            echo ""
+            echo "📍 Checking if output directory was created:"
+            ls -la ../ | grep debug
+            echo ""
+            echo "📍 Trying with different approach..."
+            echo "Let's try running build script without existing output directory"
+          }
+
+      - name: Manual Hugo Build (fallback)
+        if: failure()
+        run: |
+          echo "🛠️ Manual Hugo build as fallback..."
+          cd hugo-templates
+
+          # Simple Hugo build without the complex script
+          echo "📍 Creating simple Hugo site:"
+          mkdir -p ../manual-build-output
+
+          # Copy template to temporary location
+          cp -r templates/corporate temp-site
+          cd temp-site
+
+          # Copy content
+          cp -r ../module-content/content ./
+
+          echo "📍 Manual Hugo configuration:"
+          echo 'baseURL = "/"' > hugo.toml
+          echo 'theme = "compose"' >> hugo.toml
+          echo 'title = "InfoTech.io"' >> hugo.toml
+
+          echo "📍 Running basic Hugo build:"
+          hugo --destination ../../manual-build-output || echo "Hugo build failed"
+
+      - name: Show debug results
+        if: always()
+        run: |
+          echo "🎯 Debug Results:"
+          echo ""
+          echo "📁 Available build outputs:"
+          ls -la | grep -E "(build|output)"
+          echo ""
+
+          if [ -d "debug-build-output" ]; then
+            echo "📁 Debug build output contents:"
+            find debug-build-output -type f | head -10
+          fi
+
+          if [ -d "manual-build-output" ]; then
+            echo "📁 Manual build output contents:"
+            find manual-build-output -type f | head -10
+          fi
+
+          echo "📁 Hugo templates final state:"
+          ls -la hugo-templates/
