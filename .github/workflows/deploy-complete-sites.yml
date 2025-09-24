@@ -51,6 +51,8 @@ jobs:
 
       - name: Prepare build environment
         run: |
+          # Clean and recreate build output directory
+          rm -rf build-output
           mkdir -p build-output/docs
           cd hugo-templates
           npm install || echo "npm install failed, continuing..."
