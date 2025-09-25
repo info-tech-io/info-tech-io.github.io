@@ -1,18 +1,23 @@
-name: Deploy InfoTech.io Complete Sites with Proper Repository Names
+name: "[DEPRECATED] Deploy InfoTech.io Complete Sites with Proper Repository Names"
 
+# DEPRECATED: This workflow has been replaced by separate specialized workflows:
+# - deploy-corporate.yml (for corporate site)
+# - deploy-docs.yml (for product documentation)
+#
+# Triggers disabled to prevent conflicts with new architecture
 on:
-  repository_dispatch:
-    types: [
-      corporate-site-updated,
-      quiz-docs-updated,
-      hugo-docs-updated,
-      web-terminal-docs-updated,
-      cli-docs-updated
-    ]
+  # repository_dispatch: # DISABLED
+  #   types: [
+  #     corporate-site-updated,
+  #     quiz-docs-updated,
+  #     hugo-docs-updated,
+  #     web-terminal-docs-updated,
+  #     cli-docs-updated
+  #   ]
   workflow_dispatch:
     inputs:
       site:
-        description: 'Which site to rebuild (all, info-tech, quiz, hugo-templates, web-terminal, info-tech-cli)'
+        description: '[DEPRECATED] Use deploy-corporate.yml or deploy-docs.yml instead'
         required: false
         default: 'all'
 
