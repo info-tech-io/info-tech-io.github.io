@@ -88,7 +88,7 @@ jobs:
           cd hugo-templates
           rm -rf ./module-content
           cp -r ../content-quiz/docs ./module-content
-          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz --force
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz --force --debug
           cd ..
 
           echo "✅ Quiz Engine documentation built to /docs/quiz/"
