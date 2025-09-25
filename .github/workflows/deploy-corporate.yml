@@ -1,0 +1,163 @@
+name: Deploy InfoTech.io Corporate Site
+
+on:
+  repository_dispatch:
+    types: [corporate-site-updated]
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-corporate"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hub repository
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.148.0'
+          extended: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Checkout hugo-templates for building
+        uses: actions/checkout@v4
+        with:
+          repository: info-tech-io/hugo-templates
+          token: ${{ secrets.PAT_TOKEN }}
+          path: hugo-templates
+
+      - name: Prepare build environment
+        run: |
+          echo "🏗️ Preparing corporate site build environment..."
+
+          # Clean and create build output directory
+          rm -rf build-output
+          mkdir -p build-output
+
+          # Setup hugo-templates
+          cd hugo-templates
+          npm install || echo "npm install failed, continuing..."
+          cd ..
+
+      - name: Build Corporate Site
+        run: |
+          echo "🏢 Building InfoTech.io Corporate Site..."
+
+          # Clone corporate content
+          git clone https://github.com/info-tech-io/info-tech.git content-info-tech
+
+          # Build corporate site to root
+          cd hugo-templates
+          chmod +x scripts/build.sh
+          cp -r ../content-info-tech/docs ./module-content
+
+          # Build with or without debug mode
+          if [ "${{ github.event.inputs.debug }}" = "true" ]; then
+            scripts/build.sh --config ./module-content/module.json --output ../build-output --force --debug
+          else
+            scripts/build.sh --config ./module-content/module.json --output ../build-output --force
+          fi
+          cd ..
+
+          echo "✅ Corporate site built successfully!"
+
+      - name: Create fallback pages if needed
+        run: |
+          echo "📝 Creating fallback pages..."
+
+          # Create docs directory index if it doesn't exist
+          mkdir -p build-output/docs
+
+          if [ ! -f "build-output/docs/index.html" ]; then
+            echo "Creating documentation index placeholder..."
+            cat > build-output/docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>InfoTech.io Documentation</title>
+              <meta name="description" content="Technical documentation for all InfoTech.io products">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="refresh" content="0; url=/">
+              <style>
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                      margin: 0;
+                      padding: 40px;
+                      text-align: center;
+                      background: #fafafa;
+                  }
+                  .container {
+                      max-width: 600px;
+                      margin: 0 auto;
+                      background: white;
+                      border-radius: 12px;
+                      padding: 40px;
+                      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+                  }
+                  .header { color: #333; margin-bottom: 20px; }
+                  .message { color: #666; margin-bottom: 30px; line-height: 1.6; }
+                  .link { color: #1da1f2; text-decoration: none; font-weight: 600; }
+                  .link:hover { text-decoration: underline; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1 class="header">📚 InfoTech.io Documentation</h1>
+                  <p class="message">
+                      Product documentation is being deployed separately.<br>
+                      Redirecting you to the main site...
+                  </p>
+                  <p>
+                      <a href="/" class="link">🏠 Return to InfoTech.io</a>
+                  </p>
+              </div>
+          </body>
+          </html>
+          EOF
+          fi
+
+      - name: Build Summary
+        run: |
+          echo "🎯 Corporate Site Build Summary:"
+          echo "📁 Directory structure:"
+          find build-output -type d | head -10 | sort
+          echo ""
+          echo "📄 Generated files:"
+          find build-output -name "*.html" | head -10
+          echo ""
+          echo "📊 Total files: $(find build-output -type f | wc -l)"
+          echo "📦 Total size: $(du -sh build-output | cut -f1)"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build-output
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
