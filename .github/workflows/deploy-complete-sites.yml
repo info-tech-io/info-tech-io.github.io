@@ -70,7 +70,7 @@ jobs:
           cd hugo-templates
           chmod +x scripts/build.sh
           cp -r ../content-info-tech/docs ./module-content
-          scripts/build.sh --config ./module-content/module.json --output ../build-output
+          scripts/build.sh --config ./module-content/module.json --output ../build-output --force
           cd ..
 
           echo "✅ Corporate site (info-tech) built to /"
@@ -88,7 +88,7 @@ jobs:
           cd hugo-templates
           rm -rf ./module-content
           cp -r ../content-quiz/docs ./module-content
-          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz --force
           cd ..
 
           echo "✅ Quiz Engine documentation built to /docs/quiz/"
@@ -106,7 +106,7 @@ jobs:
           cd hugo-templates
           rm -rf ./module-content
           cp -r ../content-hugo-templates/docs ./module-content
-          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/hugo-templates
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/hugo-templates --force
           cd ..
 
           echo "✅ Hugo Templates Factory documentation built to /docs/hugo-templates/"
@@ -124,7 +124,7 @@ jobs:
           cd hugo-templates
           rm -rf ./module-content
           cp -r ../content-web-terminal/docs ./module-content
-          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/web-terminal
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/web-terminal --force
           cd ..
 
           echo "✅ Web Terminal documentation built to /docs/web-terminal/"
@@ -142,7 +142,7 @@ jobs:
           cd hugo-templates
           rm -rf ./module-content
           cp -r ../content-info-tech-cli/docs ./module-content
-          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/info-tech-cli
+          scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/info-tech-cli --force
           cd ..
 
           echo "✅ InfoTech CLI documentation built to /docs/info-tech-cli/"
