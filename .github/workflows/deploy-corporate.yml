@@ -137,14 +137,11 @@ jobs:
       - name: Build Summary
         run: |
           echo "🎯 Corporate Site Build Summary:"
-          echo "📁 Directory structure:"
-          find build-output -type d | head -10 | sort
-          echo ""
-          echo "📄 Generated files:"
-          find build-output -name "*.html" | head -10
-          echo ""
           echo "📊 Total files: $(find build-output -type f | wc -l)"
           echo "📦 Total size: $(du -sh build-output | cut -f1)"
+          echo "📄 Key files:"
+          ls -la build-output/*.html 2>/dev/null | head -5 || echo "  No HTML files in root"
+          echo "✅ Corporate site build completed successfully!"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
