@@ -1,37 +1,28 @@
-# InfoTech.io GitHub Pages Hub
+# Corporate Template
 
-This repository serves as the central hub for building and deploying the InfoTech.io organization website and all product documentation sites.
+Шаблон для создания корпоративных сайтов организаций.
 
-## Architecture
+## Особенности
 
-### Content Sources
-- `info-tech/docs/` → Corporate site content
-- `quiz/docs/` → Quiz Engine documentation
-- `hugo-templates/docs/` → Hugo Templates documentation
-- `web-terminal/docs/` → Web Terminal documentation
-- `info-tech-cli/docs/` → InfoTech CLI documentation
+- Использует тему Compose
+- Поддержка блога
+- Каталог продуктов
+- Адаптивный дизайн
+- SEO оптимизация
 
-### Build Process
-1. Repository content changes trigger notifications to this hub
-2. Hub receives `repository_dispatch` events
-3. Automated workflows fetch content and build sites using `hugo-templates`
-4. Generated sites are deployed to GitHub Pages
+## Использование
 
-### Deployed Sites
-- **Corporate Site**: https://info-tech-io.github.io/
-- **Quiz Engine Docs**: https://info-tech-io.github.io/quiz/
-- **Hugo Templates Docs**: https://info-tech-io.github.io/hugo/
-- **Web Terminal Docs**: https://info-tech-io.github.io/terminal/
-- **InfoTech CLI Docs**: https://info-tech-io.github.io/cli/
+```bash
+hugo-templates build --template corporate --config module.json
+```
 
-## Future Plans
-- Organization rename: `info-tech-io` → `info-tech`
-- Custom domain: `info-tech.io` with subdomains
-- Production deployment on VPS with GitHub Pages as mirror
+## Версия
 
-## Automation
-This repository is fully automated. Content updates in source repositories automatically trigger rebuilds and deployments.
+1.0.0 - Упрощенная версия для первоначального развертывания
+**Примечание:** Данная версия использует базовую тему Compose. В будущих версиях будет добавлена специализированная корпоративная тема с расширенным функционалом.
 
----
+## Структура
 
-*Part of the [InfoTech.io](https://info-tech.io) ecosystem.*
+- `template.json` - конфигурация шаблона
+- `config/hugo.toml` - базовая конфигурация Hugo
+- `content/_index.md` - пример главной страницы
