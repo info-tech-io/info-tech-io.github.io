@@ -1,4 +1,0 @@
-baseURL = 'https://info-tech.io'
-languageCode = 'en-us'
-title = 'Hugo Template Factory Site'
-theme = 'compose'
