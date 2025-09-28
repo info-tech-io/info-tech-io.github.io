@@ -72,9 +72,9 @@ jobs:
 
           # Build with or without debug mode
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose --no-cache
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose
           else
-            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --no-cache
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force
           fi
           cd ..
 
