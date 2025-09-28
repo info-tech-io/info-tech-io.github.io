@@ -63,6 +63,8 @@ jobs:
 
           # Setup hugo-templates
           cd hugo-templates
+          # Initialize all submodules
+          git submodule update --init --recursive
           npm install || echo "npm install failed, continuing..."
           cd ..
 
@@ -81,9 +83,9 @@ jobs:
           cp -r ../content-quiz/docs ./module-content
 
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz --force --debug
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose --no-cache
           else
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/quiz --force
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --no-cache
           fi
           cd ..
 
@@ -104,9 +106,9 @@ jobs:
           cp -r ../content-hugo-templates/docs ./module-content
 
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/hugo-templates --force --debug
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose --no-cache
           else
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/hugo-templates --force
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --no-cache
           fi
           cd ..
 
@@ -127,9 +129,9 @@ jobs:
           cp -r ../content-web-terminal/docs ./module-content
 
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/web-terminal --force --debug
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose --no-cache
           else
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/web-terminal --force
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --no-cache
           fi
           cd ..
 
@@ -150,9 +152,9 @@ jobs:
           cp -r ../content-info-tech-cli/docs ./module-content
 
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/info-tech-cli --force --debug
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose --no-cache
           else
-            scripts/build.sh --config ./module-content/module.json --output ../build-output/docs/info-tech-cli --force
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --no-cache
           fi
           cd ..
 
