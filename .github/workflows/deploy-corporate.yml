@@ -53,8 +53,8 @@ jobs:
 
           # Setup hugo-templates
           cd hugo-templates
-          # Initialize only compose theme, skip quiz-engine
-          git submodule update --init themes/compose
+          # Initialize all submodules
+          git submodule update --init --recursive
           npm install || echo "npm install failed, continuing..."
           cd ..
 
@@ -72,9 +72,9 @@ jobs:
 
           # Build with or without debug mode
           if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --debug --verbose --no-cache
           else
-            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force
+            scripts/build.sh --config ./module-content/module.json --content ./module-content/content --output ../build-output --force --no-cache
           fi
           cd ..
 
