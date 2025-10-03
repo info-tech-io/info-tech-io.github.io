@@ -7,6 +7,13 @@ on:
         description: 'Enable cache (true = bug expected, false = workaround)'
         type: boolean
         default: true
+      content_source:
+        description: 'Content source (info-tech or hugo-templates)'
+        type: choice
+        options:
+          - info-tech
+          - hugo-templates
+        default: info-tech
 
 permissions:
   contents: read
@@ -25,6 +32,7 @@ jobs:
         run: |
           echo "🧪 Cache Bug Reproduction Test"
           echo "Cache enabled: ${{ github.event.inputs.use_cache }}"
+          echo "Content source: ${{ github.event.inputs.content_source }}"
 
       - name: Checkout hub repository
         uses: actions/checkout@v4
@@ -55,30 +63,41 @@ jobs:
 
       - name: Build Corporate Site (Testing Cache)
         run: |
-          echo "🏢 Building InfoTech.io Corporate Site for cache test..."
-
-          # Clone corporate content
-          git clone https://github.com/info-tech-io/info-tech.git content-info-tech
+          echo "🏢 Building site for cache test..."
+          echo "Content source: ${{ github.event.inputs.content_source }}"
 
           cd hugo-templates
           chmod +x scripts/build.sh
-          cp -r ../content-info-tech/docs ./module-content
+
+          # Setup content based on source
+          if [ "${{ github.event.inputs.content_source }}" = "info-tech" ]; then
+            echo "📦 Using info-tech corporate content (14 MD files, ~39 HTML pages)"
+            git clone https://github.com/info-tech-io/info-tech.git ../content-repo
+            cp -r ../content-repo/docs ./module-content
+            CONFIG_FILE="./module-content/module.json"
+            CONTENT_DIR="./module-content/content"
+          else
+            echo "📦 Using hugo-templates documentation (64 MD files, more HTML pages)"
+            # Use hugo-templates own docs
+            CONFIG_FILE="./docs/module.json"
+            CONTENT_DIR="./docs"
+          fi
 
           # Build WITH or WITHOUT cache based on input
           if [ "${{ github.event.inputs.use_cache }}" = "false" ]; then
             echo "⚠️  Building with --no-cache (workaround)"
             scripts/build.sh \
-              --config ./module-content/module.json \
-              --content ./module-content/content \
+              --template corporate \
+              --content "$CONTENT_DIR" \
               --output ../build-output \
               --force \
               --no-cache \
               --verbose
           else
-            echo "🐛 Building WITH cache enabled (bug expected)"
+            echo "🐛 Building WITH cache enabled (bug expected if different content)"
             scripts/build.sh \
-              --config ./module-content/module.json \
-              --content ./module-content/content \
+              --template corporate \
+              --content "$CONTENT_DIR" \
               --output ../build-output \
               --force \
               --verbose
