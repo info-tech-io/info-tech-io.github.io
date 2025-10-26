@@ -1,5 +1,4 @@
 {
-  "$schema": "../hugo-templates/schemas/modules.schema.json",
   "federation": {
     "name": "InfoTech.io Documentation Federation",
     "baseURL": "https://info-tech-io.github.io",
@@ -23,10 +22,8 @@
       "module_json": "module.json",
       "destination": "/docs/quiz/",
       "css_path_prefix": "/docs/quiz",
-      "priority": 10,
       "overrides": {
-        "theme": "compose",
-        "template": "documentation"
+        "theme": "compose"
       }
     },
     {
@@ -39,10 +36,8 @@
       "module_json": "module.json",
       "destination": "/docs/hugo-templates/",
       "css_path_prefix": "/docs/hugo-templates",
-      "priority": 10,
       "overrides": {
-        "theme": "compose",
-        "template": "documentation"
+        "theme": "compose"
       }
     },
     {
@@ -55,10 +50,8 @@
       "module_json": "module.json",
       "destination": "/docs/web-terminal/",
       "css_path_prefix": "/docs/web-terminal",
-      "priority": 10,
       "overrides": {
-        "theme": "compose",
-        "template": "documentation"
+        "theme": "compose"
       }
     },
     {
@@ -71,10 +64,8 @@
       "module_json": "module.json",
       "destination": "/docs/info-tech-cli/",
       "css_path_prefix": "/docs/info-tech-cli",
-      "priority": 10,
       "overrides": {
-        "theme": "compose",
-        "template": "documentation"
+        "theme": "compose"
       }
     }
   ]
