@@ -1,0 +1,31 @@
+{
+  "$schema": "../hugo-templates/schemas/modules.schema.json",
+  "federation": {
+    "name": "InfoTech.io Corporate Site",
+    "baseURL": "https://info-tech-io.github.io",
+    "strategy": "preserve-base-site",
+    "build_settings": {
+      "cache_enabled": true,
+      "performance_tracking": false,
+      "fail_fast": true
+    }
+  },
+  "modules": [
+    {
+      "name": "corporate-site",
+      "source": {
+        "repository": "https://github.com/info-tech-io/info-tech",
+        "path": "docs",
+        "branch": "main"
+      },
+      "module_json": "module.json",
+      "destination": "/",
+      "css_path_prefix": "",
+      "priority": 10,
+      "overrides": {
+        "theme": "compose",
+        "template": "corporate"
+      }
+    }
+  ]
+}

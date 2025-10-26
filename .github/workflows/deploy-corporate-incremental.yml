@@ -1,0 +1,295 @@
+name: Deploy InfoTech.io Corporate Site (Incremental)
+
+on:
+  repository_dispatch:
+    types: [corporate-site-updated]
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy-corporate:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # ============================================
+      # STEP 1: Download Current GitHub Pages State
+      # ============================================
+      - name: Download Current GitHub Pages State
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: current-site
+        continue-on-error: true
+
+      - name: Validate Current State
+        run: |
+          echo "📦 Checking current site state..."
+
+          if [ -d "current-site" ]; then
+            echo "✅ Current site downloaded"
+            echo "📊 Current site size: $(du -sh current-site | cut -f1)"
+
+            if [ -d "current-site/docs" ]; then
+              echo "✅ Docs directory exists: $(du -sh current-site/docs | cut -f1)"
+              echo "📄 Docs files: $(find current-site/docs -type f | wc -l)"
+            else
+              echo "⚠️  Docs directory does not exist (will be created)"
+            fi
+          else
+            echo "⚠️  No existing site found (fresh deployment)"
+            mkdir -p current-site
+          fi
+
+      # ============================================
+      # STEP 2: Clone Required Repositories
+      # ============================================
+      - name: Checkout Hub Repository (for configs)
+        uses: actions/checkout@v4
+        with:
+          path: hub-repo
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.148.0'
+          extended: true
+
+      - name: Clone Hugo Templates Framework
+        uses: actions/checkout@v4
+        with:
+          repository: info-tech-io/hugo-templates
+          token: ${{ secrets.PAT_TOKEN }}
+          path: hugo-templates
+          submodules: recursive
+          ref: main
+
+      - name: Clone Corporate Content
+        run: |
+          echo "📥 Cloning corporate content repository..."
+          git clone https://github.com/info-tech-io/info-tech.git info-tech
+          echo "✅ Corporate content cloned"
+
+      # ============================================
+      # STEP 3: Build Corporate Site
+      # ============================================
+      - name: Prepare Hugo Templates
+        run: |
+          echo "🔧 Preparing Hugo Templates framework..."
+          cd hugo-templates
+          git submodule update --init --recursive
+          npm install || echo "⚠️  npm install failed, continuing..."
+          chmod +x scripts/build.sh scripts/federated-build.sh
+          cd ..
+          echo "✅ Hugo Templates ready"
+
+      - name: Build Corporate Site (Federated Build)
+        run: |
+          echo "🏗️ Building corporate site using federated build system..."
+
+          cd hugo-templates
+
+          # Copy corporate content to module-content
+          rm -rf module-content
+          cp -r ../info-tech/docs ./module-content
+
+          # Build corporate site
+          if [ "${{ github.event.inputs.debug }}" = "true" ]; then
+            ./scripts/build.sh \
+              --config ./module-content/module.json \
+              --content ./module-content/content \
+              --output ../corporate-build \
+              --force \
+              --debug \
+              --verbose
+          else
+            ./scripts/build.sh \
+              --config ./module-content/module.json \
+              --content ./module-content/content \
+              --output ../corporate-build \
+              --force
+          fi
+
+          cd ..
+          echo "✅ Corporate site built"
+
+      - name: Validate Build Output
+        run: |
+          echo "🔍 Validating build output..."
+
+          if [ ! -f "corporate-build/index.html" ]; then
+            echo "❌ Build failed: No index.html found"
+            exit 1
+          fi
+
+          html_count=$(find corporate-build -name '*.html' | wc -l)
+          echo "✅ Build successful: $html_count HTML files generated"
+          echo "📦 Build size: $(du -sh corporate-build | cut -f1)"
+
+          if [ $html_count -lt 5 ]; then
+            echo "⚠️  Warning: Very few HTML files generated ($html_count)"
+          fi
+
+      # ============================================
+      # STEP 4: Selective Merge (Preserve /docs/)
+      # ============================================
+      - name: Merge Corporate Content (Preserve /docs/)
+        run: |
+          echo "🔄 Merging corporate site to root, preserving /docs/..."
+
+          # Backup /docs/ if it exists
+          if [ -d "current-site/docs" ]; then
+            echo "💾 Backing up existing /docs/ directory..."
+            cp -r current-site/docs docs-backup
+            echo "✅ Backup created: $(du -sh docs-backup | cut -f1)"
+          fi
+
+          # Merge corporate files, excluding docs/
+          echo "📋 Syncing corporate content (excluding /docs/)..."
+          rsync -av --delete --exclude='docs/' corporate-build/ current-site/
+
+          # Restore /docs/ from backup
+          if [ -d "docs-backup" ]; then
+            echo "♻️  Restoring /docs/ from backup..."
+            mkdir -p current-site/docs
+            rsync -av docs-backup/ current-site/docs/
+            echo "✅ /docs/ restored"
+          else
+            echo "📁 Creating /docs/ directory (no backup existed)..."
+            mkdir -p current-site/docs
+          fi
+
+          echo "✅ Merge complete"
+
+      - name: Create Fallback Docs Index
+        run: |
+          echo "📝 Ensuring /docs/index.html exists..."
+
+          if [ ! -f "current-site/docs/index.html" ]; then
+            echo "Creating fallback docs/index.html..."
+            cat > current-site/docs/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Documentation Hub - InfoTech.io</title>
+              <meta name="description" content="Technical documentation for all InfoTech.io products">
+              <style>
+                body {
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                  margin: 0;
+                  padding: 40px;
+                  text-align: center;
+                  background: #fafafa;
+                }
+                .container {
+                  max-width: 600px;
+                  margin: 0 auto;
+                  background: white;
+                  border-radius: 12px;
+                  padding: 40px;
+                  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+                }
+                .header { color: #333; margin-bottom: 20px; }
+                .message { color: #666; margin-bottom: 30px; line-height: 1.6; }
+                .link { color: #1da1f2; text-decoration: none; font-weight: 600; }
+                .link:hover { text-decoration: underline; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <h1 class="header">📚 Documentation Hub</h1>
+                <p class="message">
+                  Product documentation will be available here soon.<br>
+                  Check back later for updates.
+                </p>
+                <p>
+                  <a href="/" class="link">🏠 Back to Main Site</a>
+                </p>
+              </div>
+            </body>
+          </html>
+          EOF
+            echo "✅ Created fallback docs/index.html"
+          else
+            echo "✅ docs/index.html already exists"
+          fi
+
+      - name: Verify Merge Result
+        run: |
+          echo "📊 Final site structure verification:"
+          echo ""
+          echo "=== Root directory ==="
+          ls -lah current-site/ | head -20
+          echo ""
+          echo "=== /docs/ directory ==="
+          if [ -d "current-site/docs" ]; then
+            ls -lah current-site/docs/ | head -10
+            echo "📄 Docs files: $(find current-site/docs -type f | wc -l)"
+            echo "📦 Docs size: $(du -sh current-site/docs | cut -f1)"
+          else
+            echo "❌ ERROR: /docs/ directory missing!"
+            exit 1
+          fi
+          echo ""
+          echo "=== Total site size ==="
+          echo "📦 Total: $(du -sh current-site | cut -f1)"
+          echo "📄 Total files: $(find current-site -type f | wc -l)"
+          echo ""
+          echo "✅ Merge verification complete"
+
+      # ============================================
+      # STEP 5: Deploy to GitHub Pages
+      # ============================================
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: current-site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Deployment Success
+        run: |
+          echo "✅ Corporate site deployed successfully!"
+          echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "📋 Deployment Summary:"
+          echo "  - Corporate site: Updated ✅"
+          echo "  - /docs/ directory: Preserved ✅"
+          echo "  - Deployment mode: Incremental"
+
+      # ============================================
+      # STEP 6: Error Handling
+      # ============================================
+      - name: Cleanup on Failure
+        if: failure()
+        run: |
+          echo "❌ Workflow failed!"
+          echo "🧹 Cleaning up temporary files..."
+          rm -rf corporate-build current-site hugo-templates info-tech docs-backup
+          echo "✅ Cleanup complete"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "::error::Corporate site deployment failed. Check logs for details."
+          echo "::error::Failed job: ${{ github.job }}"
+          echo "::error::Failed step: Check logs above for the failing step"
