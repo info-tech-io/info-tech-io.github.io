@@ -102,6 +102,12 @@ jobs:
           cd ..
           echo "✅ Hugo Templates ready"
 
+      - name: Setup Git Credentials for Repository Cloning
+        run: |
+          echo "🔑 Configuring Git credentials for federated-build.sh..."
+          git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          echo "✅ Git credentials configured"
+
       # ==========================================
       # Task 4: Clone Product Documentation Repositories
       # ==========================================
