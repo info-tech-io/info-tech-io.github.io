@@ -102,23 +102,19 @@ jobs:
           cd ..
           echo "✅ Hugo Templates ready"
 
-      - name: Setup Git Credentials for Repository Cloning
-        run: |
-          echo "🔑 Configuring Git credentials for federated-build.sh..."
-          git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          echo "✅ Git credentials configured"
-
       # ==========================================
       # Task 4: Build All Product Documentation
       # ==========================================
       - name: Build All Product Documentation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🏗️ Building all product documentation..."
 
           cd hugo-templates
 
           # Use federated-build.sh with documentation-modules.json
-          # Always use --debug for detailed error logs
+          # GITHUB_TOKEN env var enables Git authentication for repository cloning
           ./scripts/federated-build.sh \
             --config=../hub-repo/configs/documentation-modules.json \
             --output=../docs-build \
