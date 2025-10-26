@@ -109,67 +109,21 @@ jobs:
           echo "✅ Git credentials configured"
 
       # ==========================================
-      # Task 4: Clone Product Documentation Repositories
+      # Task 4: Build All Product Documentation
       # ==========================================
-      - name: Clone Product Documentation Repositories
+      - name: Build All Product Documentation
         run: |
-          echo "📥 Cloning all product documentation repositories..."
-
-          # Create products directory
-          mkdir -p products
-
-          # Clone in parallel using background processes
-          (
-            echo "Cloning quiz..."
-            git clone https://github.com/info-tech-io/quiz.git products/quiz &
-
-            echo "Cloning hugo-templates..."
-            git clone https://github.com/info-tech-io/hugo-templates.git products/hugo-templates-repo &
-
-            echo "Cloning web-terminal..."
-            git clone https://github.com/info-tech-io/web-terminal.git products/web-terminal &
-
-            echo "Cloning info-tech-cli..."
-            git clone https://github.com/info-tech-io/info-tech-cli.git products/info-tech-cli &
-
-            # Wait for all clones to complete
-            wait
-          )
-
-          echo "✅ All product repositories cloned"
-
-          # Verify all clones succeeded
-          for product in quiz hugo-templates-repo web-terminal info-tech-cli; do
-            if [ -d "products/$product" ]; then
-              echo "  ✅ $product: $(du -sh products/$product | cut -f1)"
-            else
-              echo "  ❌ $product: FAILED"
-              exit 1
-            fi
-          done
-
-      # ==========================================
-      # Task 5: Build All Product Documentation in Parallel
-      # ==========================================
-      - name: Build All Product Documentation (Parallel)
-        run: |
-          echo "🏗️ Building all product documentation in parallel..."
+          echo "🏗️ Building all product documentation..."
 
           cd hugo-templates
 
           # Use federated-build.sh with documentation-modules.json
-          if [ "${{ github.event.inputs.debug }}" = "true" ]; then
-            ./scripts/federated-build.sh \
-              --config=../hub-repo/configs/documentation-modules.json \
-              --output=../docs-build \
-              --verbose \
-              --debug
-          else
-            ./scripts/federated-build.sh \
-              --config=../hub-repo/configs/documentation-modules.json \
-              --output=../docs-build \
-              --verbose
-          fi
+          # Always use --debug for detailed error logs
+          ./scripts/federated-build.sh \
+            --config=../hub-repo/configs/documentation-modules.json \
+            --output=../docs-build \
+            --verbose \
+            --debug
 
           cd ..
           echo "✅ All documentation built"
@@ -198,7 +152,7 @@ jobs:
           echo "✅ All documentation validated"
 
       # ==========================================
-      # Task 6: Create Documentation Hub
+      # Task 5: Create Documentation Hub
       # ==========================================
       - name: Create Documentation Hub
         run: |
@@ -292,7 +246,7 @@ jobs:
           echo "✅ Documentation hub created"
 
       # ==========================================
-      # Task 7: Selective Merge (Preserve Corporate Site)
+      # Task 6: Selective Merge (Preserve Corporate Site)
       # ==========================================
       - name: Merge Documentation (Preserve Corporate Site)
         run: |
@@ -347,7 +301,7 @@ jobs:
           echo "📦 Total site size: $(du -sh current-site | cut -f1)"
 
       # ==========================================
-      # Task 8: Deploy to GitHub Pages
+      # Task 7: Deploy to GitHub Pages
       # ==========================================
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
@@ -370,7 +324,7 @@ jobs:
           echo "  - Deployment mode: Incremental (docs only)"
 
       # ==========================================
-      # Task 9: Error Handling
+      # Task 8: Error Handling
       # ==========================================
       - name: Cleanup on Failure
         if: failure()
