@@ -111,57 +111,67 @@ jobs:
           echo "✅ Hugo Templates ready"
 
       # ==========================================
-      # PHASE 3: Determine What to Build
+      # PHASE 3: Determine Federation Strategy
       # ==========================================
-      - name: Determine Build Targets
-        id: build-targets
+      - name: Determine Federation Strategy
+        id: build-strategy
         run: |
-          echo "🎯 Determining what needs to be rebuilt..."
+          echo "🎯 Determining federation build strategy..."
 
-          # Check trigger type
           TRIGGER="${{ github.event_name }}"
           EVENT_TYPE="${{ github.event.action }}"
 
-          # Defaults for workflow_dispatch
-          BUILD_CORPORATE="${{ github.event.inputs.rebuild_corporate }}"
-          BUILD_DOCS="${{ github.event.inputs.rebuild_docs }}"
+          if [ "$TRIGGER" = "workflow_dispatch" ]; then
+            # Manual trigger - full rebuild
+            echo "📢 Manual trigger - full rebuild"
+            STRATEGY="merge-and-build"
+            BUILD_CORPORATE="${{ github.event.inputs.rebuild_corporate }}"
+            BUILD_DOCS="${{ github.event.inputs.rebuild_docs }}"
+            # Apply defaults
+            BUILD_CORPORATE="${BUILD_CORPORATE:-true}"
+            BUILD_DOCS="${BUILD_DOCS:-true}"
 
-          # For repository_dispatch, determine based on event type
-          if [ "$TRIGGER" = "repository_dispatch" ]; then
+          elif [ "$TRIGGER" = "repository_dispatch" ]; then
             if [ "$EVENT_TYPE" = "corporate-site-updated" ]; then
+              # Corporate update - full rebuild
+              echo "📢 Corporate site update - full rebuild"
+              STRATEGY="merge-and-build"
               BUILD_CORPORATE="true"
-              BUILD_DOCS="false"
-              echo "📢 Triggered by corporate site update"
+              BUILD_DOCS="true"
             else
+              # Documentation update - incremental
+              echo "📢 Documentation update ($EVENT_TYPE) - incremental with preservation"
+              STRATEGY="preserve-base-site"
               BUILD_CORPORATE="false"
               BUILD_DOCS="true"
-              echo "📢 Triggered by documentation update ($EVENT_TYPE)"
             fi
+          else
+            echo "❌ Unknown trigger: $TRIGGER"
+            exit 1
           fi
 
-          # Default to true if not set
-          BUILD_CORPORATE="${BUILD_CORPORATE:-true}"
-          BUILD_DOCS="${BUILD_DOCS:-true}"
-
+          echo "strategy=$STRATEGY" >> $GITHUB_OUTPUT
           echo "build_corporate=$BUILD_CORPORATE" >> $GITHUB_OUTPUT
           echo "build_docs=$BUILD_DOCS" >> $GITHUB_OUTPUT
 
-          echo "📋 Build plan:"
-          echo "  - Corporate site: $BUILD_CORPORATE"
+          echo ""
+          echo "📋 Federation Strategy:"
+          echo "  - Strategy: $STRATEGY"
+          echo "  - Corporate: $BUILD_CORPORATE"
           echo "  - Documentation: $BUILD_DOCS"
 
       # ==========================================
       # PHASE 4: Build Corporate Site (Conditional)
       # ==========================================
       - name: Clone Corporate Content
-        if: steps.build-targets.outputs.build_corporate == 'true'
+        if: steps.build-strategy.outputs.build_corporate == 'true'
         run: |
           echo "📥 Cloning corporate content repository..."
           git clone https://github.com/info-tech-io/info-tech.git info-tech
           echo "✅ Corporate content cloned"
 
       - name: Build Corporate Site
-        if: steps.build-targets.outputs.build_corporate == 'true'
+        if: steps.build-strategy.outputs.build_corporate == 'true'
         run: |
           echo "🏗️ Building corporate site..."
 
@@ -192,7 +202,7 @@ jobs:
           echo "✅ Corporate site built"
 
       - name: Validate Corporate Build
-        if: steps.build-targets.outputs.build_corporate == 'true'
+        if: steps.build-strategy.outputs.build_corporate == 'true'
         run: |
           echo "🔍 Validating corporate build..."
 
@@ -208,27 +218,39 @@ jobs:
       # ==========================================
       # PHASE 5: Build Documentation (Conditional)
       # ==========================================
-      - name: Build All Product Documentation
-        if: steps.build-targets.outputs.build_docs == 'true'
+      - name: Run Federation Build
+        if: steps.build-strategy.outputs.build_docs == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "🏗️ Building all product documentation..."
+          echo "🚀 Running Hugo Templates federated build..."
 
           cd hugo-templates
 
-          # Use federated-build.sh with documentation-modules.json
-          ./scripts/federated-build.sh \
-            --config=../hub-repo/configs/documentation-modules.json \
-            --output=../docs-build \
-            --verbose \
-            ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
+          STRATEGY="${{ steps.build-strategy.outputs.strategy }}"
+
+          if [ "$STRATEGY" = "preserve-base-site" ]; then
+            echo "🔄 Incremental build - preserving existing content"
+            ./scripts/federated-build.sh \
+              --config=../hub-repo/configs/documentation-modules.json \
+              --output=../docs-build \
+              --preserve-base-site \
+              --verbose \
+              ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
+          else
+            echo "🔄 Full rebuild - building everything"
+            ./scripts/federated-build.sh \
+              --config=../hub-repo/configs/documentation-modules.json \
+              --output=../docs-build \
+              --verbose \
+              ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
+          fi
 
           cd ..
-          echo "✅ All documentation built"
+          echo "✅ Federation build complete"
 
       - name: Validate Documentation Build
-        if: steps.build-targets.outputs.build_docs == 'true'
+        if: steps.build-strategy.outputs.build_docs == 'true'
         run: |
           echo "🔍 Validating documentation builds..."
 
@@ -251,7 +273,7 @@ jobs:
           echo "✅ All documentation validated"
 
       - name: Create Documentation Hub
-        if: steps.build-targets.outputs.build_docs == 'true'
+        if: steps.build-strategy.outputs.build_docs == 'true'
         run: |
           echo "🏠 Creating documentation hub..."
 
@@ -341,90 +363,55 @@ jobs:
           echo "✅ Documentation hub created"
 
       # ==========================================
-      # PHASE 6: Atomic Merge
+      # PHASE 6: Prepare Final Site
       # ==========================================
-      - name: Atomic Merge - Combine All Content
+      - name: Prepare Final Site Structure
         run: |
-          echo "🔄 Performing atomic merge of all content..."
+          echo "📦 Preparing final site from federation build..."
 
-          # Initialize final-site directory
-          mkdir -p final-site
+          STRATEGY="${{ steps.build-strategy.outputs.strategy }}"
 
-          # Step 1: Copy existing content as base
-          if [ -d "current-site" ] && [ "$(ls -A current-site 2>/dev/null)" ]; then
-            echo "📋 Using current site as base..."
-            rsync -av current-site/ final-site/
-          fi
+          if [ "$STRATEGY" = "preserve-base-site" ]; then
+            # For incremental updates, federated-build.sh already handled content preservation
+            echo "🔄 Using federated build output (content already preserved)"
 
-          # Step 2: Merge corporate site (if built)
-          if [ "${{ steps.build-targets.outputs.build_corporate }}" = "true" ] && [ -d "corporate-build" ]; then
-            echo "📋 Merging corporate site to root (excluding /docs/)..."
-            rsync -av --delete --exclude='docs/' corporate-build/ final-site/
-            echo "✅ Corporate site merged"
+            if [ -d "docs-build" ]; then
+              mv docs-build final-site
+              echo "✅ Federation output moved to final-site"
+            else
+              echo "❌ Federation build output not found!"
+              exit 1
+            fi
+
           else
-            echo "⏭️  Skipping corporate site merge (not rebuilt)"
+            # For full rebuilds, combine corporate and docs
+            echo "🔄 Combining corporate site and documentation"
+            mkdir -p final-site
+
+            # Add corporate site if built
+            if [ "${{ steps.build-strategy.outputs.build_corporate }}" = "true" ] && [ -d "corporate-build" ]; then
+              echo "📋 Adding corporate site..."
+              rsync -av corporate-build/ final-site/
+              echo "✅ Corporate site added"
+            fi
+
+            # Add documentation if built
+            if [ "${{ steps.build-strategy.outputs.build_docs }}" = "true" ] && [ -d "docs-build" ]; then
+              echo "📋 Adding documentation..."
+              if [ -d "docs-build/docs" ]; then
+                # If docs-build contains docs/, copy it
+                mkdir -p final-site/docs
+                rsync -av docs-build/docs/ final-site/docs/
+              else
+                # If docs-build is the docs content, copy it to /docs/
+                mkdir -p final-site/docs
+                rsync -av docs-build/ final-site/docs/
+              fi
+              echo "✅ Documentation added"
+            fi
           fi
 
-          # Step 3: Merge documentation (if built)
-          if [ "${{ steps.build-targets.outputs.build_docs }}" = "true" ] && [ -d "docs-build/docs" ]; then
-            echo "📋 Merging documentation to /docs/..."
-            mkdir -p final-site/docs
-            rsync -av --delete docs-build/docs/ final-site/docs/
-            echo "✅ Documentation merged"
-          else
-            echo "⏭️  Skipping documentation merge (not rebuilt)"
-          fi
-
-          # Step 4: Ensure /docs/ exists with fallback
-          if [ ! -d "final-site/docs" ]; then
-            echo "📁 Creating /docs/ directory with fallback index..."
-            mkdir -p final-site/docs
-            cat > final-site/docs/index.html <<'FALLBACK'
-          <!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Documentation - InfoTech.io</title>
-              <style>
-                body {
-                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                  margin: 0;
-                  padding: 40px;
-                  text-align: center;
-                  background: #fafafa;
-                }
-                .container {
-                  max-width: 600px;
-                  margin: 0 auto;
-                  background: white;
-                  border-radius: 12px;
-                  padding: 40px;
-                  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-                }
-                .header { color: #333; margin-bottom: 20px; }
-                .message { color: #666; margin-bottom: 30px; line-height: 1.6; }
-                .link { color: #1da1f2; text-decoration: none; font-weight: 600; }
-                .link:hover { text-decoration: underline; }
-              </style>
-            </head>
-            <body>
-              <div class="container">
-                <h1 class="header">📚 Documentation Hub</h1>
-                <p class="message">
-                  Product documentation will be available here soon.<br>
-                  Check back later for updates.
-                </p>
-                <p>
-                  <a href="/" class="link">🏠 Back to Main Site</a>
-                </p>
-              </div>
-            </body>
-          </html>
-          FALLBACK
-          fi
-
-          echo "✅ Atomic merge complete"
+          echo "✅ Final site preparation complete"
 
       - name: Verify Final Site Structure
         run: |
