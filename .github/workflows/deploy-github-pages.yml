@@ -242,19 +242,19 @@ jobs:
 
             # Создать минимальный module.json для current-site
             cat > ../current-site/module.json <<'EOF'
-            {
-              "module": {
-                "name": "base-site",
-                "version": "1.0.0",
-                "description": "Current GitHub Pages content (downloaded)"
-              },
-              "build": {
-                "template": "corporate",
-                "theme": "compose",
-                "copy_static": true
-              }
-            }
-            EOF
+{
+  "module": {
+    "name": "base-site",
+    "version": "1.0.0",
+    "description": "Current GitHub Pages content (downloaded)"
+  },
+  "build": {
+    "template": "corporate",
+    "theme": "compose",
+    "copy_static": true
+  }
+}
+EOF
 
             # Создать модифицированную конфигурацию
             jq --arg current_site_path "$(pwd)/../current-site" '
