@@ -241,8 +241,7 @@ jobs:
             find ../current-site -maxdepth 1 -type f -exec mv {} ../current-site/content/ \;
 
             # Создать минимальный module.json для current-site
-            cat > ../current-site/module.json <<'EOF'
-            {
+            echo '{
               "module": {
                 "name": "base-site",
                 "version": "1.0.0",
@@ -253,8 +252,7 @@ jobs:
                 "theme": "compose",
                 "copy_static": true
               }
-            }
-            EOF
+            }' > ../current-site/module.json
 
             # Создать модифицированную конфигурацию
             jq --arg current_site_path "$(pwd)/../current-site" '
