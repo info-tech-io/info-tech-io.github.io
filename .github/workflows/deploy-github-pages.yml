@@ -230,11 +230,56 @@ jobs:
           STRATEGY="${{ steps.build-strategy.outputs.strategy }}"
 
           if [ "$STRATEGY" = "preserve-base-site" ]; then
-            echo "🔄 Incremental build - preserving existing content"
+            echo "🔄 Incremental build - using existing current-site as base"
+
+            # КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Создать временную конфигурацию с current-site как local source
+            echo "📄 Creating temporary federation config with local base site..."
+
+            # Создать правильную структуру для local source
+            mkdir -p ../current-site/content
+            # Переместить все файлы в content поддиректорию
+            find ../current-site -maxdepth 1 -type f -exec mv {} ../current-site/content/ \;
+
+            # Создать минимальный module.json для current-site
+            cat > ../current-site/module.json <<'EOF'
+            {
+              "module": {
+                "name": "base-site",
+                "version": "1.0.0",
+                "description": "Current GitHub Pages content (downloaded)"
+              },
+              "build": {
+                "template": "corporate",
+                "theme": "compose",
+                "copy_static": true
+              }
+            }
+            EOF
+
+            # Создать модифицированную конфигурацию
+            jq --arg current_site_path "$(pwd)/../current-site" '
+              .federation.strategy = "download-merge-deploy" |
+              .modules = [
+                {
+                  "name": "base-site",
+                  "source": {
+                    "repository": "local",
+                    "local_path": $current_site_path,
+                    "path": "content",
+                    "branch": "main"
+                  },
+                  "module_json": "module.json",
+                  "destination": "/",
+                  "css_path_prefix": ""
+                }
+              ] + .modules
+            ' ../hub-repo/configs/documentation-modules.json > ../temp-preserve-config.json
+
+            echo "✅ Temporary config created with current-site as base module"
+
             ./scripts/federated-build.sh \
-              --config=../hub-repo/configs/documentation-modules.json \
+              --config=../temp-preserve-config.json \
               --output=../docs-build \
-              --preserve-base-site \
               --verbose \
               ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
           else
@@ -244,6 +289,12 @@ jobs:
               --output=../docs-build \
               --verbose \
               ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
+          fi
+
+          # Cleanup temporary files
+          if [ -f "../temp-preserve-config.json" ]; then
+            rm -f ../temp-preserve-config.json
+            echo "🧹 Cleaned up temporary config"
           fi
 
           cd ..
