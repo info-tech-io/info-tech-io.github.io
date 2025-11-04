@@ -8,16 +8,21 @@
 
 ## Overview
 
-На основе анализа проблемы, корневая причина не в логике определения build targets,
-а в том, что workflow использует кастомную логику вместо встроенных возможностей
-Hugo Templates Framework для инкрементальных обновлений.
+**ОБНОВЛЕНО**: После анализа failed runs, корневая проблема в интеграции с Hugo Templates Framework.
 
-**Решение**: Использовать `federated-build.sh --preserve-base-site` вместо кастомной логики:
+**Проблема**: Hugo Templates Framework с флагом `--preserve-base-site` пытается скачать базовый сайт
+через `wget https://info-tech-io.github.io`, но получает ошибки (rate limiting, временные сбои).
 
-1. Заменить кастомные steps на вызов federated-build.sh
-2. Настроить modules.json конфигурацию
-3. Использовать preserve-base-site стратегию для инкрементальных обновлений
-4. Убрать кастомную "Atomic Merge" логику
+**Но у нас уже есть скачанное состояние** в `current-site` (Phase 1 workflow)!
+
+**Правильное решение**: Настроить Hugo Templates Framework для использования уже скачанного `current-site`
+как local source для базового сайта вместо попыток wget URL.
+
+**Ключевые изменения**:
+1. Использовать local source type для базового сайта в preserve-base-site стратегии
+2. Передать path к current-site директории вместо URL
+3. Убедиться что federated-build.sh корректно обрабатывает local base sites
+4. Сохранить существующую логику определения стратегий
 
 ---
 
@@ -107,17 +112,16 @@ Hugo Templates Framework для инкрементальных обновлен�
 
 ---
 
-### Step 2.2: Update Workflow to Use Hugo Templates Framework
+### Step 2.2: Fix Hugo Templates Framework Integration
 
-**Action**: Заменить кастомную логику на federated-build.sh
+**Action**: Исправить передачу базового сайта в preserve-base-site стратегии
 
 **File**: `.github/workflows/deploy-github-pages.yml`
 
-**Current Problematic Sections to Replace**:
-1. Lines 99-151: "Determine Build Targets" - удалить
-2. Lines 139-189: "Build Corporate Site" (conditional) - упростить
-3. Lines 194-248: "Build All Product Documentation" (conditional) - заменить
-4. Lines 344-425: "Atomic Merge - Combine All Content" - заменить
+**Проблема**: Hugo Templates Framework пытается `wget https://info-tech-io.github.io`
+но у нас уже есть скачанное состояние в `current-site` из Phase 1.
+
+**Решение**: Передать `current-site` как local source в preserve-base-site стратегии.
 
 **New Workflow Structure**:
 ```yaml
@@ -200,22 +204,20 @@ Hugo Templates Framework для инкрементальных обновлен�
           STRATEGY="${{ steps.build-strategy.outputs.strategy }}"
 
           if [ "$STRATEGY" = "preserve-base-site" ]; then
-            echo "🔄 Incremental build - preserving existing content"
+            echo "🔄 Incremental build - using existing current-site as base"
+
+            # КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Передать current-site как base-site-path
             ./scripts/federated-build.sh \
-              --config=../configs/federation-modules.json \
-              --output=../federation-output \
+              --config=../hub-repo/configs/documentation-modules.json \
+              --output=../docs-build \
               --preserve-base-site \
+              --base-site-path=../current-site \
               --verbose
           else
             echo "🔄 Full rebuild - building everything"
-            # First, prepare corporate site as base
-            if [ -d "../corporate-build" ]; then
-              cp -r ../corporate-build ../federation-base
-            fi
-
             ./scripts/federated-build.sh \
-              --config=../configs/federation-modules.json \
-              --output=../federation-output \
+              --config=../hub-repo/configs/documentation-modules.json \
+              --output=../docs-build \
               --verbose
           fi
 
@@ -237,16 +239,21 @@ Hugo Templates Framework для инкрементальных обновлен�
           echo "✅ Final site prepared"
 ```
 
+**Ключевые изменения**:
+1. **Добавлен параметр `--base-site-path=../current-site`** - это заставляет Hugo Templates Framework использовать уже скачанное состояние вместо попыток wget
+2. **Исправлен путь к config** - используется правильный путь `../hub-repo/configs/documentation-modules.json`
+3. **Исправлен output path** - используется `../docs-build` для совместимости с остальным workflow
+
 **Verification**:
-- [ ] Workflow uses federated-build.sh
-- [ ] preserve-base-site flag used for incremental updates
-- [ ] Custom merge logic removed
+- [ ] Добавлен параметр --base-site-path=../current-site для preserve-base-site стратегии
+- [ ] Hugo Templates Framework больше не пытается wget URL
+- [ ] Используется уже скачанное состояние из Phase 1
 - [ ] Syntax is valid YAML
 
 **Success Criteria**:
-- ✅ Workflow simplified and uses Hugo Templates Framework
-- ✅ Incremental logic handled by federated-build.sh
-- ✅ No custom merge operations
+- ✅ Hugo Templates Framework использует local base site вместо wget
+- ✅ Исправлена интеграция preserve-base-site стратегии
+- ✅ Устранена проблема "wget failed with exit code: 8"
 
 ---
 
