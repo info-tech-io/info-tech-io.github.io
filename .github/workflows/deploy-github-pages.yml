@@ -57,11 +57,12 @@ jobs:
           path: current-site
         continue-on-error: true
 
-      - name: Validate Current State
+      - name: Validate Current State & Apply Fallback
         run: |
           echo "📦 Checking current site state..."
 
-          if [ -d "current-site" ]; then
+          # Check if we have valid current site content
+          if [ -d "current-site" ] && [ -n "$(ls -A current-site 2>/dev/null)" ]; then
             echo "✅ Current site downloaded"
             echo "📊 Current site size: $(du -sh current-site | cut -f1)"
 
@@ -72,9 +73,16 @@ jobs:
             if [ -d "current-site/docs" ]; then
               echo "✅ Docs directory exists: $(du -sh current-site/docs | cut -f1)"
             fi
+
+            # Valid current site found
+            echo "FALLBACK_TO_FULL=false" >> $GITHUB_ENV
           else
-            echo "⚠️  No existing site found (fresh deployment)"
+            echo "⚠️  No existing site found (fresh deployment or gh-pages branch missing)"
+            echo "🔄 Will use full rebuild strategy as fallback"
             mkdir -p current-site
+
+            # Set fallback flag
+            echo "FALLBACK_TO_FULL=true" >> $GITHUB_ENV
           fi
 
       # ==========================================
@@ -148,6 +156,15 @@ jobs:
           else
             echo "❌ Unknown trigger: $TRIGGER"
             exit 1
+          fi
+
+          # CRITICAL FIX: Apply fallback strategy if base site unavailable
+          if [ "$STRATEGY" = "preserve-base-site" ] && [ "$FALLBACK_TO_FULL" = "true" ]; then
+            echo "⚠️  Base site unavailable - switching to full rebuild strategy"
+            echo "🔄 Fallback: preserve-base-site → merge-and-build"
+            STRATEGY="merge-and-build"
+            BUILD_CORPORATE="true"  # Must rebuild corporate site too
+            BUILD_DOCS="true"
           fi
 
           echo "strategy=$STRATEGY" >> $GITHUB_OUTPUT
