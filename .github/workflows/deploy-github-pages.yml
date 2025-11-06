@@ -1,10 +1,10 @@
 name: Deploy GitHub Pages Federation
 
-# Unified atomic workflow for deploying both corporate site and documentation
-# Solves race condition by deploying everything in a single atomic transaction
+# Simplified workflow for full federation rebuild
+# Always rebuilds both corporate site and documentation for reliability
 
 on:
-  # Triggered by corporate site updates
+  # Triggered by any content updates
   repository_dispatch:
     types:
       - corporate-site-updated
@@ -13,17 +13,9 @@ on:
       - web-terminal-docs-updated
       - cli-docs-updated
 
-  # Manual trigger with options
+  # Manual trigger with debug option
   workflow_dispatch:
     inputs:
-      rebuild_corporate:
-        description: 'Rebuild corporate site'
-        type: boolean
-        default: true
-      rebuild_docs:
-        description: 'Rebuild documentation'
-        type: boolean
-        default: true
       debug:
         description: 'Enable debug mode'
         type: boolean
@@ -48,45 +40,7 @@ jobs:
 
     steps:
       # ==========================================
-      # PHASE 1: Download Current State
-      # ==========================================
-      - name: Download Current GitHub Pages State
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: current-site
-        continue-on-error: true
-
-      - name: Validate Current State & Apply Fallback
-        run: |
-          echo "📦 Checking current site state..."
-
-          # Check if we have valid current site content
-          if [ -d "current-site" ] && [ -n "$(ls -A current-site 2>/dev/null)" ]; then
-            echo "✅ Current site downloaded"
-            echo "📊 Current site size: $(du -sh current-site | cut -f1)"
-
-            if [ -f "current-site/index.html" ]; then
-              echo "✅ Corporate site exists"
-            fi
-
-            if [ -d "current-site/docs" ]; then
-              echo "✅ Docs directory exists: $(du -sh current-site/docs | cut -f1)"
-            fi
-
-            # Valid current site found
-            echo "FALLBACK_TO_FULL=false" >> $GITHUB_ENV
-          else
-            echo "⚠️  No existing site found (fresh deployment or gh-pages branch missing)"
-            echo "🔄 Will use full rebuild strategy as fallback"
-            mkdir -p current-site
-
-            # Set fallback flag
-            echo "FALLBACK_TO_FULL=true" >> $GITHUB_ENV
-          fi
-
-      # ==========================================
-      # PHASE 2: Setup Build Environment
+      # PHASE 1: Setup Build Environment
       # ==========================================
       - name: Checkout Hub Repository (for configs)
         uses: actions/checkout@v4
@@ -119,76 +73,15 @@ jobs:
           echo "✅ Hugo Templates ready"
 
       # ==========================================
-      # PHASE 3: Determine Federation Strategy
-      # ==========================================
-      - name: Determine Federation Strategy
-        id: build-strategy
-        run: |
-          echo "🎯 Determining federation build strategy..."
-
-          TRIGGER="${{ github.event_name }}"
-          EVENT_TYPE="${{ github.event.action }}"
-
-          if [ "$TRIGGER" = "workflow_dispatch" ]; then
-            # Manual trigger - full rebuild
-            echo "📢 Manual trigger - full rebuild"
-            STRATEGY="merge-and-build"
-            BUILD_CORPORATE="${{ github.event.inputs.rebuild_corporate }}"
-            BUILD_DOCS="${{ github.event.inputs.rebuild_docs }}"
-            # Apply defaults
-            BUILD_CORPORATE="${BUILD_CORPORATE:-true}"
-            BUILD_DOCS="${BUILD_DOCS:-true}"
-
-          elif [ "$TRIGGER" = "repository_dispatch" ]; then
-            if [ "$EVENT_TYPE" = "corporate-site-updated" ]; then
-              # Corporate update - full rebuild
-              echo "📢 Corporate site update - full rebuild"
-              STRATEGY="merge-and-build"
-              BUILD_CORPORATE="true"
-              BUILD_DOCS="true"
-            else
-              # Documentation update - incremental
-              echo "📢 Documentation update ($EVENT_TYPE) - incremental with preservation"
-              STRATEGY="preserve-base-site"
-              BUILD_CORPORATE="false"
-              BUILD_DOCS="true"
-            fi
-          else
-            echo "❌ Unknown trigger: $TRIGGER"
-            exit 1
-          fi
-
-          # CRITICAL FIX: Apply fallback strategy if base site unavailable
-          if [ "$STRATEGY" = "preserve-base-site" ] && [ "$FALLBACK_TO_FULL" = "true" ]; then
-            echo "⚠️  Base site unavailable - switching to full rebuild strategy"
-            echo "🔄 Fallback: preserve-base-site → merge-and-build"
-            STRATEGY="merge-and-build"
-            BUILD_CORPORATE="true"  # Must rebuild corporate site too
-            BUILD_DOCS="true"
-          fi
-
-          echo "strategy=$STRATEGY" >> $GITHUB_OUTPUT
-          echo "build_corporate=$BUILD_CORPORATE" >> $GITHUB_OUTPUT
-          echo "build_docs=$BUILD_DOCS" >> $GITHUB_OUTPUT
-
-          echo ""
-          echo "📋 Federation Strategy:"
-          echo "  - Strategy: $STRATEGY"
-          echo "  - Corporate: $BUILD_CORPORATE"
-          echo "  - Documentation: $BUILD_DOCS"
-
-      # ==========================================
-      # PHASE 4: Build Corporate Site (Conditional)
+      # PHASE 2: Build Corporate Site
       # ==========================================
       - name: Clone Corporate Content
-        if: steps.build-strategy.outputs.build_corporate == 'true'
         run: |
           echo "📥 Cloning corporate content repository..."
           git clone https://github.com/info-tech-io/info-tech.git info-tech
           echo "✅ Corporate content cloned"
 
       - name: Build Corporate Site
-        if: steps.build-strategy.outputs.build_corporate == 'true'
         run: |
           echo "🏗️ Building corporate site..."
 
@@ -219,7 +112,6 @@ jobs:
           echo "✅ Corporate site built"
 
       - name: Validate Corporate Build
-        if: steps.build-strategy.outputs.build_corporate == 'true'
         run: |
           echo "🔍 Validating corporate build..."
 
@@ -233,10 +125,9 @@ jobs:
           echo "📦 Build size: $(du -sh corporate-build | cut -f1)"
 
       # ==========================================
-      # PHASE 5: Build Documentation (Conditional)
+      # PHASE 3: Build Documentation
       # ==========================================
       - name: Run Federation Build
-        if: steps.build-strategy.outputs.build_docs == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
@@ -244,79 +135,17 @@ jobs:
 
           cd hugo-templates
 
-          STRATEGY="${{ steps.build-strategy.outputs.strategy }}"
-
-          if [ "$STRATEGY" = "preserve-base-site" ]; then
-            echo "🔄 Incremental build - using existing current-site as base"
-
-            # КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Создать временную конфигурацию с current-site как local source
-            echo "📄 Creating temporary federation config with local base site..."
-
-            # Создать правильную структуру для local source
-            mkdir -p ../current-site/content
-            # Переместить все файлы в content поддиректорию
-            find ../current-site -maxdepth 1 -type f -exec mv {} ../current-site/content/ \;
-
-            # Создать минимальный module.json для current-site
-            echo '{
-              "module": {
-                "name": "base-site",
-                "version": "1.0.0",
-                "description": "Current GitHub Pages content (downloaded)"
-              },
-              "build": {
-                "template": "corporate",
-                "theme": "compose",
-                "copy_static": true
-              }
-            }' > ../current-site/module.json
-
-            # Создать модифицированную конфигурацию
-            jq --arg current_site_path "$(pwd)/../current-site" '
-              .federation.strategy = "download-merge-deploy" |
-              .modules = [
-                {
-                  "name": "base-site",
-                  "source": {
-                    "repository": "local",
-                    "local_path": $current_site_path,
-                    "path": "content",
-                    "branch": "main"
-                  },
-                  "module_json": "module.json",
-                  "destination": "/",
-                  "css_path_prefix": ""
-                }
-              ] + .modules
-            ' ../hub-repo/configs/documentation-modules.json > ../temp-preserve-config.json
-
-            echo "✅ Temporary config created with current-site as base module"
-
-            ./scripts/federated-build.sh \
-              --config=../temp-preserve-config.json \
-              --output=../docs-build \
-              --verbose \
-              ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
-          else
-            echo "🔄 Full rebuild - building everything"
-            ./scripts/federated-build.sh \
-              --config=../hub-repo/configs/documentation-modules.json \
-              --output=../docs-build \
-              --verbose \
-              ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
-          fi
-
-          # Cleanup temporary files
-          if [ -f "../temp-preserve-config.json" ]; then
-            rm -f ../temp-preserve-config.json
-            echo "🧹 Cleaned up temporary config"
-          fi
+          echo "🔄 Full rebuild - building all documentation"
+          ./scripts/federated-build.sh \
+            --config=../hub-repo/configs/documentation-modules.json \
+            --output=../docs-build \
+            --verbose \
+            ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
 
           cd ..
           echo "✅ Federation build complete"
 
       - name: Validate Documentation Build
-        if: steps.build-strategy.outputs.build_docs == 'true'
         run: |
           echo "🔍 Validating documentation builds..."
 
@@ -339,7 +168,6 @@ jobs:
           echo "✅ All documentation validated"
 
       - name: Create Documentation Hub
-        if: steps.build-strategy.outputs.build_docs == 'true'
         run: |
           echo "🏠 Creating documentation hub..."
 
@@ -429,53 +257,31 @@ jobs:
           echo "✅ Documentation hub created"
 
       # ==========================================
-      # PHASE 6: Prepare Final Site
+      # PHASE 4: Prepare Final Site
       # ==========================================
       - name: Prepare Final Site Structure
         run: |
-          echo "📦 Preparing final site from federation build..."
+          echo "📦 Preparing final site by combining corporate and documentation..."
 
-          STRATEGY="${{ steps.build-strategy.outputs.strategy }}"
+          mkdir -p final-site
 
-          if [ "$STRATEGY" = "preserve-base-site" ]; then
-            # For incremental updates, federated-build.sh already handled content preservation
-            echo "🔄 Using federated build output (content already preserved)"
+          # Add corporate site
+          echo "📋 Adding corporate site..."
+          rsync -av corporate-build/ final-site/
+          echo "✅ Corporate site added"
 
-            if [ -d "docs-build" ]; then
-              mv docs-build final-site
-              echo "✅ Federation output moved to final-site"
-            else
-              echo "❌ Federation build output not found!"
-              exit 1
-            fi
-
+          # Add documentation
+          echo "📋 Adding documentation..."
+          if [ -d "docs-build/docs" ]; then
+            # If docs-build contains docs/, copy it
+            mkdir -p final-site/docs
+            rsync -av docs-build/docs/ final-site/docs/
           else
-            # For full rebuilds, combine corporate and docs
-            echo "🔄 Combining corporate site and documentation"
-            mkdir -p final-site
-
-            # Add corporate site if built
-            if [ "${{ steps.build-strategy.outputs.build_corporate }}" = "true" ] && [ -d "corporate-build" ]; then
-              echo "📋 Adding corporate site..."
-              rsync -av corporate-build/ final-site/
-              echo "✅ Corporate site added"
-            fi
-
-            # Add documentation if built
-            if [ "${{ steps.build-strategy.outputs.build_docs }}" = "true" ] && [ -d "docs-build" ]; then
-              echo "📋 Adding documentation..."
-              if [ -d "docs-build/docs" ]; then
-                # If docs-build contains docs/, copy it
-                mkdir -p final-site/docs
-                rsync -av docs-build/docs/ final-site/docs/
-              else
-                # If docs-build is the docs content, copy it to /docs/
-                mkdir -p final-site/docs
-                rsync -av docs-build/ final-site/docs/
-              fi
-              echo "✅ Documentation added"
-            fi
+            # If docs-build is the docs content, copy it to /docs/
+            mkdir -p final-site/docs
+            rsync -av docs-build/ final-site/docs/
           fi
+          echo "✅ Documentation added"
 
           echo "✅ Final site preparation complete"
 
@@ -538,20 +344,20 @@ jobs:
           echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
           echo ""
           echo "📋 Deployment Summary:"
-          echo "  - Corporate site: ${{ steps.build-targets.outputs.build_corporate == 'true' && 'Updated ✅' || 'Preserved ✅' }}"
-          echo "  - Documentation: ${{ steps.build-targets.outputs.build_docs == 'true' && 'Updated ✅' || 'Preserved ✅' }}"
-          echo "  - Deployment mode: Atomic (single transaction)"
+          echo "  - Corporate site: Updated ✅"
+          echo "  - Documentation: Updated ✅"
+          echo "  - Deployment mode: Full rebuild (simplified strategy)"
           echo "  - Concurrency: Serialized via unified group"
 
       # ==========================================
-      # PHASE 8: Error Handling
+      # PHASE 5: Error Handling
       # ==========================================
       - name: Cleanup on Failure
         if: failure()
         run: |
           echo "❌ Workflow failed!"
           echo "🧹 Cleaning up temporary files..."
-          rm -rf corporate-build docs-build current-site final-site hugo-templates info-tech hub-repo
+          rm -rf corporate-build docs-build final-site hugo-templates info-tech hub-repo
           echo "✅ Cleanup complete"
 
       - name: Notify on Failure
@@ -559,4 +365,4 @@ jobs:
         run: |
           echo "::error::GitHub Pages deployment failed. Check logs for details."
           echo "::error::Failed job: ${{ github.job }}"
-          echo "::error::Build targets: Corporate=${{ steps.build-targets.outputs.build_corporate }}, Docs=${{ steps.build-targets.outputs.build_docs }}"
+          echo "::error::Strategy: Full rebuild (always build both corporate and documentation)"
