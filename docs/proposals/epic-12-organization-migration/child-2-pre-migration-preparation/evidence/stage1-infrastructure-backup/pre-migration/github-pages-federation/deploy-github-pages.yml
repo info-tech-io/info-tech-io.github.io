@@ -1,0 +1,368 @@
+name: Deploy GitHub Pages Federation
+
+# Simplified workflow for full federation rebuild
+# Always rebuilds both corporate site and documentation for reliability
+
+on:
+  # Triggered by any content updates
+  repository_dispatch:
+    types:
+      - corporate-site-updated
+      - quiz-docs-updated
+      - hugo-templates-docs-updated
+      - web-terminal-docs-updated
+      - cli-docs-updated
+
+  # Manual trigger with debug option
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Single concurrency group ensures atomic deployments
+concurrency:
+  group: "github-pages-federation"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # ==========================================
+      # PHASE 1: Setup Build Environment
+      # ==========================================
+      - name: Checkout Hub Repository (for configs)
+        uses: actions/checkout@v4
+        with:
+          path: hub-repo
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.148.0'
+          extended: true
+
+      - name: Clone Hugo Templates Framework
+        uses: actions/checkout@v4
+        with:
+          repository: info-tech-io/hugo-templates
+          token: ${{ secrets.PAT_TOKEN }}
+          path: hugo-templates
+          submodules: recursive
+          ref: main
+
+      - name: Prepare Hugo Templates
+        run: |
+          echo "🔧 Preparing Hugo Templates framework..."
+          cd hugo-templates
+          git submodule update --init --recursive
+          npm install || echo "⚠️  npm install failed, continuing..."
+          chmod +x scripts/build.sh scripts/federated-build.sh
+          cd ..
+          echo "✅ Hugo Templates ready"
+
+      # ==========================================
+      # PHASE 2: Build Corporate Site
+      # ==========================================
+      - name: Clone Corporate Content
+        run: |
+          echo "📥 Cloning corporate content repository..."
+          git clone https://github.com/info-tech-io/info-tech.git info-tech
+          echo "✅ Corporate content cloned"
+
+      - name: Build Corporate Site
+        run: |
+          echo "🏗️ Building corporate site..."
+
+          cd hugo-templates
+
+          # Copy corporate content to module-content
+          rm -rf module-content
+          cp -r ../info-tech/docs ./module-content
+
+          # Build corporate site
+          if [ "${{ github.event.inputs.debug }}" = "true" ]; then
+            ./scripts/build.sh \
+              --config ./module-content/module.json \
+              --content ./module-content/content \
+              --output ../corporate-build \
+              --force \
+              --debug \
+              --verbose
+          else
+            ./scripts/build.sh \
+              --config ./module-content/module.json \
+              --content ./module-content/content \
+              --output ../corporate-build \
+              --force
+          fi
+
+          cd ..
+          echo "✅ Corporate site built"
+
+      - name: Validate Corporate Build
+        run: |
+          echo "🔍 Validating corporate build..."
+
+          if [ ! -f "corporate-build/index.html" ]; then
+            echo "❌ Build failed: No index.html found"
+            exit 1
+          fi
+
+          html_count=$(find corporate-build -name '*.html' | wc -l)
+          echo "✅ Corporate build successful: $html_count HTML files"
+          echo "📦 Build size: $(du -sh corporate-build | cut -f1)"
+
+      # ==========================================
+      # PHASE 3: Build Documentation
+      # ==========================================
+      - name: Run Federation Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "🚀 Running Hugo Templates federated build..."
+
+          cd hugo-templates
+
+          echo "🔄 Full rebuild - building all documentation"
+          ./scripts/federated-build.sh \
+            --config=../hub-repo/configs/documentation-modules.json \
+            --output=../docs-build \
+            --verbose \
+            ${{ github.event.inputs.debug == 'true' && '--debug' || '' }}
+
+          cd ..
+          echo "✅ Federation build complete"
+
+      - name: Validate Documentation Build
+        run: |
+          echo "🔍 Validating documentation builds..."
+
+          products=("quiz" "hugo-templates" "web-terminal" "info-tech-cli")
+
+          for product in "${products[@]}"; do
+            if [ -d "docs-build/docs/$product" ]; then
+              html_count=$(find "docs-build/docs/$product" -name '*.html' | wc -l)
+              echo "  ✅ $product: $html_count HTML files"
+
+              if [ ! -f "docs-build/docs/$product/index.html" ]; then
+                echo "  ⚠️  Warning: $product missing index.html"
+              fi
+            else
+              echo "  ❌ $product: Build output missing"
+              exit 1
+            fi
+          done
+
+          echo "✅ All documentation validated"
+
+      - name: Create Documentation Hub
+        run: |
+          echo "🏠 Creating documentation hub..."
+
+          mkdir -p docs-build/docs
+
+          cat > docs-build/docs/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Documentation Hub - InfoTech.io</title>
+              <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                  line-height: 1.6;
+                  color: #14171a;
+                  background: #ffffff;
+                }
+                header {
+                  background: #14171a;
+                  color: white;
+                  padding: 2rem;
+                  text-align: center;
+                }
+                h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+                .subtitle { color: rgba(255,255,255,0.8); font-size: 1.1rem; }
+                .container { max-width: 1200px; margin: 3rem auto; padding: 0 2rem; }
+                .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+                .card {
+                  background: #f7f9fa;
+                  border: 1px solid #e1e8ed;
+                  border-radius: 12px;
+                  padding: 2rem;
+                  transition: transform 0.3s, box-shadow 0.3s;
+                  text-decoration: none;
+                  color: inherit;
+                  display: block;
+                }
+                .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+                .icon { font-size: 3rem; margin-bottom: 1rem; }
+                .card h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #14171a; }
+                .card p { color: #657786; margin-bottom: 1rem; }
+                .link { color: #1da1f2; font-weight: 500; text-decoration: none; }
+                .back { display: inline-block; margin: 2rem 0; color: #1da1f2; text-decoration: none; }
+              </style>
+            </head>
+            <body>
+              <header>
+                <h1>📚 Documentation Hub</h1>
+                <p class="subtitle">Comprehensive documentation for all InfoTech.io products</p>
+              </header>
+              <main class="container">
+                <div class="products">
+                  <a href="/docs/quiz/" class="card">
+                    <div class="icon">🎯</div>
+                    <h2>Quiz Engine</h2>
+                    <p>Interactive quiz and assessment platform for creating engaging educational content</p>
+                    <span class="link">View Documentation →</span>
+                  </a>
+                  <a href="/docs/hugo-templates/" class="card">
+                    <div class="icon">🏗️</div>
+                    <h2>Hugo Templates Framework</h2>
+                    <p>Powerful Hugo-based static site generation framework with federated build capabilities</p>
+                    <span class="link">View Documentation →</span>
+                  </a>
+                  <a href="/docs/web-terminal/" class="card">
+                    <div class="icon">💻</div>
+                    <h2>Web Terminal</h2>
+                    <p>Browser-based terminal emulator for interactive command-line experiences</p>
+                    <span class="link">View Documentation →</span>
+                  </a>
+                  <a href="/docs/info-tech-cli/" class="card">
+                    <div class="icon">⚡</div>
+                    <h2>InfoTech CLI</h2>
+                    <p>Command-line interface for managing InfoTech.io projects and workflows</p>
+                    <span class="link">View Documentation →</span>
+                  </a>
+                </div>
+                <a href="/" class="back">← Back to Main Site</a>
+              </main>
+            </body>
+          </html>
+          EOF
+
+          echo "✅ Documentation hub created"
+
+      # ==========================================
+      # PHASE 4: Prepare Final Site
+      # ==========================================
+      - name: Prepare Final Site Structure
+        run: |
+          echo "📦 Preparing final site by combining corporate and documentation..."
+
+          mkdir -p final-site
+
+          # Add corporate site
+          echo "📋 Adding corporate site..."
+          rsync -av corporate-build/ final-site/
+          echo "✅ Corporate site added"
+
+          # Add documentation
+          echo "📋 Adding documentation..."
+          if [ -d "docs-build/docs" ]; then
+            # If docs-build contains docs/, copy it
+            mkdir -p final-site/docs
+            rsync -av docs-build/docs/ final-site/docs/
+          else
+            # If docs-build is the docs content, copy it to /docs/
+            mkdir -p final-site/docs
+            rsync -av docs-build/ final-site/docs/
+          fi
+          echo "✅ Documentation added"
+
+          echo "✅ Final site preparation complete"
+
+      - name: Verify Final Site Structure
+        run: |
+          echo "📊 Final site structure verification:"
+          echo ""
+          echo "=== Root directory ==="
+          if [ -f "final-site/index.html" ]; then
+            echo "✅ Corporate index.html present"
+          else
+            echo "⚠️  Corporate index.html missing"
+          fi
+
+          echo ""
+          echo "=== Documentation (/docs/) ==="
+          if [ -d "final-site/docs" ]; then
+            echo "✅ /docs/ directory exists"
+
+            if [ -f "final-site/docs/index.html" ]; then
+              echo "✅ /docs/index.html present"
+            fi
+
+            products=("quiz" "hugo-templates" "web-terminal" "info-tech-cli")
+            for product in "${products[@]}"; do
+              if [ -d "final-site/docs/$product" ]; then
+                files=$(find "final-site/docs/$product" -type f | wc -l)
+                echo "  ✅ $product: $files files"
+              else
+                echo "  ⚠️  $product: Not present"
+              fi
+            done
+          else
+            echo "❌ /docs/ directory missing!"
+            exit 1
+          fi
+
+          echo ""
+          echo "=== Final statistics ==="
+          echo "📦 Total size: $(du -sh final-site | cut -f1)"
+          echo "📄 Total files: $(find final-site -type f | wc -l)"
+          echo ""
+          echo "✅ Verification complete"
+
+      # ==========================================
+      # PHASE 7: Atomic Deployment
+      # ==========================================
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: final-site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Deployment Success
+        run: |
+          echo "✅ GitHub Pages federation deployed successfully!"
+          echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "📋 Deployment Summary:"
+          echo "  - Corporate site: Updated ✅"
+          echo "  - Documentation: Updated ✅"
+          echo "  - Deployment mode: Full rebuild (simplified strategy)"
+          echo "  - Concurrency: Serialized via unified group"
+
+      # ==========================================
+      # PHASE 5: Error Handling
+      # ==========================================
+      - name: Cleanup on Failure
+        if: failure()
+        run: |
+          echo "❌ Workflow failed!"
+          echo "🧹 Cleaning up temporary files..."
+          rm -rf corporate-build docs-build final-site hugo-templates info-tech hub-repo
+          echo "✅ Cleanup complete"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "::error::GitHub Pages deployment failed. Check logs for details."
+          echo "::error::Failed job: ${{ github.job }}"
+          echo "::error::Strategy: Full rebuild (always build both corporate and documentation)"

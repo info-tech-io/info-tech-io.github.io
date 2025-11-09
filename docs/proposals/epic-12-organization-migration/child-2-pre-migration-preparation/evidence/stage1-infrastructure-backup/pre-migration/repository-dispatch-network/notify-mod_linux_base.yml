@@ -1,0 +1,52 @@
+name: Notify Hub on Content Update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+  workflow_dispatch:
+
+jobs:
+  notify-infotecha-hub:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Debug PAT_TOKEN and environment
+      run: |
+        echo "🔍 Debugging PAT_TOKEN and workflow environment"
+        echo "PAT_TOKEN length: ${#PAT_TOKEN}"
+        echo "PAT_TOKEN prefix: ${PAT_TOKEN:0:4}..."
+        echo "Target repository: info-tech-io/infotecha"
+        echo "Event type: module-updated"
+        echo "GitHub event: ${{ github.event_name }}"
+        echo "GitHub SHA: ${{ github.sha }}"
+        if [ -z "$PAT_TOKEN" ]; then
+          echo "❌ PAT_TOKEN is empty"
+          exit 1
+        fi
+        echo "✅ PAT_TOKEN is present"
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        
+    - name: Notify infotecha hub
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        token: ${{ secrets.PAT_TOKEN }}
+        repository: info-tech-io/infotecha
+        event-type: module-updated
+        client-payload: |
+          {
+            "module_name": "linux_base",
+            "content_repo": "mod_linux_base",
+            "updated_at": "${{ github.event.head_commit.timestamp }}",
+            "commit_sha": "${{ github.sha }}",
+            "commit_message": "${{ github.event.head_commit.message }}"
+          }
+          
+    - name: Log notification
+      run: |
+        echo "🚀 Notified infotecha hub about linux_base module update"
+        echo "📦 Repository: mod_linux_base" 
+        echo "🔄 Commit: ${{ github.sha }}"
+        echo "⏰ Timestamp: ${{ github.event.head_commit.timestamp }}"

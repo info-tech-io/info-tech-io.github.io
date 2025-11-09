@@ -1,0 +1,350 @@
+name: Build Module
+
+on:
+  repository_dispatch:
+    types: [build-module]
+  workflow_dispatch:
+    inputs:
+      module_name:
+        description: 'Module name to build'
+        required: true
+        type: string
+        default: 'linux_base'
+      content_repo:
+        description: 'Content repository name'
+        required: true
+        type: string
+        default: 'mod_linux_base'
+
+env:
+  MODULE_NAME: ${{ github.event.client_payload.module_name || github.event.inputs.module_name || 'linux_base' }}
+  CONTENT_REPO: ${{ github.event.client_payload.content_repo || github.event.inputs.content_repo || 'mod_linux_base' }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Debug workflow trigger and environment
+      run: |
+        echo "🔍 Build Module Workflow Debug Information"
+        echo "Trigger event: ${{ github.event_name }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Ref: ${{ github.ref }}"
+        echo ""
+        echo "Environment variables:"
+        echo "MODULE_NAME: ${{ env.MODULE_NAME }}"
+        echo "CONTENT_REPO: ${{ env.CONTENT_REPO }}"
+        echo ""
+        if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+          echo "Repository dispatch payload:"
+          echo "module_name: ${{ github.event.client_payload.module_name }}"
+          echo "content_repo: ${{ github.event.client_payload.content_repo }}"
+          echo "trigger: ${{ github.event.client_payload.trigger }}"
+        elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "Manual workflow dispatch inputs:"
+          echo "module_name: ${{ github.event.inputs.module_name }}"
+          echo "content_repo: ${{ github.event.inputs.content_repo }}"
+        fi
+        echo ""
+        echo "✅ Environment validation complete"
+        
+    - name: Validate environment variables
+      run: |
+        if [ -z "${{ env.MODULE_NAME }}" ] || [ "${{ env.MODULE_NAME }}" = "null" ]; then
+          echo "❌ MODULE_NAME is empty or null"
+          exit 1
+        fi
+        
+        if [ -z "${{ env.CONTENT_REPO }}" ] || [ "${{ env.CONTENT_REPO }}" = "null" ]; then
+          echo "❌ CONTENT_REPO is empty or null"
+          exit 1
+        fi
+        
+        echo "✅ Environment variables validated successfully"
+        echo "Will build module: ${{ env.MODULE_NAME }}"
+        echo "Using content from: ${{ env.CONTENT_REPO }}"
+        
+    - name: Checkout infotecha repository
+      uses: actions/checkout@v4
+      
+    - name: Checkout hugo-base template
+      uses: actions/checkout@v4
+      with:
+        repository: info-tech-io/hugo-base
+        path: hugo-base
+        token: ${{ secrets.PAT_TOKEN }}
+        submodules: recursive
+        
+    - name: Checkout module content
+      uses: actions/checkout@v4
+      with:
+        repository: info-tech-io/${{ env.CONTENT_REPO }}
+        path: module-content
+        token: ${{ secrets.PAT_TOKEN }}
+        
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.148.2'
+        extended: true
+        
+    - name: Validate checkout operations
+      run: |
+        echo "🔍 Validating checkout operations..."
+        
+        if [ ! -d hugo-base ] || [ -z "$(ls -A hugo-base)" ]; then
+          echo "❌ hugo-base checkout failed or empty"
+          exit 1
+        fi
+        
+        if [ ! -d module-content ] || [ -z "$(ls -A module-content)" ]; then
+          echo "❌ module-content checkout failed or empty"
+          exit 1
+        fi
+        
+        if [ ! -f modules.json ]; then
+          echo "❌ modules.json not found in infotecha repository"
+          exit 1
+        fi
+        
+        echo "✅ All repositories validated successfully"
+        
+    - name: Build module site
+      run: |
+        echo "🏗️ Building module: ${{ env.MODULE_NAME }}"
+        
+        # Создаем рабочую директорию для сборки
+        mkdir -p build-workspace
+        cd build-workspace
+        
+        # Копируем шаблон hugo-base (все файлы включая скрытые)
+        echo "📋 Copying hugo-base template..."
+        cp -r ../hugo-base/* . 2>/dev/null || true
+        cp ../hugo-base/.* . 2>/dev/null || true
+        
+        # Убеждаемся, что критичные файлы скопированы
+        if [ ! -f hugo.toml ]; then
+          echo "⚠️ hugo.toml not found, copying explicitly..."
+          cp ../hugo-base/hugo.toml . || {
+            echo "❌ Failed to copy hugo.toml"
+            exit 1
+          }
+        fi
+        
+        # Копируем .gitmodules для submodules
+        if [ -f ../hugo-base/.gitmodules ]; then
+          cp ../hugo-base/.gitmodules .
+          echo "📋 .gitmodules copied"
+        fi
+        
+        # Проверяем, что основные файлы скопированы
+        if [ ! -f hugo.toml ]; then
+          echo "❌ hugo.toml not found after copy!"
+          ls -la
+          exit 1
+        fi
+        
+        # Заменяем контент модуля (если папка content есть в модуле)
+        if [ -d "../module-content/content" ]; then
+            echo "📂 Using content from module repository"
+            rm -rf content/
+            cp -r ../module-content/content/ ./
+        else
+            echo "⚠️ No content/ folder in module repository, using default"
+        fi
+        
+        # Получаем параметры модуля из modules.json
+        echo "🔍 Reading module configuration..."
+        MODULE_SUBDOMAIN=$(jq -r --arg module "${{ env.MODULE_NAME }}" '.modules[$module].subdomain' ../modules.json)
+        MODULE_TITLE=$(jq -r --arg module "${{ env.MODULE_NAME }}" '.modules[$module].name' ../modules.json)
+        
+        # Проверяем, что параметры получены
+        if [ "$MODULE_SUBDOMAIN" = "null" ] || [ -z "$MODULE_SUBDOMAIN" ]; then
+          echo "❌ Could not get subdomain for module: ${{ env.MODULE_NAME }}"
+          echo "Available modules:"
+          jq -r '.modules | keys[]' ../modules.json
+          exit 1
+        fi
+        
+        if [ "$MODULE_TITLE" = "null" ] || [ -z "$MODULE_TITLE" ]; then
+          echo "❌ Could not get title for module: ${{ env.MODULE_NAME }}"
+          exit 1
+        fi
+        
+        echo "🎯 Module parameters:"
+        echo "  Name: ${{ env.MODULE_NAME }}"
+        echo "  Subdomain: ${MODULE_SUBDOMAIN}"
+        echo "  Title: ${MODULE_TITLE}"
+        
+        # Безопасно обновляем hugo.toml
+        echo "⚙️ Updating hugo.toml configuration..."
+        sed -i "s|baseURL = '.*'|baseURL = 'https://${MODULE_SUBDOMAIN}.infotecha.ru/'|" hugo.toml
+        sed -i "s|title = '.*'|title = '${MODULE_TITLE}'|" hugo.toml
+        
+        echo "✅ Configuration updated:"
+        echo "  Base URL: https://${MODULE_SUBDOMAIN}.infotecha.ru/"
+        echo "  Title: ${MODULE_TITLE}"
+        
+        # Проверяем, что submodules были клонированы корректно
+        echo "🔧 Checking submodules and themes..."
+        if [ -f .gitmodules ]; then
+          echo "📋 .gitmodules found, checking submodule directories..."
+          
+          # Проверяем тему
+          if [ ! -d themes/compose ]; then
+            echo "❌ Theme 'compose' not found in themes/ directory"
+            echo "Available themes:"
+            ls -la themes/ 2>/dev/null || echo "No themes directory found"
+            exit 1
+          fi
+          
+          # Проверяем, что тема не пустая  
+          if [ -z "$(ls -A themes/compose 2>/dev/null)" ]; then
+            echo "❌ Theme 'compose' directory is empty"
+            exit 1
+          fi
+          
+          # Проверяем quiz engine
+          if [ ! -d static/quiz ]; then
+            echo "❌ Quiz engine not found in static/quiz directory"
+            echo "Available static content:"
+            ls -la static/ 2>/dev/null || echo "No static directory found"
+            exit 1
+          fi
+          
+          echo "✅ All submodules validated successfully"
+        else
+          echo "ℹ️ No .gitmodules found, skipping submodule validation"
+        fi
+        
+        echo "🏗️ Building Hugo site..."
+        
+        # Детальная диагностика перед сборкой Hugo
+        echo "📋 Pre-build diagnostics:"
+        echo "Current directory: $(pwd)"
+        echo "Hugo version: $(hugo version || echo 'Hugo not found')"
+        echo "Config file check:"
+        ls -la *.toml *.yaml *.json 2>/dev/null || echo "No config files found"
+        echo "Themes directory:"
+        ls -la themes/ 2>/dev/null || echo "No themes directory"
+        echo "Content directory:"
+        ls -la content/ 2>/dev/null || echo "No content directory"
+        
+        # Проверяем Hugo конфигурацию
+        echo "📊 Hugo config validation:"
+        hugo config || echo "Hugo config command failed"
+        
+        # Собираем сайт с детальным выводом ошибок
+        echo "🚀 Starting Hugo build with detailed logging..."
+        if ! hugo --minify --gc --logLevel debug; then
+          echo "❌ Hugo build failed!"
+          echo "📋 Hugo configuration:"
+          cat hugo.toml
+          echo "📂 Directory structure:"
+          find . -type f -name '*.toml' -o -name '*.yaml' -o -name '*.yml' | head -10
+          echo "📂 Themes:"
+          ls -la themes/
+          echo "📂 Content:"
+          ls -la content/
+          exit 1
+        fi
+        
+        echo "✅ Site built successfully"
+        echo "📂 Generated files:"
+        ls -la public/ | head -10
+        
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.PROD_USERNAME }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        script: |
+          set -e
+          
+          MODULE_NAME="${{ env.MODULE_NAME }}"
+          MODULE_SUBDOMAIN=$(echo "$MODULE_NAME" | tr '_' '-')
+          
+          echo "🚀 Deploying module: $MODULE_NAME to subdomain: $MODULE_SUBDOMAIN"
+          
+          # Создаем директорию модуля если не существует
+          sudo mkdir -p "/var/www/infotecha.ru/${MODULE_SUBDOMAIN}"
+          
+          # Устанавливаем права
+          sudo chown -R www-data:www-data "/var/www/infotecha.ru/${MODULE_SUBDOMAIN}"
+          
+          echo "✅ Module deployment directory prepared"
+          
+    - name: Upload built site
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.PROD_USERNAME }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        source: "build-workspace/public/*"
+        target: "/tmp/infotecha-deploy-${{ env.MODULE_NAME }}/"
+        strip_components: 2
+        
+    - name: Complete deployment
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.PROD_USERNAME }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        script: |
+          set -e
+          
+          MODULE_NAME="${{ env.MODULE_NAME }}"
+          MODULE_SUBDOMAIN=$(echo "$MODULE_NAME" | tr '_' '-')
+          DEPLOY_DIR="/tmp/infotecha-deploy-${MODULE_NAME}"
+          TARGET_DIR="/var/www/infotecha.ru/${MODULE_SUBDOMAIN}"
+          
+          echo "📦 Deploying files to: $TARGET_DIR"
+          
+          # Копируем файлы
+          sudo cp -r "$DEPLOY_DIR"/* "$TARGET_DIR/"
+          
+          # Устанавливаем права
+          sudo chown -R www-data:www-data "$TARGET_DIR"
+          sudo chmod -R 755 "$TARGET_DIR"
+          
+          # Очищаем временные файлы
+          rm -rf "$DEPLOY_DIR"
+          
+          # Обновляем/создаем Apache конфигурацию для поддоменов если нужно
+          if ! sudo test -f /etc/apache2/sites-available/infotecha.conf; then
+            echo "⚙️ Creating Apache configuration..."
+            sudo bash -c 'cat > /etc/apache2/sites-available/infotecha.conf << '"'"'EOF'"'"'
+          <VirtualHost *:80>
+              ServerName infotecha.ru
+              ServerAlias *.infotecha.ru
+              DocumentRoot /var/www/infotecha.ru
+              
+              <Directory /var/www/infotecha.ru>
+                  Options -Indexes +FollowSymLinks
+                  AllowOverride All
+                  Require all granted
+                  DirectoryIndex index.html
+              </Directory>
+              
+              RewriteEngine On
+              RewriteCond %{HTTP_HOST} ^([a-z0-9\-]+)\.infotecha\.ru$ [NC]
+              RewriteCond %{HTTP_HOST} !^(www|mail|ftp|admin)\.infotecha\.ru$ [NC]
+              RewriteCond %{DOCUMENT_ROOT}/%1 -d
+              RewriteRule ^(.*)$ /%1/$1 [L]
+              
+              ErrorLog /var/www/infotecha.ru/logs/error.log
+              CustomLog /var/www/infotecha.ru/logs/access.log combined
+          </VirtualHost>
+          EOF'
+            sudo a2enmod rewrite headers
+            sudo a2ensite infotecha.conf
+            sudo a2dissite 000-default || true
+          fi
+          
+          # Перезагружаем Apache для применения изменений  
+          sudo systemctl reload apache2
+          
+          echo "✅ Module $MODULE_NAME deployed successfully"
+          echo "🌐 Available at: https://${MODULE_SUBDOMAIN}.infotecha.ru"

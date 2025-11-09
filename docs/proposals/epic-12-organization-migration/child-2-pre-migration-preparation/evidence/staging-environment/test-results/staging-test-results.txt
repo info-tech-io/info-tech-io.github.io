@@ -1,0 +1,66 @@
+=== Epic #12 Migration Updates - Staging Test ===
+Test started: Sat Nov  8 09:10:19 UTC 2025
+
+=== Testing: hugo-templates ===
+Scanning for 'info-tech-io' references...
+  Workflow files with references: 1
+  Config files with references: 17
+  Detailed references:
+    ./package.json:    "name": "info-tech-io",
+    ./package.json:    "url": "https://github.com/info-tech-io"
+    ./package.json:    "url": "https://github.com/info-tech-io/hugo-templates.git"
+    ./package.json:    "url": "https://github.com/info-tech-io/hugo-templates/issues"
+    ./package.json:  "homepage": "https://github.com/info-tech-io/hugo-templates#readme",
+    ./schemas/modules.schema.json:  "$id": "https://github.com/info-tech-io/hugo-templates/schemas/modules.schema.json",
+    ./schemas/modules.schema.json:            "https://info-tech-io.github.io",
+    ./schemas/modules.schema.json:                      "https://github.com/info-tech-io/info-tech",
+    ./schemas/modules.schema.json:                      "https://github.com/info-tech-io/quiz"
+    ./schemas/modules.schema.json:                "examples": ["https://info-tech-io.github.io"]
+
+=== Testing: info-tech-io.github.io ===
+Scanning for 'info-tech-io' references...
+  Workflow files with references: 1
+  Config files with references: 2
+  Detailed references:
+    ./configs/documentation-modules.json:    "baseURL": "https://info-tech-io.github.io",
+    ./configs/documentation-modules.json:        "repository": "https://github.com/info-tech-io/quiz",
+    ./configs/documentation-modules.json:        "repository": "https://github.com/info-tech-io/hugo-templates",
+    ./configs/documentation-modules.json:        "repository": "https://github.com/info-tech-io/web-terminal",
+    ./configs/documentation-modules.json:        "repository": "https://github.com/info-tech-io/info-tech-cli",
+    ./configs/corporate-modules.json:    "baseURL": "https://info-tech-io.github.io",
+    ./configs/corporate-modules.json:        "repository": "https://github.com/info-tech-io/info-tech",
+    ./.github/workflows/deploy-github-pages.yml:          repository: info-tech-io/hugo-templates
+    ./.github/workflows/deploy-github-pages.yml:          git clone https://github.com/info-tech-io/info-tech.git info-tech
+
+=== Testing: infotecha ===
+Scanning for 'info-tech-io' references...
+  Workflow files with references: 5
+  Config files with references: 5
+  Detailed references:
+    ./package.json:  "name": "@info-tech-io/infotecha-tools",
+    ./package.json:    "url": "https://github.com/info-tech-io/infotecha.git"
+    ./package.json:    "url": "https://github.com/info-tech-io/infotecha/issues"
+    ./node_modules/.package-lock.json:  "name": "@info-tech-io/infotecha-tools",
+    ./package-lock.json:  "name": "@info-tech-io/infotecha-tools",
+    ./package-lock.json:      "name": "@info-tech-io/infotecha-tools",
+    ./schemas/module.json:          "pattern": "^https://github\\.com/info-tech-io/mod_[a-z0-9_]+/?$"
+    ./modules.json:    "github_org": "info-tech-io"
+    ./.github/workflows/test-build-module.yml:        response=$(curl -s -H "Authorization: token $PAT_TOKEN" https://api.github.com/repos/info-tech-io/hugo-base)
+    ./.github/workflows/test-build-module.yml:        response=$(curl -s -H "Authorization: token $PAT_TOKEN" https://api.github.com/repos/info-tech-io/$CONTENT_REPO)
+
+=== Testing: quiz ===
+Scanning for 'info-tech-io' references...
+  Workflow files with references: 2
+  Config files with references: 2
+  Detailed references:
+    ./package.json:    "url": "git+https://github.com/info-tech-io/testcases.git"
+    ./package.json:    "url": "https://github.com/info-tech-io/testcases/issues"
+    ./package.json:  "homepage": "https://github.com/info-tech-io/testcases#readme",
+    ./.github/workflows/notify-hub.yml:          repository: info-tech-io/info-tech-io.github.io
+    ./.github/workflows/release.yml:          https://api.github.com/repos/info-tech-io/hugo-base/dispatches \
+    ./.github/workflows/release.yml:          https://api.github.com/repos/info-tech-io/platform-hub/dispatches \
+    ./docs/module.json:    "baseURL": "https://info-tech-io.github.io",
+
+=== Test Summary ===
+Staging test completed: Sat Nov  8 09:10:28 UTC 2025
+All staging repositories ready for migration testing

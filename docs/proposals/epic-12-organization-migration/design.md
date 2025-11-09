@@ -106,6 +106,14 @@ Epic #12: Organization Migration
 ### Child #1: Dependencies Analysis & Risk Assessment
 **Цель**: Полная инвентаризация всех зависимостей от имени организации
 
+**Dependency Counting Methodology**:
+- **Total Dependencies**: 21 organization references identified
+  - **GitHub Pages Federation**: 9 dependencies (info-tech-io.github.io domain)
+  - **Repository Dispatch Network**: 10 dependencies (CI/CD workflows)
+  - **ИНФОТЕКА Production**: 2 dependencies (независимые ссылки)
+- **Implementation Files**: 16 files contain these dependencies
+- **Note**: Some files contain multiple dependency types, explaining the difference between total dependencies (21) and affected files (16)
+
 **Deliverables**:
 - Полный список файлов с упоминаниями `info-tech-io`
 - Категоризация по критичности и типу обновления
