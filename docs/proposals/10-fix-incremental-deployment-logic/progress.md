@@ -1,9 +1,9 @@
 # Progress: Fix Incremental Deployment Logic
 
 **Issue**: #10
-**Status**: ⏳ Planning
+**Status**: ✅ Closed (won't do)
 **Started**: 2025-11-02
-**Completed**: -
+**Completed**: 2026-03-14
 
 ---
 
@@ -37,7 +37,7 @@ graph LR
 | 3. Enhance Safety | ⏳ Ready | - | - | 0.25d | - |
 | 4. Test & Verify | ⏳ Ready | - | - | 0.5d | - |
 
-**Overall Progress**: 33% (1/3 stages complete, 1 skipped)
+**Overall Progress**: Closed. Stage 2 resolved the root cause. Stages 3–4 deferred and cancelled: workflow migrated to full-rebuild strategy (no incremental logic to protect), verified stable in Child #5 testing.
 
 ---
 
