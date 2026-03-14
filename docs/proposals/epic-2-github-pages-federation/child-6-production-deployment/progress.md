@@ -1,40 +1,29 @@
 # Child #6: Production Deployment & Monitoring - Progress Tracking
 
-**Status**: ⏳ Pending
-**Blocked By**: Child #5 (Testing & Validation)
-**Estimated Duration**: ~2 days
+**Status**: ❌ Cancelled (won't do)
+**Closed**: 2026-03-14
 
 ---
 
-## 📊 Overall Progress
+## Решение
 
-```mermaid
-pie title Child #6 Progress
-    "Pending" : 100
-```
+Child #6 отменён. Производственная система и без него работает стабильно:
 
----
+- Workflow активен в production ✅
+- Все URL возвращают 200 OK ✅
+- Child #5 подтвердил production readiness ✅
+- Legacy cleanup выполнен на этапе Child #5 Stage 1 (16 файлов удалено) ✅
 
-## 🚧 Blocked
+**Что было запланировано, но пропущено:**
+- Monitoring & alerting setup — заменяется встроенными GitHub email-нотификациями
+- Operational runbooks — отложены, система работает без них
+- README update — выполнен отдельно (коммит 2f8f6ae)
 
-**Reason**: Waiting for complete testing validation
-
-**Dependencies**:
-- ⏳ Child #3 (Corporate Workflow) - Must be complete
-- ⏳ Child #4 (Docs Federation) - Must be complete
-- ⏳ Child #5 (Testing) - MUST be complete with ALL tests passing
-
-**What's Needed**:
-- All E2E tests passing
-- Performance validation complete
-- User experience validated
-- Reliability confirmed
-- Test report reviewed and approved
-
-**Next Action**: Will start only after Child #5 100% complete and approved
+**Issue #8**: закрыт как won't do (2026-03-14)
 
 ---
 
 **Created**: 2025-10-26
-**Status**: Design complete, awaiting unblock
-**Document Version**: 1.0
+**Updated**: 2026-03-14
+**Status**: ❌ Cancelled
+**Document Version**: 1.1
