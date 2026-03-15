@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/tmp/tmp.dpN90JysTL/output-2-web-terminal-docs",
+	"sourceRoot": "/tmp/tmp.iuQoBez79G/output-2-web-terminal-docs",
 	"sources": [
 		"themes/compose/assets/sass/main.sass",
 		"themes/compose/assets/sass/_variables.sass",
