@@ -1,0 +1,1432 @@
+<!doctype html>
+<html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Hugo 0.148.0">
+<link rel="apple-touch-icon" sizes="180x180" href='https://info-tech-io.github.io/favicons/apple-touch-icon.png'>
+<link rel="icon" type="image/png" sizes="32x32" href='https://info-tech-io.github.io/favicons/favicon-32x32.png'>
+<link rel="icon" type="image/png" sizes="16x16" href='https://info-tech-io.github.io/favicons/favicon-16x16.png'>
+<link rel="manifest" href='https://info-tech-io.github.io/favicons/site.webmanifest'>
+<link rel="mask-icon" href='https://info-tech-io.github.io/favicons/safari-pinned-tab.svg' color="#004750">
+<link rel="shortcut icon" href='https://info-tech-io.github.io/favicons/favicon.ico'>
+<meta name="msapplication-config" content='https://info-tech-io.github.io/favicons/browserconfig.xml'>
+<title>Technical Architecture | Test Site</title><meta property="og:url" content="https://info-tech-io.github.io/open-source/architecture/">
+  <meta property="og:site_name" content="Test Site">
+  <meta property="og:title" content="Technical Architecture">
+  <meta property="og:description" content="Comprehensive overview of InfoTech.io&#39;s system architecture and design decisions">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="open-source">
+    <meta property="article:published_time" content="2025-09-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-09-23T00:00:00+00:00">
+
+  <meta itemprop="name" content="Technical Architecture">
+  <meta itemprop="description" content="Comprehensive overview of InfoTech.io&#39;s system architecture and design decisions">
+  <meta itemprop="datePublished" content="2025-09-23T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-09-23T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2139">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Technical Architecture">
+  <meta name="twitter:description" content="Comprehensive overview of InfoTech.io&#39;s system architecture and design decisions">
+
+<link rel="stylesheet" href="https://info-tech-io.github.io/css/styles.74d7fb78947094a526973c2c67c02cf6d516c4cc4f8f410c6df278dbba989ae7d016bc6d5d9be9aa8eb439586aa8cffa76cd786d523ac7d5fb09cc6e77bcf3dd.css" integrity="sha512-dNf7eJRwlKUmlzwsZ8As9tUWxMxPj0EMbfJ427qYmufQFrxtXZvpqo60OVhqqM/6ds14bVI6x9X7Ccxud7zz3Q==">
+<meta name="description" content="Comprehensive overview of InfoTech.io&#39;s system architecture and design decisions">
+
+</head>
+<body class="page-page" id="pagetop">
+  <header class="nav_header">
+<nav class="wrap nav menu">
+	<a href='https://info-tech-io.github.io/' class="nav_brand">
+		<picture data-lit="https://info-tech-io.github.io/" data-dark="https://info-tech-io.github.io/">
+			<img src="https://info-tech-io.github.io/" alt="Test Site Logo">
+		</picture>
+		<div class="nav_toggle toggle" title='Site Menu'><svg class="icon icon_harmburger">
+  <use href="#harmburger"></use>
+</svg>
+		</div>
+	</a>
+	<ul class="nav_body">
+		<li class="nav-item">
+  <div class="search">
+    <label for="find" class="search_label"><svg class="icon icon_search">
+  <use href="#search"></use>
+</svg>
+    </label>
+    
+    <input type="search" class="search_field  standardize-input" placeholder="Search site" id="find" autocomplete="off" data-scope='open-source'>
+    <div class="search_results results"></div>
+  </div>
+		</li>
+		<li class="nav-item"><div class=color_mode>
+  <label for=mode></label>
+  <input type="checkbox" class="color_choice standardize-input" id="mode" title="Toggle Dark Mode">
+</div>
+</li>
+	</ul>
+</nav>
+
+  </header>
+  <div class="main wrap pt-4">
+      <div class="content">
+<div class="content">
+	<h1>Technical Architecture</h1>
+	<div>Comprehensive overview of InfoTech.io&rsquo;s system architecture and design decisions</div><h1 id="infotechio-technical-architecture" class=link_owner>
+  InfoTech.io Technical Architecture
+  <a href="#infotechio-technical-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h1>
+<p>This document provides a comprehensive overview of InfoTech.io&rsquo;s technical architecture, design decisions, and implementation details for developers and contributors.</p>
+<h2 id="-system-overview" class=link_owner>
+  🏗️ System Overview
+  <a href="#-system-overview" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>InfoTech.io implements a <strong>decentralized, modular architecture</strong> based on the &ldquo;Hub and Spoke&rdquo; pattern with static site generation and automated CI/CD pipelines.</p>
+<h3 id="high-level-architecture" class=link_owner>
+  High-Level Architecture
+  <a href="#high-level-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TB
+    subgraph &#34;Content Layer&#34;
+        A[Educational Modules]
+        B[Corporate Content]
+        C[Documentation]
+    end
+
+    subgraph &#34;Build Layer&#34;
+        D[Hugo Templates Factory]
+        E[Quiz Engine]
+        F[Web Terminal]
+    end
+
+    subgraph &#34;Automation Layer&#34;
+        G[GitHub Actions]
+        H[InfoTech CLI]
+        I[Webhook System]
+    end
+
+    subgraph &#34;Infrastructure Layer&#34;
+        J[Apache2 Server]
+        K[DNS &amp; SSL]
+        L[CDN Ready]
+    end
+
+    A --&gt; D
+    B --&gt; D
+    C --&gt; D
+    D --&gt; G
+    E --&gt; D
+    F --&gt; J
+    G --&gt; J
+    H --&gt; G
+    I --&gt; G
+    J --&gt; K
+    K --&gt; L
+</code></pre><h2 id="-core-architectural-principles" class=link_owner>
+  🎯 Core Architectural Principles
+  <a href="#-core-architectural-principles" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="1-modular-design" class=link_owner>
+  1. Modular Design
+  <a href="#1-modular-design" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Each component is independent and can be developed, tested, and deployed separately:</p>
+<ul>
+<li><strong>Educational modules</strong> as separate repositories</li>
+<li><strong>Build tools</strong> as reusable packages</li>
+<li><strong>Infrastructure components</strong> as isolated services</li>
+</ul>
+<h3 id="2-static-first-approach" class=link_owner>
+  2. Static-First Approach
+  <a href="#2-static-first-approach" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>All content is generated as static HTML for optimal performance:</p>
+<ul>
+<li><strong>No server-side processing</strong> required for content delivery</li>
+<li><strong>CDN-friendly</strong> architecture for global distribution</li>
+<li><strong>Security through simplicity</strong> - no dynamic vulnerabilities</li>
+</ul>
+<h3 id="3-open-source-transparency" class=link_owner>
+  3. Open Source Transparency
+  <a href="#3-open-source-transparency" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Every component is open source with clear interfaces:</p>
+<ul>
+<li><strong>Public repositories</strong> for all code and content</li>
+<li><strong>Documented APIs</strong> for all integrations</li>
+<li><strong>Community-driven</strong> development process</li>
+</ul>
+<h3 id="4-automation-first" class=link_owner>
+  4. Automation-First
+  <a href="#4-automation-first" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Human intervention is minimized through automation:</p>
+<ul>
+<li><strong>Automated testing</strong> for all changes</li>
+<li><strong>Automatic deployment</strong> from commits</li>
+<li><strong>Self-updating</strong> documentation and dependencies</li>
+</ul>
+<h2 id="-component-architecture" class=link_owner>
+  🏛️ Component Architecture
+  <a href="#-component-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="educational-platform-infoteka" class=link_owner>
+  Educational Platform (INFOTEKA)
+  <a href="#educational-platform-infoteka" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="repository-structure" class=link_owner>
+  Repository Structure
+  <a href="#repository-structure" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>infotecha.ru/
+├── Main Platform Hub
+├── Module Registry
+└── Deployment Orchestration
+
+mod_*/
+├── Educational Content
+├── Quiz Configurations
+├── Module Metadata (module.json)
+└── CI/CD Workflows
+</code></pre><h4 id="content-flow" class=link_owner>
+  Content Flow
+  <a href="#content-flow" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">sequenceDiagram
+    participant Dev as Developer
+    participant Repo as Module Repository
+    participant Hub as INFOTEKA Hub
+    participant Factory as Hugo Templates
+    participant Prod as Production
+
+    Dev-&gt;&gt;Repo: Push content changes
+    Repo-&gt;&gt;Hub: Webhook notification
+    Hub-&gt;&gt;Factory: Trigger build with module.json
+    Factory-&gt;&gt;Factory: Generate static site
+    Factory-&gt;&gt;Prod: Deploy to production
+    Prod--&gt;&gt;Dev: Site live in 2-3 minutes
+</code></pre><h3 id="hugo-templates-factory" class=link_owner>
+  Hugo Templates Factory
+  <a href="#hugo-templates-factory" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="architecture-overview" class=link_owner>
+  Architecture Overview
+  <a href="#architecture-overview" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>hugo-templates/
+├── templates/           # Site templates (educational, corporate, docs)
+├── themes/             # Visual themes (compose, minimal, custom)
+├── components/         # Reusable components (quiz, search, nav)
+├── schemas/           # JSON validation schemas
+├── scripts/           # Build and automation scripts
+└── package.json       # CLI package configuration
+</code></pre><h4 id="template-system" class=link_owner>
+  Template System
+  <a href="#template-system" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph LR
+    A[module.json] --&gt; B[Schema Validation]
+    B --&gt; C[Template Selection]
+    C --&gt; D[Theme Application]
+    D --&gt; E[Component Integration]
+    E --&gt; F[Hugo Build]
+    F --&gt; G[Static Site Output]
+</code></pre><h4 id="build-process" class=link_owner>
+  Build Process
+  <a href="#build-process" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ol>
+<li><strong>Configuration Reading</strong>: Parse <code>module.json</code> for build parameters</li>
+<li><strong>Schema Validation</strong>: Ensure configuration meets requirements</li>
+<li><strong>Template Assembly</strong>: Combine template + theme + components</li>
+<li><strong>Content Processing</strong>: Transform Markdown to HTML with Hugo</li>
+<li><strong>Asset Optimization</strong>: Minify CSS/JS, optimize images</li>
+<li><strong>Output Generation</strong>: Create production-ready static site</li>
+</ol>
+<h3 id="quiz-engine" class=link_owner>
+  Quiz Engine
+  <a href="#quiz-engine" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="technical-architecture" class=link_owner>
+  Technical Architecture
+  <a href="#technical-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">// Core Quiz Engine Structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QuizEngine</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">constructor</span>(<span style="color:#a6e22e">config</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">questions</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">questions</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">scoring</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ScoringSystem</span>(<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">scoring</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">ui</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">QuizUI</span>(<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">ui</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">analytics</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Analytics</span>(<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">analytics</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">async</span> <span style="color:#a6e22e">loadQuiz</span>(<span style="color:#a6e22e">quizId</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">config</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">`/quizzes/</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">quizId</span><span style="color:#e6db74">}</span><span style="color:#e6db74">.json`</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Quiz</span>(<span style="color:#a6e22e">config</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="integration-patterns" class=link_owner>
+  Integration Patterns
+  <a href="#integration-patterns" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TB
+    A[Quiz JSON Config] --&gt; B[Quiz Engine Loader]
+    B --&gt; C[Question Renderer]
+    B --&gt; D[Scoring Calculator]
+    B --&gt; E[Progress Tracker]
+    C --&gt; F[User Interface]
+    D --&gt; F
+    E --&gt; F
+    F --&gt; G[Analytics Collector]
+</code></pre><h4 id="question-types-implementation" class=link_owner>
+  Question Types Implementation
+  <a href="#question-types-implementation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Question</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">id</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;multiple_choice&#39;</span> <span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;true_false&#39;</span> <span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;fill_blank&#39;</span> <span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;code_review&#39;</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">question</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">options?</span>: <span style="color:#66d9ef">string</span>[];
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">correct</span>: <span style="color:#66d9ef">number</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">string</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">explanation?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">points?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">timeLimit?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="web-terminal" class=link_owner>
+  Web Terminal
+  <a href="#web-terminal" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="system-architecture" class=link_owner>
+  System Architecture
+  <a href="#system-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TB
+    subgraph &#34;Client Side&#34;
+        A[Xterm.js Terminal]
+        B[WebSocket Client]
+        C[File Manager UI]
+    end
+
+    subgraph &#34;Server Side&#34;
+        D[Node.js Server]
+        E[WebSocket Handler]
+        F[Docker Manager]
+    end
+
+    subgraph &#34;Container Layer&#34;
+        G[User Containers]
+        H[Shared Volumes]
+        I[Network Isolation]
+    end
+
+    A &lt;--&gt; B
+    B &lt;--&gt; E
+    E &lt;--&gt; D
+    D &lt;--&gt; F
+    F &lt;--&gt; G
+    G &lt;--&gt; H
+    G &lt;--&gt; I
+</code></pre><h4 id="security-model" class=link_owner>
+  Security Model
+  <a href="#security-model" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Container Security</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Isolated user namespaces</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Resource limits (CPU, memory, disk)</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Network restrictions</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#66d9ef">No</span> <span style="color:#ae81ff">privileged operations</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Temporary file systems</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Automatic cleanup after session</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Session Management</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">JWT-based authentication</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Session timeouts</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Rate limiting</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Input sanitization</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Command filtering</span>
+</span></span></code></pre></div><h2 id="-cicd-pipeline-architecture" class=link_owner>
+  🔄 CI/CD Pipeline Architecture
+  <a href="#-cicd-pipeline-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="workflow-overview" class=link_owner>
+  Workflow Overview
+  <a href="#workflow-overview" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph LR
+    A[Git Push] --&gt; B[GitHub Webhook]
+    B --&gt; C[Actions Trigger]
+    C --&gt; D[Module Validation]
+    D --&gt; E[Build Process]
+    E --&gt; F[Testing Suite]
+    F --&gt; G[Security Scan]
+    G --&gt; H[Production Deploy]
+    H --&gt; I[Cache Invalidation]
+    I --&gt; J[Health Check]
+</code></pre><h3 id="github-actions-workflows" class=link_owner>
+  GitHub Actions Workflows
+  <a href="#github-actions-workflows" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="module-update-workflow" class=link_owner>
+  Module Update Workflow
+  <a href="#module-update-workflow" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># .github/workflows/module-updated.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Module Content Updated</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">repository_dispatch</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">types</span>: [<span style="color:#ae81ff">module-updated]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build-and-deploy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout hugo-templates</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v4</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">repository</span>: <span style="color:#ae81ff">info-tech-io/hugo-templates</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">token</span>: <span style="color:#ae81ff">${{ secrets.PAT_TOKEN }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Get module configuration</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          MODULE_REPO=&#34;${{ github.event.client_payload.repository }}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          curl -H &#34;Authorization: token ${{ secrets.PAT_TOKEN }}&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">               &#34;https://api.github.com/repos/${MODULE_REPO}/contents/module.json&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">               | jq -r .content | base64 -d &gt; module.json</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build site</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          npm install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          chmod +x scripts/build.sh
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          scripts/build.sh --config module.json --deploy production</span>
+</span></span></code></pre></div><h4 id="quality-assurance-pipeline" class=link_owner>
+  Quality Assurance Pipeline
+  <a href="#quality-assurance-pipeline" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># Automated quality checks</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Quality Gates</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Schema validation for module.json</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Markdown linting for content</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Link checking for all URLs</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Performance testing for generated sites</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Security scanning for dependencies</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Accessibility auditing</span>
+</span></span></code></pre></div><h3 id="deployment-strategy" class=link_owner>
+  Deployment Strategy
+  <a href="#deployment-strategy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="blue-green-deployment" class=link_owner>
+  Blue-Green Deployment
+  <a href="#blue-green-deployment" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TB
+    A[New Build] --&gt; B[Green Environment]
+    B --&gt; C[Health Checks]
+    C --&gt; D{Tests Pass?}
+    D --&gt;|Yes| E[Switch Traffic]
+    D --&gt;|No| F[Rollback]
+    E --&gt; G[Blue Environment Standby]
+    F --&gt; H[Debug and Fix]
+</code></pre><h2 id="-infrastructure-architecture" class=link_owner>
+  🌐 Infrastructure Architecture
+  <a href="#-infrastructure-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="network-architecture" class=link_owner>
+  Network Architecture
+  <a href="#network-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<pre tabindex="0"><code>Domain Structure:
+├── infotecha.ru (Main Platform)
+├── *.infotecha.ru (Educational Modules)
+├── info-tech.io (Corporate Site)
+└── *.info-tech.io (Product Documentation)
+
+SSL/TLS:
+├── Let&#39;s Encrypt Wildcard Certificates
+├── Automatic Renewal via Certbot
+├── HSTS and Security Headers
+└── Grade A+ SSL Configuration
+</code></pre><h3 id="server-configuration" class=link_owner>
+  Server Configuration
+  <a href="#server-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="apache2-virtual-host-setup" class=link_owner>
+  Apache2 Virtual Host Setup
+  <a href="#apache2-virtual-host-setup" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-apache" data-lang="apache"><span style="display:flex;"><span><span style="color:#f92672">&lt;VirtualHost</span> <span style="color:#e6db74">*:443</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    ServerName infotecha.ru
+</span></span><span style="display:flex;"><span>    ServerAlias *.infotecha.ru
+</span></span><span style="display:flex;"><span>    DocumentRoot <span style="color:#e6db74">/var/www/infotecha.ru</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Dynamic subdomain routing</span>
+</span></span><span style="display:flex;"><span>    RewriteEngine <span style="color:#66d9ef">On</span>
+</span></span><span style="display:flex;"><span>    RewriteCond %{HTTP_HOST} ^([^.]+)\.infotecha\.ru$
+</span></span><span style="display:flex;"><span>    RewriteRule ^(.*)$ /%1/$1 [L]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Security headers</span>
+</span></span><span style="display:flex;"><span>    Header always set Strict-Transport-Security <span style="color:#e6db74">&#34;max-age=31536000; includeSubDomains&#34;</span>
+</span></span><span style="display:flex;"><span>    Header always set X-Frame-Options <span style="color:#e6db74">&#34;SAMEORIGIN&#34;</span>
+</span></span><span style="display:flex;"><span>    Header always set X-Content-Type-Options <span style="color:#e6db74">&#34;nosniff&#34;</span>
+</span></span><span style="display:flex;"><span>    Header always set Referrer-Policy <span style="color:#e6db74">&#34;strict-origin-when-cross-origin&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># SSL configuration</span>
+</span></span><span style="display:flex;"><span>    SSLEngine <span style="color:#66d9ef">on</span>
+</span></span><span style="display:flex;"><span>    SSLCertificateFile <span style="color:#e6db74">/etc/letsencrypt/live/infotecha.ru/fullchain.pem</span>
+</span></span><span style="display:flex;"><span>    SSLCertificateKeyFile <span style="color:#e6db74">/etc/letsencrypt/live/infotecha.ru/privkey.pem</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Modern SSL configuration</span>
+</span></span><span style="display:flex;"><span>    SSLProtocol <span style="color:#66d9ef">all</span> -SSLv3 -TLSv1 -TLSv1.1
+</span></span><span style="display:flex;"><span>    SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256
+</span></span><span style="display:flex;"><span>    SSLHonorCipherOrder <span style="color:#66d9ef">off</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/VirtualHost&gt;</span>
+</span></span></code></pre></div><h4 id="file-system-structure" class=link_owner>
+  File System Structure
+  <a href="#file-system-structure" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>/var/www/
+├── infotecha.ru/
+│   ├── index.html (Main hub)
+│   ├── linux-base/ (Educational module)
+│   ├── linux-advanced/
+│   ├── linux-professional/
+│   └── assets/ (Shared resources)
+├── info-tech.io/
+│   ├── index.html (Corporate site)
+│   ├── docs/
+│   │   ├── quiz/ (Quiz Engine docs)
+│   │   ├── hugo-templates/ (Hugo Templates docs)
+│   │   ├── web-terminal/ (Web Terminal docs)
+│   │   └── info-tech-cli/ (InfoTech CLI docs)
+└── logs/
+    ├── access.log
+    ├── error.log
+    └── ssl_request.log
+</code></pre><h3 id="monitoring-and-observability" class=link_owner>
+  Monitoring and Observability
+  <a href="#monitoring-and-observability" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="system-monitoring" class=link_owner>
+  System Monitoring
+  <a href="#system-monitoring" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Metrics Collection</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Server resources (CPU, memory, disk)</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Web server performance (response times, error rates)</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">SSL certificate expiration monitoring</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">DNS resolution monitoring</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">CDN cache hit rates</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Alerting</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Site downtime alerts</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Performance degradation warnings</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Security certificate expiration</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Build failure notifications</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Anomalous traffic patterns</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Logging</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Structured JSON logs</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Centralized log aggregation</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Error tracking and analysis</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">User behavior analytics</span>
+</span></span></code></pre></div><h2 id="-security-architecture" class=link_owner>
+  🔒 Security Architecture
+  <a href="#-security-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="security-layers" class=link_owner>
+  Security Layers
+  <a href="#security-layers" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-infrastructure-security" class=link_owner>
+  1. Infrastructure Security
+  <a href="#1-infrastructure-security" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Server Hardening</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">UFW firewall (ports 22, 80, 443 only)</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">SSH key authentication only</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Automatic security updates</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Fail2ban for brute force protection</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Regular vulnerability scanning</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">SSL/TLS Security</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Modern cipher suites only</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Perfect Forward Secrecy</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">HSTS with preloading</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Certificate transparency monitoring</span>
+</span></span></code></pre></div><h4 id="2-application-security" class=link_owner>
+  2. Application Security
+  <a href="#2-application-security" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Static Site Security</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#66d9ef">No</span> <span style="color:#ae81ff">server-side code execution</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Content Security Policy headers</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Subresource Integrity for external resources</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">XSS protection headers</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Input sanitization in Quiz Engine</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">API Security</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Rate limiting on all endpoints</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">JWT authentication for Web Terminal</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">CORS policies properly configured</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Input validation and sanitization</span>
+</span></span></code></pre></div><h4 id="3-development-security" class=link_owner>
+  3. Development Security
+  <a href="#3-development-security" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Code Security</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Dependency vulnerability scanning</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Static analysis security testing</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Secrets scanning in repositories</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Security code review requirements</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Regular security audits</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">CI/CD Security</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Signed commits verification</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Secure secrets management</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Build environment isolation</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Artifact integrity verification</span>
+</span></span></code></pre></div><h3 id="threat-model" class=link_owner>
+  Threat Model
+  <a href="#threat-model" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="identified-threats-and-mitigations" class=link_owner>
+  Identified Threats and Mitigations
+  <a href="#identified-threats-and-mitigations" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ol>
+<li>
+<p><strong>DDoS Attacks</strong></p>
+<ul>
+<li>Mitigation: CloudFlare CDN with DDoS protection</li>
+<li>Rate limiting at multiple levels</li>
+</ul>
+</li>
+<li>
+<p><strong>Content Injection</strong></p>
+<ul>
+<li>Mitigation: Static site generation eliminates server-side injection</li>
+<li>Content validation in CI/CD pipeline</li>
+</ul>
+</li>
+<li>
+<p><strong>Supply Chain Attacks</strong></p>
+<ul>
+<li>Mitigation: Dependency pinning and vulnerability scanning</li>
+<li>Secure package management practices</li>
+</ul>
+</li>
+<li>
+<p><strong>Social Engineering</strong></p>
+<ul>
+<li>Mitigation: Multi-factor authentication for maintainers</li>
+<li>Security awareness training</li>
+</ul>
+</li>
+</ol>
+<h2 id="-performance-architecture" class=link_owner>
+  📊 Performance Architecture
+  <a href="#-performance-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="performance-optimization-strategy" class=link_owner>
+  Performance Optimization Strategy
+  <a href="#performance-optimization-strategy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="frontend-performance" class=link_owner>
+  Frontend Performance
+  <a href="#frontend-performance" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Loading Speed Optimization</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Static site generation for instant serving</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Minified CSS and JavaScript</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Optimized images with WebP format</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Critical CSS inlining</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Resource preloading and prefetching</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Rendering Performance</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Minimal JavaScript usage</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Progressive enhancement approach</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Lazy loading for non-critical content</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Service worker for offline functionality</span>
+</span></span></code></pre></div><h4 id="backend-performance" class=link_owner>
+  Backend Performance
+  <a href="#backend-performance" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Server Performance</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Apache2 with mod_deflate compression</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Browser caching with appropriate headers</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">HTTP/2 support for multiplexing</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Keep-alive connections</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Build Performance</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Incremental builds for unchanged content</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Parallel processing where possible</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Build caching for dependencies</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Optimized Docker layers</span>
+</span></span></code></pre></div><h3 id="performance-monitoring" class=link_owner>
+  Performance Monitoring
+  <a href="#performance-monitoring" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="core-web-vitals-tracking" class=link_owner>
+  Core Web Vitals Tracking
+  <a href="#core-web-vitals-tracking" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">// Performance monitoring implementation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">observer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PerformanceObserver</span>((<span style="color:#a6e22e">list</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">entry</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">getEntries</span>()) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">entryType</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;largest-contentful-paint&#39;</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;LCP:&#39;</span>, <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">startTime</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">entryType</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;first-input&#39;</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;FID:&#39;</span>, <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">processingStart</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">startTime</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">entryType</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;layout-shift&#39;</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;CLS:&#39;</span>, <span style="color:#a6e22e">entry</span>.<span style="color:#a6e22e">value</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">observer</span>.<span style="color:#a6e22e">observe</span>({<span style="color:#a6e22e">entryTypes</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;largest-contentful-paint&#39;</span>, <span style="color:#e6db74">&#39;first-input&#39;</span>, <span style="color:#e6db74">&#39;layout-shift&#39;</span>]});
+</span></span></code></pre></div><h2 id="-scalability-architecture" class=link_owner>
+  🚀 Scalability Architecture
+  <a href="#-scalability-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="horizontal-scaling-strategy" class=link_owner>
+  Horizontal Scaling Strategy
+  <a href="#horizontal-scaling-strategy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="current-capacity" class=link_owner>
+  Current Capacity
+  <a href="#current-capacity" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Single VPS</strong>: Handles current traffic efficiently</li>
+<li><strong>Static content</strong>: Minimal server resources required</li>
+<li><strong>Build processes</strong>: Handled by GitHub Actions</li>
+</ul>
+<h4 id="scaling-plan" class=link_owner>
+  Scaling Plan
+  <a href="#scaling-plan" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TB
+    A[Current: Single VPS] --&gt; B[Stage 1: Load Balancer]
+    B --&gt; C[Stage 2: CDN Integration]
+    C --&gt; D[Stage 3: Multi-Region]
+    D --&gt; E[Stage 4: Edge Computing]
+</code></pre><h4 id="implementation-steps" class=link_owner>
+  Implementation Steps
+  <a href="#implementation-steps" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ol>
+<li><strong>Load Balancer</strong>: Nginx reverse proxy for multiple Apache instances</li>
+<li><strong>CDN Integration</strong>: CloudFlare or AWS CloudFront for global distribution</li>
+<li><strong>Database</strong>: Redis for session management and caching</li>
+<li><strong>Microservices</strong>: Separate services for Quiz Engine and Web Terminal</li>
+</ol>
+<h3 id="technology-evolution-path" class=link_owner>
+  Technology Evolution Path
+  <a href="#technology-evolution-path" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="current-stack--future-stack" class=link_owner>
+  Current Stack → Future Stack
+  <a href="#current-stack--future-stack" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Static Site Generation</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Current</span>: <span style="color:#ae81ff">Hugo with Apache2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Future</span>: <span style="color:#ae81ff">Hugo with Nginx + Redis + CDN</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Content Management</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Current</span>: <span style="color:#ae81ff">Git-based workflow</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Future</span>: <span style="color:#ae81ff">Git + Headless CMS integration</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Interactive Features</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Current</span>: <span style="color:#ae81ff">Client-side JavaScript</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Future</span>: <span style="color:#ae81ff">Edge computing with Workers</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Analytics</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Current</span>: <span style="color:#ae81ff">Basic logging</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">Future</span>: <span style="color:#ae81ff">Real-time analytics with ML insights</span>
+</span></span></code></pre></div><h2 id="-developer-experience-architecture" class=link_owner>
+  🔧 Developer Experience Architecture
+  <a href="#-developer-experience-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="local-development-environment" class=link_owner>
+  Local Development Environment
+  <a href="#local-development-environment" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="setup-automation" class=link_owner>
+  Setup Automation
+  <a href="#setup-automation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e"># dev-setup.sh - One-command development setup</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Clone all repositories</span>
+</span></span><span style="display:flex;"><span>gh repo clone info-tech-io/hugo-templates
+</span></span><span style="display:flex;"><span>gh repo clone info-tech-io/quiz
+</span></span><span style="display:flex;"><span>gh repo clone info-tech-io/web-terminal
+</span></span><span style="display:flex;"><span>gh repo clone info-tech-io/info-tech-cli
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install dependencies</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> dir in */; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -f <span style="color:#e6db74">&#34;</span>$dir<span style="color:#e6db74">/package.json&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>cd <span style="color:#e6db74">&#34;</span>$dir<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">&amp;&amp;</span> npm install<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Setup environment variables</span>
+</span></span><span style="display:flex;"><span>cp .env.example .env
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Development environment ready!&#34;</span>
+</span></span></code></pre></div><h4 id="development-tools-integration" class=link_owner>
+  Development Tools Integration
+  <a href="#development-tools-integration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">VS Code Extensions</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Hugo Language Support</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Markdown All in One</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">GitLens</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">ESLint</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Prettier</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Git Hooks</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">Pre-commit</span>: <span style="color:#ae81ff">Linting and formatting</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">Pre-push</span>: <span style="color:#ae81ff">Test suite execution</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">Commit-msg</span>: <span style="color:#ae81ff">Conventional commit validation</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Docker Compose</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Local Hugo server</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Quiz Engine development</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Web Terminal testing</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Database services</span>
+</span></span></code></pre></div><h3 id="api-design-philosophy" class=link_owner>
+  API Design Philosophy
+  <a href="#api-design-philosophy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="restful-api-principles" class=link_owner>
+  RESTful API Principles
+  <a href="#restful-api-principles" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Endpoint Design</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Resource-based URLs</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">HTTP method semantics</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Consistent response formats</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Proper status codes</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Versioning Strategy</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">URL versioning</span>: <span style="color:#ae81ff">/api/v1/</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Backward compatibility maintenance</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Deprecation warnings</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Migration guides</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Documentation</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">OpenAPI/Swagger specifications</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Interactive API explorer</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Code examples in multiple languages</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">SDK generation</span>
+</span></span></code></pre></div><h2 id="-documentation-architecture" class=link_owner>
+  📚 Documentation Architecture
+  <a href="#-documentation-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="documentation-strategy" class=link_owner>
+  Documentation Strategy
+  <a href="#documentation-strategy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="multi-level-documentation" class=link_owner>
+  Multi-Level Documentation
+  <a href="#multi-level-documentation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>├── User Documentation (infotecha.ru)
+│   ├── Course content and tutorials
+│   ├── Getting started guides
+│   └── Frequently asked questions
+├── Developer Documentation (info-tech.io)
+│   ├── API references
+│   ├── Architecture overviews
+│   └── Contributing guidelines
+├── Technical Documentation (GitHub)
+│   ├── README files
+│   ├── Code comments
+│   └── Architecture Decision Records
+└── Operational Documentation (Private)
+    ├── Deployment procedures
+    ├── Incident response plans
+    └── Monitoring runbooks
+</code></pre><h4 id="documentation-as-code" class=link_owner>
+  Documentation as Code
+  <a href="#documentation-as-code" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Automation</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Auto-generated API docs from code</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Automated link checking</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Screenshot automation for UI docs</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Version synchronization</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">Quality Assurance</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Technical writing review process</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">User testing of documentation</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Analytics on documentation usage</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">Regular content audits</span>
+</span></span></code></pre></div><h2 id="-future-architecture-considerations" class=link_owner>
+  🔮 Future Architecture Considerations
+  <a href="#-future-architecture-considerations" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="technology-roadmap" class=link_owner>
+  Technology Roadmap
+  <a href="#technology-roadmap" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="next-6-months" class=link_owner>
+  Next 6 Months
+  <a href="#next-6-months" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>CDN Integration</strong>: CloudFlare implementation</li>
+<li><strong>API Gateway</strong>: Centralized API management</li>
+<li><strong>Monitoring</strong>: Comprehensive observability stack</li>
+<li><strong>Mobile App</strong>: Progressive Web App development</li>
+</ul>
+<h4 id="next-12-months" class=link_owner>
+  Next 12 Months
+  <a href="#next-12-months" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Microservices</strong>: Service decomposition</li>
+<li><strong>Container Orchestration</strong>: Kubernetes migration</li>
+<li><strong>Real-time Features</strong>: WebSocket infrastructure</li>
+<li><strong>AI Integration</strong>: Machine learning capabilities</li>
+</ul>
+<h4 id="next-24-months" class=link_owner>
+  Next 24 Months
+  <a href="#next-24-months" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Edge Computing</strong>: Global edge deployment</li>
+<li><strong>Blockchain Integration</strong>: Certificate verification</li>
+<li><strong>IoT Support</strong>: Hardware lab integration</li>
+<li><strong>AR/VR</strong>: Immersive learning experiences</li>
+</ul>
+<h3 id="architectural-decision-records-adrs" class=link_owner>
+  Architectural Decision Records (ADRs)
+  <a href="#architectural-decision-records-adrs" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="adr-001-static-site-generation-choice" class=link_owner>
+  ADR-001: Static Site Generation Choice
+  <a href="#adr-001-static-site-generation-choice" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Decision</strong>: Use Hugo for static site generation
+<strong>Rationale</strong>: Performance, security, and simplicity
+<strong>Consequences</strong>: Limited dynamic functionality, excellent caching</p>
+<h4 id="adr-002-modular-repository-structure" class=link_owner>
+  ADR-002: Modular Repository Structure
+  <a href="#adr-002-modular-repository-structure" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Decision</strong>: Separate repositories for each module
+<strong>Rationale</strong>: Independent development and deployment
+<strong>Consequences</strong>: More complex coordination, better isolation</p>
+<h4 id="adr-003-github-actions-for-cicd" class=link_owner>
+  ADR-003: GitHub Actions for CI/CD
+  <a href="#adr-003-github-actions-for-cicd" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Decision</strong>: Use GitHub Actions instead of external CI/CD
+<strong>Rationale</strong>: Integration with GitHub, cost-effectiveness
+<strong>Consequences</strong>: Vendor lock-in, excellent developer experience</p>
+<h2 id="-architecture-support" class=link_owner>
+  📞 Architecture Support
+  <a href="#-architecture-support" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="getting-help-with-architecture" class=link_owner>
+  Getting Help with Architecture
+  <a href="#getting-help-with-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="questions-and-discussions" class=link_owner>
+  Questions and Discussions
+  <a href="#questions-and-discussions" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>GitHub Discussions</strong>: Architecture category</li>
+<li><strong>Telegram</strong>: #architecture channel</li>
+<li><strong>Email</strong>: <a href="mailto:architecture@info-tech.io">architecture@info-tech.io</a></li>
+</ul>
+<h4 id="contributing-to-architecture" class=link_owner>
+  Contributing to Architecture
+  <a href="#contributing-to-architecture" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>RFC Process</strong>: Request for Comments on major changes</li>
+<li><strong>Architecture Review</strong>: Mandatory for significant changes</li>
+<li><strong>Documentation</strong>: Update ADRs for all decisions</li>
+</ul>
+<hr>
+<p><em>This architecture document is maintained by the InfoTech.io community and updated with each major release.</em></p>
+
+</div>
+      </div></div><script>
+
+const copy_text = 'Copy';
+const copied_text = 'Copied';
+const toggle_line_numbers_text = 'Toggle line numbers';
+const toggle_line_wrap_text = 'Toggle line wrap';
+const resize_snippet = 'Resize snippet height';
+const not_set = 'not set';
+const quick_links = 'Quick links';
+const search_results_label = 'Search Results';
+const short_search_query = 'Query is too short'
+const type_to_search = 'Type to search';
+const no_matches_found = 'No matches found';
+</script>
+<footer class="pt-2 pb-2">
+  <div class="wrap">
+    <p>
+      &copy; <span class="year">2026</span>
+    </p>
+    <a href="#pagetop" id="toTop" title=Back&#32;to&#32;top></a>
+  </div>
+</footer>
+<svg width="0" height="0" class="hidden">
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492.004 492.004" id="next">
+    <path d="M484.14 226.886L306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" id="search">
+    <path d="M508.874 478.708L360.142 329.976c28.21-34.827 45.191-79.103 45.191-127.309C405.333 90.917 314.416 0 202.666 0S0 90.917 0 202.667s90.917 202.667 202.667 202.667c48.206 0 92.482-16.982 127.309-45.191l148.732 148.732c4.167 4.165 10.919 4.165 15.086 0l15.081-15.082c4.165-4.166 4.165-10.92-.001-15.085zM202.667 362.667c-88.229 0-160-71.771-160-160s71.771-160 160-160 160 71.771 160 160-71.771 160-160 160z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 241 179" id="harmburger">
+    <path d="M1 10C1 4.477 5.477 0 11 0h220c5.523 0 10 4.477 10 10s-4.477 10-10 10H11C5.477 20 1 15.523 1 10zm0 80c0-5.523 4.477-10 10-10h220c5.523 0 10 4.477 10 10s-4.477 10-10 10H11c-5.523 0-10-4.477-10-10zm9 69c-5.523 0-10 4.477-10 10s4.477 10 10 10h220c5.523 0 10-4.477 10-10s-4.477-10-10-10H10z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 401.998 401.998" id="sort">
+    <path d="M73.092 164.452h255.813c4.949 0 9.233-1.807 12.848-5.424 3.613-3.616 5.427-7.898 5.427-12.847s-1.813-9.229-5.427-12.85L213.846 5.424C210.232 1.812 205.951 0 200.999 0s-9.233 1.812-12.85 5.424L60.242 133.331c-3.617 3.617-5.424 7.901-5.424 12.85 0 4.948 1.807 9.231 5.424 12.847 3.621 3.617 7.902 5.424 12.85 5.424zm255.813 73.097H73.092c-4.952 0-9.233 1.808-12.85 5.421-3.617 3.617-5.424 7.898-5.424 12.847s1.807 9.233 5.424 12.848L188.149 396.57c3.621 3.617 7.902 5.428 12.85 5.428s9.233-1.811 12.847-5.428l127.907-127.906c3.613-3.614 5.427-7.898 5.427-12.848 0-4.948-1.813-9.229-5.427-12.847-3.614-3.616-7.899-5.42-12.848-5.42z"></path>
+  </symbol>
+</svg>
+
+<svg width="0" height="0" class="hidden">
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="facebook">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h151V331h-60v-90h60v-61c0-49.629 40.371-90 90-90h91v90h-91v61h91l-15 90h-76v181h121c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.001 18.001" id="twitter">
+    <path d="M15.891 4.013c.808-.496 1.343-1.173 1.605-2.034a8.68 8.68 0 0 1-2.351.861c-.703-.756-1.593-1.14-2.66-1.14-1.043 0-1.924.366-2.643 1.078a3.56 3.56 0 0 0-1.076 2.605c0 .309.039.585.117.819-3.076-.105-5.622-1.381-7.628-3.837-.34.601-.51 1.213-.51 1.846 0 1.301.549 2.332 1.645 3.089-.625-.053-1.176-.211-1.645-.47 0 .929.273 1.705.82 2.388a3.623 3.623 0 0 0 2.115 1.291c-.312.08-.641.118-.979.118-.312 0-.533-.026-.664-.083.23.757.664 1.371 1.291 1.841a3.652 3.652 0 0 0 2.152.743C4.148 14.173 2.625 14.69.902 14.69c-.422 0-.721-.006-.902-.038 1.697 1.102 3.586 1.649 5.676 1.649 2.139 0 4.029-.542 5.674-1.626 1.645-1.078 2.859-2.408 3.639-3.974a10.77 10.77 0 0 0 1.172-4.892v-.468a7.788 7.788 0 0 0 1.84-1.921 8.142 8.142 0 0 1-2.11.593z"
+      ></path>
+  </symbol>
+  <symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="mail">
+    <path  d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="calendar">
+    <path d="M452 40h-24V0h-40v40H124V0H84v40H60C26.916 40 0 66.916 0 100v352c0 33.084 26.916 60 60 60h392c33.084 0 60-26.916 60-60V100c0-33.084-26.916-60-60-60zm20 412c0 11.028-8.972 20-20 20H60c-11.028 0-20-8.972-20-20V188h432v264zm0-304H40v-48c0-11.028 8.972-20 20-20h24v40h40V80h264v40h40V80h24c11.028 0 20 8.972 20 20v48z"></path>
+    <path d="M76 230h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 310h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 390h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80-80h40v40h-40z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="github">
+    <path d="M255.968 5.329C114.624 5.329 0 120.401 0 262.353c0 113.536 73.344 209.856 175.104 243.872 12.8 2.368 17.472-5.568 17.472-12.384 0-6.112-.224-22.272-.352-43.712-71.2 15.52-86.24-34.464-86.24-34.464-11.616-29.696-28.416-37.6-28.416-37.6-23.264-15.936 1.728-15.616 1.728-15.616 25.696 1.824 39.2 26.496 39.2 26.496 22.848 39.264 59.936 27.936 74.528 21.344 2.304-16.608 8.928-27.936 16.256-34.368-56.832-6.496-116.608-28.544-116.608-127.008 0-28.064 9.984-51.008 26.368-68.992-2.656-6.496-11.424-32.64 2.496-68 0 0 21.504-6.912 70.4 26.336 20.416-5.696 42.304-8.544 64.096-8.64 21.728.128 43.648 2.944 64.096 8.672 48.864-33.248 70.336-26.336 70.336-26.336 13.952 35.392 5.184 61.504 2.56 68 16.416 17.984 26.304 40.928 26.304 68.992 0 98.72-59.84 120.448-116.864 126.816 9.184 7.936 17.376 23.616 17.376 47.584 0 34.368-.32 62.08-.32 70.496 0 6.88 4.608 14.88 17.6 12.352C438.72 472.145 512 375.857 512 262.353 512 120.401 397.376 5.329 255.968 5.329z"></path>
+  </symbol>
+  <symbol viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="rss">
+    <circle cx="3.429" cy="20.571" r="3.429"></circle>
+    <path d="M11.429 24h4.57C15.999 15.179 8.821 8.001 0 8v4.572c6.302.001 11.429 5.126 11.429 11.428z"></path>
+    <path d="M24 24C24 10.766 13.234 0 0 0v4.571c10.714 0 19.43 8.714 19.43 19.429z"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 64 64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="anchor-link">
+    <g fill="var(--theme)">
+      <path d="m19 40c1.104 0 2-.896 2-2s-.896-2-2-2c-3.86 0-7-3.14-7-7 0-1.873.728-3.628 2.059-4.95 1.313-1.322 3.068-2.05 4.941-2.05h10c3.86 0 7 3.14 7 7 0 .258-.015.509-.048.78-.174 1.574-.885 3.052-2.017 4.176-.532.54-1.137.974-1.797 1.289-.997.476-1.419 1.669-.944 2.666.476.996 1.669 1.419 2.667.943 1.08-.516 2.063-1.219 2.908-2.075 1.763-1.75 2.885-4.08 3.156-6.539.051-.413.075-.819.075-1.24 0-6.065-4.935-11-11-11h-10c-2.947 0-5.709 1.147-7.77 3.221-2.083 2.07-3.23 4.832-3.23 7.779 0 6.065 4.935 11 11 11z"></path>
+      <path d="m45 28c-1.104 0-2 .896-2 2s.896 2 2 2c3.86 0 7 3.141 7 7 0 1.873-.728 3.628-2.059 4.95-1.313 1.322-3.068 2.05-4.941 2.05h-10c-3.86 0-7-3.141-7-7 0-.258.015-.509.048-.78.174-1.574.885-3.052 2.017-4.176.532-.54 1.136-.974 1.796-1.289.997-.476 1.419-1.67.944-2.667s-1.669-1.418-2.667-.944c-1.081.516-2.064 1.22-2.908 2.076-1.763 1.75-2.885 4.08-3.156 6.538-.05.415-.074.821-.074 1.242 0 6.065 4.935 11 11 11h10c2.946 0 5.709-1.147 7.77-3.221 2.083-2.07 3.23-4.833 3.23-7.779 0-6.065-4.935-11-11-11z"></path>
+    </g>
+  </symbol>
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="linkedin">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h362c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zM181 406h-60V196h60zm0-240h-60v-60h60zm210 240h-60V286c0-16.54-13.46-30-30-30s-30 13.46-30 30v120h-60V196h60v11.309C286.719 202.422 296.93 196 316 196c40.691.043 75 36.547 75 79.688zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" id="arrow">
+    <path d="M604.501 440.509L325.398 134.956c-5.331-5.357-12.423-7.627-19.386-7.27-6.989-.357-14.056 1.913-19.387 7.27L7.499 440.509c-9.999 10.024-9.999 26.298 0 36.323s26.223 10.024 36.222 0l262.293-287.164L568.28 476.832c9.999 10.024 26.222 10.024 36.221 0 9.999-10.023 9.999-26.298 0-36.323z"></path>
+  </symbol>
+  <symbol aria-hidden="true" viewBox="0 0 24 24" id="carly">
+    <path fill="currentColor" d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 512 512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="copy">
+    <path d="m366.905 108.016h-141.91c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h141.91c11.048 0 20.003-8.955 20.003-20.003s-8.956-20.003-20.003-20.003z"></path>
+    <path d="m366.905 188.027h-141.91c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h141.91c11.047 0 20.003-8.955 20.003-20.003s-8.955-20.003-20.003-20.003z"></path>
+    <path d="m286.004 268.039h-61.009c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h61.009c11.048 0 20.003-8.955 20.003-20.003s-8.955-20.003-20.003-20.003z"></path>
+    <path d="m448.028 272.039c11.048 0 20.003-8.955 20.003-20.003v-172.024c0-44.119-35.894-80.012-80.012-80.012h-184.027c-44.094 0-79.971 35.853-80.012 79.938-44.118 0-80.012 35.893-80.012 80.012v272.039c0 44.118 35.893 80.012 80.012 80.012h194.028c44.118 0 80.012-35.893 80.012-80.012v-.608c39.414-4.938 70.01-38.662 70.01-79.389 0-11.048-8.955-20.003-20.003-20.003s-20.003 8.955-20.003 20.003c0 22.054-17.942 40.001-39.996 40.006l-184.027.045h-.009c-10.685 0-20.73-4.16-28.285-11.715-7.558-7.556-11.721-17.604-11.721-28.291v-272.025c0-22.059 17.947-40.006 40.006-40.006h184.028c22.059 0 40.006 17.947 40.006 40.006v172.025c-.001 11.047 8.954 20.002 20.002 20.002zm-244.036 160.008h.02l154.002-.038c-.012 22.049-17.954 39.984-40.006 39.984h-194.027c-22.059 0-40.006-17.947-40.006-40.006v-272.039c0-22.059 17.947-40.006 40.006-40.006v232.094c0 21.375 8.325 41.471 23.441 56.583 15.113 15.11 35.2 23.428 56.57 23.428z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001" id="closeme">
+    <path d="M284.286 256.002L506.143 34.144c7.811-7.811 7.811-20.475 0-28.285-7.811-7.81-20.475-7.811-28.285 0L256 227.717 34.143 5.859c-7.811-7.811-20.475-7.811-28.285 0-7.81 7.811-7.811 20.475 0 28.285l221.857 221.857L5.858 477.859c-7.811 7.811-7.811 20.475 0 28.285a19.938 19.938 0 0 0 14.143 5.857 19.94 19.94 0 0 0 14.143-5.857L256 284.287l221.857 221.857c3.905 3.905 9.024 5.857 14.143 5.857s10.237-1.952 14.143-5.857c7.811-7.811 7.811-20.475 0-28.285L284.286 256.002z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="open-menu">
+    <path d="M492 236H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0-160H20C8.954 76 0 84.954 0 96s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0 320H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="instagram">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="youtube">
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="stackoverflow">
+    <path d="M21 27v-8h3v11H0V19h3v8h18z"></path><path d="M17.1.2L15 1.8l7.9 10.6 2.1-1.6L17.1.2zm3.7 14.7L10.6 6.4l1.7-2 10.2 8.5-1.7 2zM7.2 12.3l12 5.6 1.1-2.4-12-5.6-1.1 2.4zm-1.8 6.8l13.56 1.96.17-2.38-13.26-2.55-.47 2.97zM19 25H5v-3h14v3z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.016 512" id="expand">
+    <path d="m240 426.675781h-181.332031c-32.363281 0-58.667969-26.304687-58.667969-58.667969v-309.332031c0-32.363281 26.304688-58.6679685 58.667969-58.6679685h309.332031c32.363281 0 58.667969 26.3046875 58.667969 58.6679685v181.332031c0 8.832032-7.167969 16-16 16s-16-7.167968-16-16v-181.332031c0-14.699219-11.96875-26.667969-26.667969-26.667969h-309.332031c-14.699219 0-26.667969 11.96875-26.667969 26.667969v309.332031c0 14.699219 11.96875 26.667969 26.667969 26.667969h181.332031c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"></path>
+    <path d="m496 512.007812h-138.667969c-8.832031 0-16-7.167968-16-16 0-8.832031 7.167969-16 16-16h122.667969v-122.667968c0-8.832032 7.167969-16 16-16s16 7.167968 16 16v138.667968c0 8.832032-7.167969 16-16 16zm0 0"></path>
+    <path d="m496 512.007812c-4.097656 0-8.191406-1.558593-11.308594-4.691406l-181.332031-181.335937c-6.25-6.25-6.25-16.382813 0-22.632813s16.382813-6.25 22.636719 0l181.332031 181.332032c6.25 6.25 6.25 16.382812 0 22.636718-3.136719 3.132813-7.230469 4.691406-11.328125 4.691406zm0 0"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 512 512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="order">
+    <path d="m492 236h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <path d="m492 86h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <path d="m492 386h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <circle cx="27" cy="106" r="27"></circle>
+    <circle cx="27" cy="256" r="27"></circle>
+    <circle cx="27" cy="406" r="27"></circle>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" fill="#666" viewBox="0 0 512 512" id="check">
+    <path d="M99.941 293.748a21.78 21.78 0 0 1-7.175-16.153c0-11.938 9.823-21.765 21.764-21.765a21.772 21.772 0 0 1 15.737 6.733l85.958 83.825 164.42-194.504c18.463-21.833 51.574 6.326 33.213 28.125L234.276 392.324l-1.032 1.135c-8.327 8.55-22.218 8.74-30.773.412L99.941 293.748z"></path>
+  </symbol>
+</svg>
+
+<script>
+  "use strict";const doc=document.documentElement,toggle_id="toggle",show_id="show",menu="menu",active="active";let site_title=`test-site`,root_url="/";root_url=root_url.startsWith("http")?root_url:window.location.origin;const go_back_class="button_back",line_class=".line",code_block_config=JSON.parse('{"maximum":100,"show":false}'),iconsPath=`icons/`,shell_based=["sh","shell","zsh","bash"],body=elem("body"),max_lines=code_block_config.maximum,show_lines=code_block_config.show,copy_id="panel_copy",wrap_id="panel_wrap",lines_id="panel_lines",panel_expand="panel_expand",panel_expanded="panel_expanded",panel_box="panel_box",panel_hide="panel_hide",panel_from="panel_from",full_height="initial",highlight="highlight",highlight_wrap="highlight_wrap",hash="#",light="light",dark="dark",storageKey=`${site_title}-color-mode`,mermaidThemeKey=`${site_title}-mermaid`,key="--color-mode",mode_data="data-mode",bank=window.localStorage;function isObj(e){return!!(e&&typeof e=="object"&&e!==null)}function createEl(e="div"){return document.createElement(e)}function emptyEl(e){for(;e.firstChild;)e.removeChild(e.firstChild)}function elem(e,t=document){let n=!!isObj(t)&&t.querySelector(e);return n||!1}function elems(e,t=document){return isObj(t)?t.querySelectorAll(e):[]}function pushClass(e,t){if(isObj(e)&&t){let n=e.classList;!n.contains(t)&&n.add(t)}}function deleteClass(e,t){if(isObj(e)&&t){let n=e.classList;!!n.contains(t)&&n.remove(t)}}function modifyClass(e,t){if(isObj(e)&&t){const n=e.classList;n.contains(t)?n.remove(t):n.add(t)}}function containsClass(e,t){if(isObj(e)&&t&&e!==document)return!!e.classList.contains(t)}function isChild(e,t){let n=isObj(e)&&t&&typeof t=="string";return!!(n&&e.closest(t))}function elemAttribute(e,t,n=null){if(n)e.setAttribute(t,n);else return n=e.getAttribute(t),n||!1}function deleteChars(e,t){let n=e;if(Array.isArray(t))for(let e=0;e<t.length;e++)n=n.replace(t[e],"");else n=n.replace(t,"");return n}function isBlank(e){return!e||e.trim().length===0}function isMatch(e,t){if(isObj(e)){if(t.isArray){let n=t.map(function(t){return e.matches(t)});return n.includes(!0)}return e.matches(t)}}function closestInt(e,t){return t.reduce(function(t,n){return Math.abs(n-e)<Math.abs(t-e)?n:t})}function hasClasses(e){if(isObj(e)){const t=e.classList;return t.length}}function wrapEl(e,t){e.parentNode.insertBefore(t,e),t.appendChild(e)}function wrapText(e,t,n="mark"){let s=`<${n}>`,o=`</${n}>`,r=`%3C${n}%3E`,c=`%3C/${n}%3E`;function i(t){let n=t.innerHTML,a=new RegExp(e,"gi"),i=e.length?n.match(a):null;if(i){i.forEach(function(e){n=n.replaceAll(e,`${s}${e}${o}`),t.innerHTML=n});const e=elems("img",t);e&&e.forEach(e=>{e.src=e.src.replaceAll(s,"").replaceAll(o,"").replaceAll(r,"").replaceAll(c,"")})}}const l=["h1","h2","h3","h4","h5","h6","p","code","td"];l.forEach(function(e){const n=elems(e,t);n.length&&n.forEach(function(e){e.children.length>=1?(Array.from(e.children).forEach(function(e){i(e)}),i(e)):i(e)})});const a=elems("a");a&&a.forEach(function(e){e.href=e.href.replaceAll(encodeURI(s),"").replaceAll(encodeURI(o),"")})}function parseBoolean(e=""){switch(e=e.trim().toLowerCase(),e){case"true":return!0;case"false":return!1;default:return 0[0]}}function loadSvg(e,t){t.innerHTML=`
+  <svg class="icon_${e}">
+    <use xlink:href="#${e}"></use>
+  </svg>`}function copyToClipboard(e){let t,n,s;t=createEl("textarea"),t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",n=document.getSelection(),doc.appendChild(t),s=n.rangeCount>0&&n.getRangeAt(0),t.select(),document.execCommand("copy"),doc.removeChild(t),s&&(n.removeAllRanges(),n.addRange(s))}const snippet_actions=[{icon:"copy",id:"copy",title:copy_text,show:!0},{icon:"order",id:"lines",title:toggle_line_numbers_text,show:!0},{icon:"carly",id:"wrap",title:toggle_line_wrap_text,show:!1},{icon:"expand",id:"expand",title:resize_snippet,show:!1}];function addLines(e){let t=e.textContent;const n=[];t.includes(`
+`)&&e.closest("pre")&&!e.children.length&&(t=t.split(`
+`),t.forEach((t,s)=>{if(t.trim().length){const o=`
+        <span class="line line-flex">
+          <span class="ln">${s+1}</span>
+          <span class="cl">${t.trim()}</span>
+        </span>`.trim();n.push(o),e.closest("pre").className="chroma",pushClass(e,"language-unknown"),e.dataset.lang=not_set}}),e.innerHTML=n.join("").trim(" "))}function wrapOrphanedPreElements(){const e=elems("pre");Array.from(e).forEach(function(e){const t=e.parentNode,n=!containsClass(t,highlight);if(n){const t=createEl();t.className=highlight;const n=createEl();n.className=highlight_wrap,wrapEl(e,t),wrapEl(t,n)}})}wrapOrphanedPreElements();function codeBlocks(){const e=elems("code"),t=Array.from(e).filter(function(e){return addLines(e),e.closest("pre")&&!Array.from(e.classList).includes("noClass")}).map(function(e){return e});return t}function codeBlockFits(e){const t=e.offsetWidth,n=e.closest(`.${highlight}`).offsetWidth;return t<=n}function maxHeightIsSet(e){let t=e.style.maxHeight;return t.includes("px")}function restrainCodeBlockHeight(e){const n=e[max_lines-1];let t=full_height;if(n){const s=n.offsetTop;if(s!==0){t=`${s}px`;const n=e[0].parentNode,o=n.closest(`.${highlight}`),i=containsClass(o,panel_expanded);i||(n.dataset.height=t,n.style.maxHeight=t)}}}const blocks=codeBlocks();function collapseCodeBlock(e){const t=elems(line_class,e),n=t.length;if(n>max_lines){const n=createEl();pushClass(n,panel_expand),pushClass(n,panel_from),n.title="Toggle snippet",n.textContent="...";const s=e.closest(".highlight");window.setTimeout(function(){const e=s.nextElementSibling.lastElementChild;deleteClass(e,panel_hide)},150),restrainCodeBlockHeight(t);const o=e.parentNode.parentNode;o.appendChild(n)}}blocks.forEach(function(e){collapseCodeBlock(e)});function actionPanel(){const e=createEl();return e.className=panel_box,snippet_actions.forEach(function(t){const n=createEl("a");n.href="#",n.title=t.title,n.className=`icon panel_icon panel_${t.id}`,!t.show&&pushClass(n,panel_hide),loadSvg(t.icon,n),e.appendChild(n)}),e}function toggleLineNumbers(e){e&&(e.forEach(e=>modifyClass(e,"pre_nolines")),restrainCodeBlockHeight(e))}function toggleLineWrap(e){modifyClass(e,"pre_wrap");const t=elems(".ln",e);restrainCodeBlockHeight(t)}function copyCode(e){const t=e.parentNode.parentNode.querySelector(`.${copy_id}`),s=t.title;loadSvg("check",t),t.title=copied_text,e=e.cloneNode(!0);const n=elems(".ln",e);!!n.length&&n.forEach(e=>e.remove());let o=elems("span",e);o.forEach(e=>{const t=e.textContent.trim(" ");t.indexOf("$")===0&&(e.textContent=e.textContent.replace("$ ",""))});const i=e.textContent.trim(" ");copyToClipboard(i),setTimeout(function(){t.title=s,loadSvg("copy",t)},2250)}(function(){const n=highlight_wrap;blocks.forEach(function(e){show_lines===!1&&toggleLineNumbers(elems(".ln",e));const o=e.parentNode.parentNode,t=createEl();t.className=n,wrapEl(o,t);const s=actionPanel(),i=elem(`.${wrap_id}`,s);!codeBlockFits(e)&&deleteClass(i,panel_hide),t.appendChild(s)});function t(e,t){return e.matches(`.${t}`)||e.closest(`.${t}`)}function s(e,t){const n=e.matches(`.${t}`)?e:e.closest(`.${t}`);deleteClass(n,active),setTimeout(function(){modifyClass(n,active)},50)}doc.addEventListener("click",function(e){const o=e.target,i=t(o,copy_id),a=t(o,wrap_id),r=t(o,lines_id),c=t(o,panel_expand),l=i||a||r||c;if(l){e.preventDefault(),s(o,"icon");const t=o.closest(`.${n}`).firstElementChild.firstElementChild;let l=elems(".ln",t);if(!!a&&toggleLineWrap(t),!!r&&toggleLineNumbers(l),c){let e=t.firstElementChild;const n=e.closest(".highlight");maxHeightIsSet(e)?(e.style.maxHeight=full_height,pushClass(n,panel_expanded)):(e.style.maxHeight=e.dataset.height,deleteClass(n,panel_expanded))}!!i&&copyCode(t)}}),function(){blocks.forEach(e=>{let t=e.dataset.lang;const n=shell_based.includes(t);if(n){const t=elems(line_class,e);Array.from(t).forEach(e=>{e=e.lastElementChild;let t=e.textContent.trim(" ");!!(t.indexOf("$")!==0&&t.trim(" ").length)&&pushClass(e,"shell")})}if(t=t==="sh"?"shell":t,t!=="fallback"){const n=createEl();n.textContent=t,pushClass(n,"lang"),e.closest(`.${highlight_wrap}`).appendChild(n)}})}()})();function prefersColor(e){return`(prefers-color-scheme: ${e})`}function systemMode(){return window.matchMedia&&window.matchMedia(prefersColor(dark)).matches?dark:light}function currentMode(){let e=light+dark;e=[...e];let t=getComputedStyle(doc).getPropertyValue(key).replace(/"/g,"").trim();return[...t].filter(t=>e.includes(t)).join("")}function changeMode(e){e?(bank.setItem(storageKey,light),elemAttribute(doc,mode_data,light)):(bank.setItem(storageKey,dark),elemAttribute(doc,mode_data,dark))}function pickModePicture(e){elems("picture").forEach(function(t){let o=t.firstElementChild;const n=t.dataset,s=[n.lit,n.dark];o.src=e=="dark"?s[1]:s[0]})}function setMermaidTheme(e){bank.setItem(mermaidThemeKey,e);let t=elem(".color_choice");t.value=e}function setUserColorMode(e=!1){const n=currentMode()==dark,s=bank.getItem(storageKey),o=systemMode();s?e?changeMode(n):elemAttribute(doc,mode_data,s):changeMode(e===!0?n:o!==dark);const t=doc.dataset.mode;doc.dataset.systemmode=o,!!t&&pickModePicture(t),setMermaidTheme(t)}setUserColorMode(),function(){return elem(".nav_header").offsetHeight+25}();function toggleMenu(e){const t=e.target,o=t.matches(`.${toggle_id}`),n=t.closest(`.${toggle_id}`),i=elems(`.${show_id}`)?Array.from(elems(`.${show_id}`)):[],a=t.closest(`.${menu}`);function s(e,t=!1){i.forEach(function(n){!t&&deleteClass(n,show_id),n!==e.closest(`.${menu}`)&&deleteClass(n,show_id)})}if(o||n){const s=n?n.parentNode.parentNode:t.parentNode.parentNode;e.preventDefault(),modifyClass(s,show_id)}else a?s(t,!0):s(t)}(function(){const t=elems("code");t&&t.forEach(function(e){hasClasses(e)||!e.children.length&&pushClass(e,"noClass")})})();function featureHeading(){const t="section_link",n="section_title",e=elem(".aside");if(e){let s=elem(`.${t}.${active}`);s=s||elem(`.${n}.${active}`),e.scroll({top:s.offsetTop,left:0})}}function activeHeading(e,t){let n=Object.create(null);n.active=t.filter(function(e){return containsClass(e,active)})[0],n.new=t[e],n.active!=n.new&&(!!n.active&&deleteClass(n.active,active),pushClass(n.new,active))}setTimeout(()=>{featureHeading()},50);function updateDate(){const t=new Date,e=t.getFullYear().toString,n=elem(".year");!!n&&(e.textContent=e)}function customizeSidebar(){const e="toc_active",n=elem("aside"),t=elems("nav",n);if(t){t.forEach(function(t){if(t.id="",pushClass(t,"toc"),t.children.length>=1){const n=Array.from(t.children[0].children),s=t.previousElementSibling;!!s.matches(`.${active}`)&&pushClass(t,e),n.forEach(function(e){pushClass(e,"toc_item"),pushClass(e.firstElementChild,"toc_link")})}});const n=elem(`.${e}`);if(n){const e=Array.from(elems("a",n)),t=e.map(function(e){return document.getElementById(decodeURIComponent(e.hash.replace("#","")))});window.addEventListener("scroll",function(){let o=window.scrollY+window.innerHeight/2,s=0;for(const[n,e]of t.entries())e.offsetTop<o&&e.offsetTop>t[s].offsetTop&&(s=n);activeHeading(s,e)})}}elems("p").forEach(function(e){const t=elems(".button",e);t.length>1&&pushClass(e,"button_grid")})}function markExternalLinks(){let e=elems("a");e&&Array.from(e).forEach(function(e){let n,o,i,s,a,r,t,c;t=new URL(e.href),c=t.host!==location.host||t.protocol!==location.protocol||t.port!==location.port,c&&(n="target",o="rel",i="_blank",s="noopener",a=elemAttribute(e,n),r=elemAttribute(e,s),!a&&elemAttribute(e,n,i),!r&&elemAttribute(e,o,s))})}function sanitizeURL(e){const t=e.indexOf(hash);if(t>-1){const n=e.substr(t,e.length-1);e=e.replace(n,"")}return e}function copyFeedback(e){const t=document.createElement("div"),n="link_yanked";if(t.classList.add(n),t.innerText=copied_text,!elem(`.${n}`,e)){const n=e.getElementsByTagName("svg")[0],s=n.src;n.src="https://info-tech-io.github.io/icons/check.svg",e.appendChild(t),setTimeout(function(){e.removeChild(t),n.src=s},2250)}}function copyHeadingLink(){let t,n,s,o,e;t="link",n=elems(`.${t}`),n&&document.addEventListener("click",function(n){e=n.target,o=e.parentNode,(e&&containsClass(e,t)||containsClass(o,t))&&(n.preventDefault(),s=e.href!=0[0]?e.href:e.parentNode.href,copyToClipboard(s),copyFeedback(e.href!=0[0]?e:e.parentNode))})}function makeTablesResponsive(){const e=elems("table");e&&e.forEach(function(e){const t=createEl();pushClass(t,"scrollable"),wrapEl(e,t)})}function backToTop(){const e=elem("#toTop");window.addEventListener("scroll",()=>{const t=window.scrollY;t>=200?(e.style.display="flex",pushClass(e,active)):deleteClass(e,active)})}function lazyLoadMedia(e=[]){e.forEach(e=>{let t=elems(e);t&&Array.from(t).forEach(function(e){e.loading="lazy"})})}function loadActions(){updateDate(),customizeSidebar(),markExternalLinks(),copyHeadingLink(),makeTablesResponsive(),backToTop(),lazyLoadMedia(["iframe","img"]),doc.addEventListener("click",e=>{let t=e.target,n="color_choice",s=containsClass(t,n);!!s&&setUserColorMode(!0),toggleMenu(e)})}window.addEventListener("load",loadActions())
+</script>
+
+<script src="https://info-tech-io.github.io/js/search.min.ced9096e00d5ed374b805a5ba6ac7c85f5269f7ba65c8b35482af33128ccdb3d890f44edf7ce462465dc94225c182b77086a3fdabb0f211947a23e32fd4bb82d.js" async></script>
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  let theme_input = elem('.color_choice');
+  let key = theme_input.value;
+
+  function getTheme(mode) {
+    return key == 'dark' ? 'dark' : 'base';
+  }
+
+  function initializeMermaid(mode) {
+    mermaid.initialize(
+    { startOnLoad: true, theme: getTheme(mode) }
+  );
+  }
+
+  initializeMermaid(key);
+
+  theme_input.addEventListener('change', e => {
+    location.reload();
+    initializeMermaid(e.target.value);
+  });
+</script>
+</body>
+</html>

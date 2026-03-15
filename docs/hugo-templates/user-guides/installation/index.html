@@ -1,0 +1,1015 @@
+<!doctype html>
+<html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Hugo 0.148.0">
+<link rel="apple-touch-icon" sizes="180x180" href='https://info-tech-io.github.io/favicons/apple-touch-icon.png'>
+<link rel="icon" type="image/png" sizes="32x32" href='https://info-tech-io.github.io/favicons/favicon-32x32.png'>
+<link rel="icon" type="image/png" sizes="16x16" href='https://info-tech-io.github.io/favicons/favicon-16x16.png'>
+<link rel="manifest" href='https://info-tech-io.github.io/favicons/site.webmanifest'>
+<link rel="mask-icon" href='https://info-tech-io.github.io/favicons/safari-pinned-tab.svg' color="#004750">
+<link rel="shortcut icon" href='https://info-tech-io.github.io/favicons/favicon.ico'>
+<meta name="msapplication-config" content='https://info-tech-io.github.io/favicons/browserconfig.xml'>
+<title>Hugo Template Factory Site</title><meta property="og:url" content="https://info-tech-io.github.io/user-guides/installation/">
+  <meta property="og:site_name" content="Hugo Template Factory Site">
+  <meta property="og:title" content="Hugo Template Factory Site">
+  <meta property="og:description" content="Installation Guide Overview This comprehensive installation guide covers setting up the Hugo Template Factory Framework on different operating systems and environments.
+System Requirements Minimum Requirements Hugo Extended ≥ 0.148.0 Node.js ≥ 18.0.0 Git ≥ 2.30.0 Bash shell (Linux/macOS) or Git Bash (Windows) Recommended Requirements Hugo Extended ≥ 0.148.0 (latest stable) Node.js ≥ 20.0.0 (LTS version) NPM ≥ 9.0.0 Git ≥ 2.40.0 4GB RAM (for large sites) 2GB free disk space Optional Dependencies Docker (for containerized builds) BATS (for bash testing) yamllint (for YAML validation) Quick Installation One-Line Installation (Linux/macOS) curl -fsSL https://raw.githubusercontent.com/info-tech-io/hugo-templates/main/scripts/install.sh | bash Manual Installation # Clone the repository git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates # Initialize submodules and install dependencies git submodule update --init --recursive npm ci # Verify installation ./scripts/diagnostic.js --all Platform-Specific Installation Ubuntu/Debian 1. Update System sudo apt update &amp;&amp; sudo apt upgrade -y 2. Install Hugo Extended # Method 1: Download official release (recommended) HUGO_VERSION=&#34;0.148.0&#34; wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb sudo dpkg -i hugo.deb # Method 2: Using snap (alternative) sudo snap install hugo --channel=extended 3. Install Node.js # Method 1: Using NodeSource repository (recommended) curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - sudo apt-get install -y nodejs # Method 2: Using nvm (user-specific) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.bashrc nvm install 20 nvm use 20 4. Install Additional Tools # Git (if not already installed) sudo apt install git # BATS testing framework (optional) sudo apt install bats # YAML linter (optional) sudo apt install yamllint 5. Clone and Setup git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates git submodule update --init --recursive npm ci CentOS/RHEL/Fedora 1. Install Hugo Extended # Fedora sudo dnf install hugo # CentOS/RHEL (manual installation) HUGO_VERSION=&#34;0.148.0&#34; wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz tar -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz sudo mv hugo /usr/local/bin/ 2. Install Node.js # Fedora sudo dnf install nodejs npm # CentOS/RHEL curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - sudo yum install -y nodejs 3. Install Additional Tools sudo dnf install git # Fedora sudo yum install git # CentOS/RHEL macOS 1. Install Homebrew (if not installed) /bin/bash -c &#34;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&#34; 2. Install Hugo Extended brew install hugo 3. Install Node.js # Method 1: Using Homebrew brew install node # Method 2: Using nvm (recommended for development) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.zshrc # or ~/.bash_profile nvm install 20 nvm use 20 4. Install Additional Tools # Git (usually pre-installed) brew install git # BATS testing framework (optional) brew install bats-core Windows 1. Install Git Bash Download Git from git-scm.com Install with “Git Bash Here” option enabled Open Git Bash for all following commands 2. Install Hugo Extended Method 1: Using Chocolatey (recommended)">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="user-guides">
+
+  <meta itemprop="name" content="Hugo Template Factory Site">
+  <meta itemprop="description" content="Installation Guide Overview This comprehensive installation guide covers setting up the Hugo Template Factory Framework on different operating systems and environments.
+System Requirements Minimum Requirements Hugo Extended ≥ 0.148.0 Node.js ≥ 18.0.0 Git ≥ 2.30.0 Bash shell (Linux/macOS) or Git Bash (Windows) Recommended Requirements Hugo Extended ≥ 0.148.0 (latest stable) Node.js ≥ 20.0.0 (LTS version) NPM ≥ 9.0.0 Git ≥ 2.40.0 4GB RAM (for large sites) 2GB free disk space Optional Dependencies Docker (for containerized builds) BATS (for bash testing) yamllint (for YAML validation) Quick Installation One-Line Installation (Linux/macOS) curl -fsSL https://raw.githubusercontent.com/info-tech-io/hugo-templates/main/scripts/install.sh | bash Manual Installation # Clone the repository git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates # Initialize submodules and install dependencies git submodule update --init --recursive npm ci # Verify installation ./scripts/diagnostic.js --all Platform-Specific Installation Ubuntu/Debian 1. Update System sudo apt update &amp;&amp; sudo apt upgrade -y 2. Install Hugo Extended # Method 1: Download official release (recommended) HUGO_VERSION=&#34;0.148.0&#34; wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb sudo dpkg -i hugo.deb # Method 2: Using snap (alternative) sudo snap install hugo --channel=extended 3. Install Node.js # Method 1: Using NodeSource repository (recommended) curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - sudo apt-get install -y nodejs # Method 2: Using nvm (user-specific) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.bashrc nvm install 20 nvm use 20 4. Install Additional Tools # Git (if not already installed) sudo apt install git # BATS testing framework (optional) sudo apt install bats # YAML linter (optional) sudo apt install yamllint 5. Clone and Setup git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates git submodule update --init --recursive npm ci CentOS/RHEL/Fedora 1. Install Hugo Extended # Fedora sudo dnf install hugo # CentOS/RHEL (manual installation) HUGO_VERSION=&#34;0.148.0&#34; wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz tar -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz sudo mv hugo /usr/local/bin/ 2. Install Node.js # Fedora sudo dnf install nodejs npm # CentOS/RHEL curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - sudo yum install -y nodejs 3. Install Additional Tools sudo dnf install git # Fedora sudo yum install git # CentOS/RHEL macOS 1. Install Homebrew (if not installed) /bin/bash -c &#34;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&#34; 2. Install Hugo Extended brew install hugo 3. Install Node.js # Method 1: Using Homebrew brew install node # Method 2: Using nvm (recommended for development) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.zshrc # or ~/.bash_profile nvm install 20 nvm use 20 4. Install Additional Tools # Git (usually pre-installed) brew install git # BATS testing framework (optional) brew install bats-core Windows 1. Install Git Bash Download Git from git-scm.com Install with “Git Bash Here” option enabled Open Git Bash for all following commands 2. Install Hugo Extended Method 1: Using Chocolatey (recommended)">
+  <meta itemprop="wordCount" content="1204">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Hugo Template Factory Site">
+  <meta name="twitter:description" content="Installation Guide Overview This comprehensive installation guide covers setting up the Hugo Template Factory Framework on different operating systems and environments.
+System Requirements Minimum Requirements Hugo Extended ≥ 0.148.0 Node.js ≥ 18.0.0 Git ≥ 2.30.0 Bash shell (Linux/macOS) or Git Bash (Windows) Recommended Requirements Hugo Extended ≥ 0.148.0 (latest stable) Node.js ≥ 20.0.0 (LTS version) NPM ≥ 9.0.0 Git ≥ 2.40.0 4GB RAM (for large sites) 2GB free disk space Optional Dependencies Docker (for containerized builds) BATS (for bash testing) yamllint (for YAML validation) Quick Installation One-Line Installation (Linux/macOS) curl -fsSL https://raw.githubusercontent.com/info-tech-io/hugo-templates/main/scripts/install.sh | bash Manual Installation # Clone the repository git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates # Initialize submodules and install dependencies git submodule update --init --recursive npm ci # Verify installation ./scripts/diagnostic.js --all Platform-Specific Installation Ubuntu/Debian 1. Update System sudo apt update &amp;&amp; sudo apt upgrade -y 2. Install Hugo Extended # Method 1: Download official release (recommended) HUGO_VERSION=&#34;0.148.0&#34; wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb sudo dpkg -i hugo.deb # Method 2: Using snap (alternative) sudo snap install hugo --channel=extended 3. Install Node.js # Method 1: Using NodeSource repository (recommended) curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - sudo apt-get install -y nodejs # Method 2: Using nvm (user-specific) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.bashrc nvm install 20 nvm use 20 4. Install Additional Tools # Git (if not already installed) sudo apt install git # BATS testing framework (optional) sudo apt install bats # YAML linter (optional) sudo apt install yamllint 5. Clone and Setup git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates git submodule update --init --recursive npm ci CentOS/RHEL/Fedora 1. Install Hugo Extended # Fedora sudo dnf install hugo # CentOS/RHEL (manual installation) HUGO_VERSION=&#34;0.148.0&#34; wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz tar -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz sudo mv hugo /usr/local/bin/ 2. Install Node.js # Fedora sudo dnf install nodejs npm # CentOS/RHEL curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - sudo yum install -y nodejs 3. Install Additional Tools sudo dnf install git # Fedora sudo yum install git # CentOS/RHEL macOS 1. Install Homebrew (if not installed) /bin/bash -c &#34;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&#34; 2. Install Hugo Extended brew install hugo 3. Install Node.js # Method 1: Using Homebrew brew install node # Method 2: Using nvm (recommended for development) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.zshrc # or ~/.bash_profile nvm install 20 nvm use 20 4. Install Additional Tools # Git (usually pre-installed) brew install git # BATS testing framework (optional) brew install bats-core Windows 1. Install Git Bash Download Git from git-scm.com Install with “Git Bash Here” option enabled Open Git Bash for all following commands 2. Install Hugo Extended Method 1: Using Chocolatey (recommended)">
+
+<link rel="stylesheet" href="https://info-tech-io.github.io/css/styles.74d7fb78947094a526973c2c67c02cf6d516c4cc4f8f410c6df278dbba989ae7d016bc6d5d9be9aa8eb439586aa8cffa76cd786d523ac7d5fb09cc6e77bcf3dd.css" integrity="sha512-dNf7eJRwlKUmlzwsZ8As9tUWxMxPj0EMbfJ427qYmufQFrxtXZvpqo60OVhqqM/6ds14bVI6x9X7Ccxud7zz3Q==">
+<meta name="description" content=" Installation Guide Overview This comprehensive installation guide covers setting up the Hugo Template Factory Framework on different operating systems and environments.
+System Requirements Minimum Requirements Hugo Extended ≥ 0.148.0 Node.js ≥ 18.0.0 Git ≥ 2.30.0 Bash shell (Linux/macOS) or Git Bash (Windows) Recommended Requirements Hugo Extended ≥ 0.148.0 (latest stable) Node.js ≥ 20.0.0 (LTS version) NPM ≥ 9.0.0 Git ≥ 2.40.0 4GB RAM (for large sites) 2GB free disk space Optional Dependencies Docker (for containerized builds) BATS (for bash testing) yamllint (for YAML validation) Quick Installation One-Line Installation (Linux/macOS) curl -fsSL https://raw.githubusercontent.com/info-tech-io/hugo-templates/main/scripts/install.sh | bash Manual Installation # Clone the repository git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates # Initialize submodules and install dependencies git submodule update --init --recursive npm ci # Verify installation ./scripts/diagnostic.js --all Platform-Specific Installation Ubuntu/Debian 1. Update System sudo apt update &amp;&amp; sudo apt upgrade -y 2. Install Hugo Extended # Method 1: Download official release (recommended) HUGO_VERSION=&#34;0.148.0&#34; wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb sudo dpkg -i hugo.deb # Method 2: Using snap (alternative) sudo snap install hugo --channel=extended 3. Install Node.js # Method 1: Using NodeSource repository (recommended) curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - sudo apt-get install -y nodejs # Method 2: Using nvm (user-specific) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.bashrc nvm install 20 nvm use 20 4. Install Additional Tools # Git (if not already installed) sudo apt install git # BATS testing framework (optional) sudo apt install bats # YAML linter (optional) sudo apt install yamllint 5. Clone and Setup git clone https://github.com/info-tech-io/hugo-templates.git cd hugo-templates git submodule update --init --recursive npm ci CentOS/RHEL/Fedora 1. Install Hugo Extended # Fedora sudo dnf install hugo # CentOS/RHEL (manual installation) HUGO_VERSION=&#34;0.148.0&#34; wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz tar -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz sudo mv hugo /usr/local/bin/ 2. Install Node.js # Fedora sudo dnf install nodejs npm # CentOS/RHEL curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - sudo yum install -y nodejs 3. Install Additional Tools sudo dnf install git # Fedora sudo yum install git # CentOS/RHEL macOS 1. Install Homebrew (if not installed) /bin/bash -c &#34;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&#34; 2. Install Hugo Extended brew install hugo 3. Install Node.js # Method 1: Using Homebrew brew install node # Method 2: Using nvm (recommended for development) curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash source ~/.zshrc # or ~/.bash_profile nvm install 20 nvm use 20 4. Install Additional Tools # Git (usually pre-installed) brew install git # BATS testing framework (optional) brew install bats-core Windows 1. Install Git Bash Download Git from git-scm.com Install with &ldquo;Git Bash Here&rdquo; option enabled Open Git Bash for all following commands 2. Install Hugo Extended Method 1: Using Chocolatey (recommended)
+">
+
+</head>
+<body class="page-page" id="pagetop">
+  <header class="nav_header">
+<nav class="wrap nav menu">
+	<a href='https://info-tech-io.github.io/' class="nav_brand">
+		<picture data-lit="https://info-tech-io.github.io/" data-dark="https://info-tech-io.github.io/">
+			<img src="https://info-tech-io.github.io/" alt="Hugo Template Factory Site Logo">
+		</picture>
+		<div class="nav_toggle toggle" title='Site Menu'><svg class="icon icon_harmburger">
+  <use href="#harmburger"></use>
+</svg>
+		</div>
+	</a>
+	<ul class="nav_body">
+		<li class="nav-item">
+  <div class="search">
+    <label for="find" class="search_label"><svg class="icon icon_search">
+  <use href="#search"></use>
+</svg>
+    </label>
+    
+    <input type="search" class="search_field  standardize-input" placeholder="Search site" id="find" autocomplete="off" data-scope='user-guides'>
+    <div class="search_results results"></div>
+  </div>
+		</li>
+		<li class="nav-item"><div class=color_mode>
+  <label for=mode></label>
+  <input type="checkbox" class="color_choice standardize-input" id="mode" title="Toggle Dark Mode">
+</div>
+</li>
+	</ul>
+</nav>
+
+  </header>
+  <div class="main wrap pt-4">
+      <div class="content">
+<div class="content">
+	<h1></h1>
+	<h1 id="installation-guide" class=link_owner>
+  Installation Guide
+  <a href="#installation-guide" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h1>
+<h2 id="overview" class=link_owner>
+  Overview
+  <a href="#overview" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>This comprehensive installation guide covers setting up the Hugo Template Factory Framework on different operating systems and environments.</p>
+<h2 id="system-requirements" class=link_owner>
+  System Requirements
+  <a href="#system-requirements" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="minimum-requirements" class=link_owner>
+  Minimum Requirements
+  <a href="#minimum-requirements" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<ul>
+<li><strong>Hugo Extended</strong> ≥ 0.148.0</li>
+<li><strong>Node.js</strong> ≥ 18.0.0</li>
+<li><strong>Git</strong> ≥ 2.30.0</li>
+<li><strong>Bash</strong> shell (Linux/macOS) or <strong>Git Bash</strong> (Windows)</li>
+</ul>
+<h3 id="recommended-requirements" class=link_owner>
+  Recommended Requirements
+  <a href="#recommended-requirements" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<ul>
+<li><strong>Hugo Extended</strong> ≥ 0.148.0 (latest stable)</li>
+<li><strong>Node.js</strong> ≥ 20.0.0 (LTS version)</li>
+<li><strong>NPM</strong> ≥ 9.0.0</li>
+<li><strong>Git</strong> ≥ 2.40.0</li>
+<li><strong>4GB RAM</strong> (for large sites)</li>
+<li><strong>2GB free disk space</strong></li>
+</ul>
+<h3 id="optional-dependencies" class=link_owner>
+  Optional Dependencies
+  <a href="#optional-dependencies" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<ul>
+<li><strong>Docker</strong> (for containerized builds)</li>
+<li><strong>BATS</strong> (for bash testing)</li>
+<li><strong>yamllint</strong> (for YAML validation)</li>
+</ul>
+<h2 id="quick-installation" class=link_owner>
+  Quick Installation
+  <a href="#quick-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="one-line-installation-linuxmacos" class=link_owner>
+  One-Line Installation (Linux/macOS)
+  <a href="#one-line-installation-linuxmacos" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -fsSL https://raw.githubusercontent.com/info-tech-io/hugo-templates/main/scripts/install.sh | bash
+</span></span></code></pre></div><h3 id="manual-installation" class=link_owner>
+  Manual Installation
+  <a href="#manual-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Clone the repository</span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/info-tech-io/hugo-templates.git
+</span></span><span style="display:flex;"><span>cd hugo-templates
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize submodules and install dependencies</span>
+</span></span><span style="display:flex;"><span>git submodule update --init --recursive
+</span></span><span style="display:flex;"><span>npm ci
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify installation</span>
+</span></span><span style="display:flex;"><span>./scripts/diagnostic.js --all
+</span></span></code></pre></div><h2 id="platform-specific-installation" class=link_owner>
+  Platform-Specific Installation
+  <a href="#platform-specific-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="ubuntudebian" class=link_owner>
+  Ubuntu/Debian
+  <a href="#ubuntudebian" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-update-system" class=link_owner>
+  1. Update System
+  <a href="#1-update-system" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt update <span style="color:#f92672">&amp;&amp;</span> sudo apt upgrade -y
+</span></span></code></pre></div><h4 id="2-install-hugo-extended" class=link_owner>
+  2. Install Hugo Extended
+  <a href="#2-install-hugo-extended" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Method 1: Download official release (recommended)</span>
+</span></span><span style="display:flex;"><span>HUGO_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.148.0&#34;</span>
+</span></span><span style="display:flex;"><span>wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>/hugo_extended_<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>_linux-amd64.deb
+</span></span><span style="display:flex;"><span>sudo dpkg -i hugo.deb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Method 2: Using snap (alternative)</span>
+</span></span><span style="display:flex;"><span>sudo snap install hugo --channel<span style="color:#f92672">=</span>extended
+</span></span></code></pre></div><h4 id="3-install-nodejs" class=link_owner>
+  3. Install Node.js
+  <a href="#3-install-nodejs" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Method 1: Using NodeSource repository (recommended)</span>
+</span></span><span style="display:flex;"><span>curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+</span></span><span style="display:flex;"><span>sudo apt-get install -y nodejs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Method 2: Using nvm (user-specific)</span>
+</span></span><span style="display:flex;"><span>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span><span style="display:flex;"><span>nvm install <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>nvm use <span style="color:#ae81ff">20</span>
+</span></span></code></pre></div><h4 id="4-install-additional-tools" class=link_owner>
+  4. Install Additional Tools
+  <a href="#4-install-additional-tools" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Git (if not already installed)</span>
+</span></span><span style="display:flex;"><span>sudo apt install git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># BATS testing framework (optional)</span>
+</span></span><span style="display:flex;"><span>sudo apt install bats
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># YAML linter (optional)</span>
+</span></span><span style="display:flex;"><span>sudo apt install yamllint
+</span></span></code></pre></div><h4 id="5-clone-and-setup" class=link_owner>
+  5. Clone and Setup
+  <a href="#5-clone-and-setup" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/info-tech-io/hugo-templates.git
+</span></span><span style="display:flex;"><span>cd hugo-templates
+</span></span><span style="display:flex;"><span>git submodule update --init --recursive
+</span></span><span style="display:flex;"><span>npm ci
+</span></span></code></pre></div><h3 id="centosrhelfedora" class=link_owner>
+  CentOS/RHEL/Fedora
+  <a href="#centosrhelfedora" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-install-hugo-extended" class=link_owner>
+  1. Install Hugo Extended
+  <a href="#1-install-hugo-extended" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Fedora</span>
+</span></span><span style="display:flex;"><span>sudo dnf install hugo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CentOS/RHEL (manual installation)</span>
+</span></span><span style="display:flex;"><span>HUGO_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.148.0&#34;</span>
+</span></span><span style="display:flex;"><span>wget https://github.com/gohugoio/hugo/releases/download/v<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>/hugo_extended_<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>_linux-amd64.tar.gz
+</span></span><span style="display:flex;"><span>tar -xzf hugo_extended_<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>_linux-amd64.tar.gz
+</span></span><span style="display:flex;"><span>sudo mv hugo /usr/local/bin/
+</span></span></code></pre></div><h4 id="2-install-nodejs" class=link_owner>
+  2. Install Node.js
+  <a href="#2-install-nodejs" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Fedora</span>
+</span></span><span style="display:flex;"><span>sudo dnf install nodejs npm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># CentOS/RHEL</span>
+</span></span><span style="display:flex;"><span>curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+</span></span><span style="display:flex;"><span>sudo yum install -y nodejs
+</span></span></code></pre></div><h4 id="3-install-additional-tools" class=link_owner>
+  3. Install Additional Tools
+  <a href="#3-install-additional-tools" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install git  <span style="color:#75715e"># Fedora</span>
+</span></span><span style="display:flex;"><span>sudo yum install git  <span style="color:#75715e"># CentOS/RHEL</span>
+</span></span></code></pre></div><h3 id="macos" class=link_owner>
+  macOS
+  <a href="#macos" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-install-homebrew-if-not-installed" class=link_owner>
+  1. Install Homebrew (if not installed)
+  <a href="#1-install-homebrew-if-not-installed" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/bin/bash -c <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><h4 id="2-install-hugo-extended-1" class=link_owner>
+  2. Install Hugo Extended
+  <a href="#2-install-hugo-extended-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>brew install hugo
+</span></span></code></pre></div><h4 id="3-install-nodejs-1" class=link_owner>
+  3. Install Node.js
+  <a href="#3-install-nodejs-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Method 1: Using Homebrew</span>
+</span></span><span style="display:flex;"><span>brew install node
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Method 2: Using nvm (recommended for development)</span>
+</span></span><span style="display:flex;"><span>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+</span></span><span style="display:flex;"><span>source ~/.zshrc  <span style="color:#75715e"># or ~/.bash_profile</span>
+</span></span><span style="display:flex;"><span>nvm install <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>nvm use <span style="color:#ae81ff">20</span>
+</span></span></code></pre></div><h4 id="4-install-additional-tools-1" class=link_owner>
+  4. Install Additional Tools
+  <a href="#4-install-additional-tools-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Git (usually pre-installed)</span>
+</span></span><span style="display:flex;"><span>brew install git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># BATS testing framework (optional)</span>
+</span></span><span style="display:flex;"><span>brew install bats-core
+</span></span></code></pre></div><h3 id="windows" class=link_owner>
+  Windows
+  <a href="#windows" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-install-git-bash" class=link_owner>
+  1. Install Git Bash
+  <a href="#1-install-git-bash" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ol>
+<li>Download Git from <a href="https://git-scm.com/download/win">git-scm.com</a></li>
+<li>Install with &ldquo;Git Bash Here&rdquo; option enabled</li>
+<li>Open Git Bash for all following commands</li>
+</ol>
+<h4 id="2-install-hugo-extended-2" class=link_owner>
+  2. Install Hugo Extended
+  <a href="#2-install-hugo-extended-2" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Method 1: Using Chocolatey (recommended)</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Install Chocolatey (if not installed)</span>
+</span></span><span style="display:flex;"><span>Set-ExecutionPolicy Bypass -Scope <span style="color:#66d9ef">Process</span> -Force
+</span></span><span style="display:flex;"><span>iex ((New-Object System.Net.WebClient).DownloadString(<span style="color:#e6db74">&#39;https://chocolatey.org/install.ps1&#39;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install Hugo Extended</span>
+</span></span><span style="display:flex;"><span>choco install hugo-extended
+</span></span></code></pre></div><p><strong>Method 2: Manual Installation</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Download and extract Hugo</span>
+</span></span><span style="display:flex;"><span>HUGO_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.148.0&#34;</span>
+</span></span><span style="display:flex;"><span>curl -L -o hugo.zip https://github.com/gohugoio/hugo/releases/download/v<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>/hugo_extended_<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>_windows-amd64.zip
+</span></span><span style="display:flex;"><span>unzip hugo.zip
+</span></span><span style="display:flex;"><span>mkdir -p /c/Hugo/bin
+</span></span><span style="display:flex;"><span>mv hugo.exe /c/Hugo/bin/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add to PATH</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;export PATH=&#34;/c/Hugo/bin:$PATH&#34;&#39;</span> &gt;&gt; ~/.bashrc
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span></code></pre></div><h4 id="3-install-nodejs-2" class=link_owner>
+  3. Install Node.js
+  <a href="#3-install-nodejs-2" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ol>
+<li>Download Node.js LTS from <a href="https://nodejs.org/">nodejs.org</a></li>
+<li>Install using the Windows installer</li>
+<li>Verify installation in Git Bash:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>node --version
+</span></span><span style="display:flex;"><span>npm --version
+</span></span></code></pre></div><h4 id="4-powershell-execution-policy" class=link_owner>
+  4. PowerShell Execution Policy
+  <a href="#4-powershell-execution-policy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Allow script execution (run as Administrator)</span>
+</span></span><span style="display:flex;"><span>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+</span></span></code></pre></div><h3 id="docker-installation" class=link_owner>
+  Docker Installation
+  <a href="#docker-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-create-dockerfile" class=link_owner>
+  1. Create Dockerfile
+  <a href="#1-create-dockerfile" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> ubuntu:22.04</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Install dependencies</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    curl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    git <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    wget <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Install Hugo Extended</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> HUGO_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.148.0&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>/hugo_extended_<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>_linux-amd64.deb <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    dpkg -i hugo.deb <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    rm hugo.deb<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Install Node.js</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> curl -fsSL https://deb.nodesource.com/setup_20.x | bash - <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    apt-get install -y nodejs<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Set working directory</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /workspace</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Copy project files</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Install dependencies</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> git submodule update --init --recursive <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    npm ci<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Default command</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;./scripts/build.sh&#34;</span>, <span style="color:#e6db74">&#34;--help&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h4 id="2-build-and-run" class=link_owner>
+  2. Build and Run
+  <a href="#2-build-and-run" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Build Docker image</span>
+</span></span><span style="display:flex;"><span>docker build -t hugo-templates .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run container</span>
+</span></span><span style="display:flex;"><span>docker run -it --rm -v <span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>:/workspace hugo-templates
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run specific command</span>
+</span></span><span style="display:flex;"><span>docker run --rm -v <span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>:/workspace hugo-templates ./scripts/build.sh --template<span style="color:#f92672">=</span>default
+</span></span></code></pre></div><h2 id="verification" class=link_owner>
+  Verification
+  <a href="#verification" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="system-check" class=link_owner>
+  System Check
+  <a href="#system-check" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check Hugo installation</span>
+</span></span><span style="display:flex;"><span>hugo version
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: hugo v0.148.0+extended</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check Node.js installation</span>
+</span></span><span style="display:flex;"><span>node --version
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: v18.x.x or higher</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>npm --version
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: 9.x.x or higher</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check Git installation</span>
+</span></span><span style="display:flex;"><span>git --version
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: git version 2.30.x or higher</span>
+</span></span></code></pre></div><h3 id="project-verification" class=link_owner>
+  Project Verification
+  <a href="#project-verification" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Navigate to project directory</span>
+</span></span><span style="display:flex;"><span>cd hugo-templates
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run comprehensive diagnostic</span>
+</span></span><span style="display:flex;"><span>./scripts/diagnostic.js --all
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test basic build</span>
+</span></span><span style="display:flex;"><span>./scripts/build.sh --template<span style="color:#f92672">=</span>minimal --validate-only
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List available resources</span>
+</span></span><span style="display:flex;"><span>./scripts/list.js --all
+</span></span></code></pre></div><h3 id="expected-output" class=link_owner>
+  Expected Output
+  <a href="#expected-output" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Successful installation should show:</p>
+<pre tabindex="0"><code>✅ Hugo Extended v0.148.0 detected
+✅ Node.js v20.x.x detected
+✅ NPM v9.x.x detected
+✅ Git v2.40.x detected
+✅ Templates loaded: 5 templates
+✅ Themes loaded: 1 theme
+✅ Components loaded: 1 component
+✅ Build system: Ready
+</code></pre><h2 id="troubleshooting-installation" class=link_owner>
+  Troubleshooting Installation
+  <a href="#troubleshooting-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="common-issues" class=link_owner>
+  Common Issues
+  <a href="#common-issues" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="hugo-not-found" class=link_owner>
+  Hugo Not Found
+  <a href="#hugo-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check if Hugo is in PATH</span>
+</span></span><span style="display:flex;"><span>which hugo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check Hugo version</span>
+</span></span><span style="display:flex;"><span>hugo version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Reinstall if necessary (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>sudo dpkg -r hugo
+</span></span><span style="display:flex;"><span>wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v0.148.0/hugo_extended_0.148.0_linux-amd64.deb
+</span></span><span style="display:flex;"><span>sudo dpkg -i hugo.deb
+</span></span></code></pre></div><h4 id="nodejs-version-issues" class=link_owner>
+  Node.js Version Issues
+  <a href="#nodejs-version-issues" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check current version</span>
+</span></span><span style="display:flex;"><span>node --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update using nvm</span>
+</span></span><span style="display:flex;"><span>nvm install <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>nvm use <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>nvm alias default <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update using package manager (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+</span></span><span style="display:flex;"><span>sudo apt-get install -y nodejs
+</span></span></code></pre></div><h4 id="permission-issues" class=link_owner>
+  Permission Issues
+  <a href="#permission-issues" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Fix npm permissions</span>
+</span></span><span style="display:flex;"><span>mkdir ~/.npm-global
+</span></span><span style="display:flex;"><span>npm config set prefix <span style="color:#e6db74">&#39;~/.npm-global&#39;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;export PATH=~/.npm-global/bin:$PATH&#39;</span> &gt;&gt; ~/.bashrc
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Fix script permissions</span>
+</span></span><span style="display:flex;"><span>chmod +x scripts/*.sh
+</span></span></code></pre></div><h4 id="git-submodule-issues" class=link_owner>
+  Git Submodule Issues
+  <a href="#git-submodule-issues" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Update submodules</span>
+</span></span><span style="display:flex;"><span>git submodule update --init --recursive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Force update if stuck</span>
+</span></span><span style="display:flex;"><span>git submodule foreach --recursive git reset --hard
+</span></span><span style="display:flex;"><span>git submodule update --force --recursive
+</span></span></code></pre></div><h3 id="advanced-troubleshooting" class=link_owner>
+  Advanced Troubleshooting
+  <a href="#advanced-troubleshooting" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="clean-installation" class=link_owner>
+  Clean Installation
+  <a href="#clean-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Remove existing installation</span>
+</span></span><span style="display:flex;"><span>rm -rf node_modules/
+</span></span><span style="display:flex;"><span>rm -f package-lock.json
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Clean npm cache</span>
+</span></span><span style="display:flex;"><span>npm cache clean --force
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Reinstall dependencies</span>
+</span></span><span style="display:flex;"><span>npm ci
+</span></span></code></pre></div><h4 id="debug-mode-installation" class=link_owner>
+  Debug Mode Installation
+  <a href="#debug-mode-installation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Enable debug logging</span>
+</span></span><span style="display:flex;"><span>export DEBUG<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run diagnostic with verbose output</span>
+</span></span><span style="display:flex;"><span>./scripts/diagnostic.js --verbose --log-file<span style="color:#f92672">=</span>install-debug.log
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check detailed logs</span>
+</span></span><span style="display:flex;"><span>cat install-debug.log
+</span></span></code></pre></div><h2 id="development-environment-setup" class=link_owner>
+  Development Environment Setup
+  <a href="#development-environment-setup" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="vs-code-configuration" class=link_owner>
+  VS Code Configuration
+  <a href="#vs-code-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="1-install-extensions" class=link_owner>
+  1. Install Extensions
+  <a href="#1-install-extensions" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li>Hugo Language and Syntax Support</li>
+<li>YAML</li>
+<li>GitLens</li>
+<li>Markdown All in One</li>
+</ul>
+<h4 id="2-workspace-settings-vscodesettingsjson" class=link_owner>
+  2. Workspace Settings (.vscode/settings.json)
+  <a href="#2-workspace-settings-vscodesettingsjson" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;hugo.server.renderToDisk&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;hugo.server.poll&#34;</span>: <span style="color:#e6db74">&#34;300ms&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;files.associations&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;*.toml&#34;</span>: <span style="color:#e6db74">&#34;toml&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;*.yml&#34;</span>: <span style="color:#e6db74">&#34;yaml&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;yaml.schemas&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;./schemas/components.schema.json&#34;</span>: <span style="color:#e6db74">&#34;components.yml&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="git-configuration" class=link_owner>
+  Git Configuration
+  <a href="#git-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Configure Git (if not already done)</span>
+</span></span><span style="display:flex;"><span>git config --global user.name <span style="color:#e6db74">&#34;Your Name&#34;</span>
+</span></span><span style="display:flex;"><span>git config --global user.email <span style="color:#e6db74">&#34;your.email@example.com&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Configure Git hooks (optional)</span>
+</span></span><span style="display:flex;"><span>git config core.hooksPath .githooks
+</span></span><span style="display:flex;"><span>chmod +x .githooks/*
+</span></span></code></pre></div><h3 id="shell-configuration" class=link_owner>
+  Shell Configuration
+  <a href="#shell-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="bash-aliases-bashrc-or-bash_profile" class=link_owner>
+  Bash Aliases (.bashrc or .bash_profile)
+  <a href="#bash-aliases-bashrc-or-bash_profile" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Hugo Template Factory aliases</span>
+</span></span><span style="display:flex;"><span>alias htf-build<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/build.sh&#39;</span>
+</span></span><span style="display:flex;"><span>alias htf-list<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/list.js&#39;</span>
+</span></span><span style="display:flex;"><span>alias htf-validate<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/validate.js&#39;</span>
+</span></span><span style="display:flex;"><span>alias htf-diag<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/diagnostic.js&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Quick commands</span>
+</span></span><span style="display:flex;"><span>alias htf-minimal<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/build.sh --template=minimal&#39;</span>
+</span></span><span style="display:flex;"><span>alias htf-default<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/build.sh --template=default&#39;</span>
+</span></span><span style="display:flex;"><span>alias htf-test<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./scripts/build.sh --template=minimal --validate-only&#39;</span>
+</span></span></code></pre></div><h4 id="zsh-configuration-zshrc" class=link_owner>
+  Zsh Configuration (.zshrc)
+  <a href="#zsh-configuration-zshrc" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Same aliases as above, plus:</span>
+</span></span><span style="display:flex;"><span>autoload -U compinit
+</span></span><span style="display:flex;"><span>compinit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Add custom completion (if available)</span>
+</span></span><span style="display:flex;"><span>source scripts/completion.zsh 2&gt;/dev/null <span style="color:#f92672">||</span> true
+</span></span></code></pre></div><h2 id="update-procedures" class=link_owner>
+  Update Procedures
+  <a href="#update-procedures" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="framework-updates" class=link_owner>
+  Framework Updates
+  <a href="#framework-updates" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Update framework</span>
+</span></span><span style="display:flex;"><span>git pull origin main
+</span></span><span style="display:flex;"><span>git submodule update --recursive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update dependencies</span>
+</span></span><span style="display:flex;"><span>npm ci
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify update</span>
+</span></span><span style="display:flex;"><span>./scripts/diagnostic.js --all
+</span></span></code></pre></div><h3 id="hugo-updates" class=link_owner>
+  Hugo Updates
+  <a href="#hugo-updates" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check current version</span>
+</span></span><span style="display:flex;"><span>hugo version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hugo (Ubuntu)</span>
+</span></span><span style="display:flex;"><span>HUGO_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.149.0&#34;</span>  <span style="color:#75715e"># New version</span>
+</span></span><span style="display:flex;"><span>wget -O hugo.deb https://github.com/gohugoio/hugo/releases/download/v<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>/hugo_extended_<span style="color:#e6db74">${</span>HUGO_VERSION<span style="color:#e6db74">}</span>_linux-amd64.deb
+</span></span><span style="display:flex;"><span>sudo dpkg -i hugo.deb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hugo (macOS)</span>
+</span></span><span style="display:flex;"><span>brew upgrade hugo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hugo (Windows)</span>
+</span></span><span style="display:flex;"><span>choco upgrade hugo-extended
+</span></span></code></pre></div><h3 id="nodejs-updates" class=link_owner>
+  Node.js Updates
+  <a href="#nodejs-updates" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Update using nvm</span>
+</span></span><span style="display:flex;"><span>nvm install node --latest-npm
+</span></span><span style="display:flex;"><span>nvm use node
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update global packages</span>
+</span></span><span style="display:flex;"><span>npm update -g
+</span></span></code></pre></div><h2 id="next-steps" class=link_owner>
+  Next Steps
+  <a href="#next-steps" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>After successful installation:</p>
+<ol>
+<li><strong>Read Getting Started</strong>: <a href="../tutorials/getting-started.md">Getting Started Tutorial</a></li>
+<li><strong>Explore Templates</strong>: <a href="./templates.md">Template Usage Guide</a></li>
+<li><strong>Try Building</strong>: <a href="./build-system.md">Build System Guide</a></li>
+<li><strong>Join Community</strong>: <a href="../developer-docs/contributing.md">Contributing Guide</a></li>
+</ol>
+<h2 id="related-documentation" class=link_owner>
+  Related Documentation
+  <a href="#related-documentation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<ul>
+<li><a href="./build-system.md">Build System Guide</a></li>
+<li><a href="./templates.md">Template Usage Guide</a></li>
+<li><a href="../troubleshooting/common-issues.md">Troubleshooting Guide</a></li>
+<li><a href="../developer-docs/contributing.md">Developer Setup</a></li>
+</ul>
+
+</div>
+      </div></div><script>
+
+const copy_text = 'Copy';
+const copied_text = 'Copied';
+const toggle_line_numbers_text = 'Toggle line numbers';
+const toggle_line_wrap_text = 'Toggle line wrap';
+const resize_snippet = 'Resize snippet height';
+const not_set = 'not set';
+const quick_links = 'Quick links';
+const search_results_label = 'Search Results';
+const short_search_query = 'Query is too short'
+const type_to_search = 'Type to search';
+const no_matches_found = 'No matches found';
+</script>
+<footer class="pt-2 pb-2">
+  <div class="wrap">
+    <p>
+      &copy; <span class="year">2026</span>
+    </p>
+    <a href="#pagetop" id="toTop" title=Back&#32;to&#32;top></a>
+  </div>
+</footer>
+<svg width="0" height="0" class="hidden">
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492.004 492.004" id="next">
+    <path d="M484.14 226.886L306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" id="search">
+    <path d="M508.874 478.708L360.142 329.976c28.21-34.827 45.191-79.103 45.191-127.309C405.333 90.917 314.416 0 202.666 0S0 90.917 0 202.667s90.917 202.667 202.667 202.667c48.206 0 92.482-16.982 127.309-45.191l148.732 148.732c4.167 4.165 10.919 4.165 15.086 0l15.081-15.082c4.165-4.166 4.165-10.92-.001-15.085zM202.667 362.667c-88.229 0-160-71.771-160-160s71.771-160 160-160 160 71.771 160 160-71.771 160-160 160z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 241 179" id="harmburger">
+    <path d="M1 10C1 4.477 5.477 0 11 0h220c5.523 0 10 4.477 10 10s-4.477 10-10 10H11C5.477 20 1 15.523 1 10zm0 80c0-5.523 4.477-10 10-10h220c5.523 0 10 4.477 10 10s-4.477 10-10 10H11c-5.523 0-10-4.477-10-10zm9 69c-5.523 0-10 4.477-10 10s4.477 10 10 10h220c5.523 0 10-4.477 10-10s-4.477-10-10-10H10z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 401.998 401.998" id="sort">
+    <path d="M73.092 164.452h255.813c4.949 0 9.233-1.807 12.848-5.424 3.613-3.616 5.427-7.898 5.427-12.847s-1.813-9.229-5.427-12.85L213.846 5.424C210.232 1.812 205.951 0 200.999 0s-9.233 1.812-12.85 5.424L60.242 133.331c-3.617 3.617-5.424 7.901-5.424 12.85 0 4.948 1.807 9.231 5.424 12.847 3.621 3.617 7.902 5.424 12.85 5.424zm255.813 73.097H73.092c-4.952 0-9.233 1.808-12.85 5.421-3.617 3.617-5.424 7.898-5.424 12.847s1.807 9.233 5.424 12.848L188.149 396.57c3.621 3.617 7.902 5.428 12.85 5.428s9.233-1.811 12.847-5.428l127.907-127.906c3.613-3.614 5.427-7.898 5.427-12.848 0-4.948-1.813-9.229-5.427-12.847-3.614-3.616-7.899-5.42-12.848-5.42z"></path>
+  </symbol>
+</svg>
+
+<svg width="0" height="0" class="hidden">
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="facebook">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h151V331h-60v-90h60v-61c0-49.629 40.371-90 90-90h91v90h-91v61h91l-15 90h-76v181h121c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.001 18.001" id="twitter">
+    <path d="M15.891 4.013c.808-.496 1.343-1.173 1.605-2.034a8.68 8.68 0 0 1-2.351.861c-.703-.756-1.593-1.14-2.66-1.14-1.043 0-1.924.366-2.643 1.078a3.56 3.56 0 0 0-1.076 2.605c0 .309.039.585.117.819-3.076-.105-5.622-1.381-7.628-3.837-.34.601-.51 1.213-.51 1.846 0 1.301.549 2.332 1.645 3.089-.625-.053-1.176-.211-1.645-.47 0 .929.273 1.705.82 2.388a3.623 3.623 0 0 0 2.115 1.291c-.312.08-.641.118-.979.118-.312 0-.533-.026-.664-.083.23.757.664 1.371 1.291 1.841a3.652 3.652 0 0 0 2.152.743C4.148 14.173 2.625 14.69.902 14.69c-.422 0-.721-.006-.902-.038 1.697 1.102 3.586 1.649 5.676 1.649 2.139 0 4.029-.542 5.674-1.626 1.645-1.078 2.859-2.408 3.639-3.974a10.77 10.77 0 0 0 1.172-4.892v-.468a7.788 7.788 0 0 0 1.84-1.921 8.142 8.142 0 0 1-2.11.593z"
+      ></path>
+  </symbol>
+  <symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="mail">
+    <path  d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="calendar">
+    <path d="M452 40h-24V0h-40v40H124V0H84v40H60C26.916 40 0 66.916 0 100v352c0 33.084 26.916 60 60 60h392c33.084 0 60-26.916 60-60V100c0-33.084-26.916-60-60-60zm20 412c0 11.028-8.972 20-20 20H60c-11.028 0-20-8.972-20-20V188h432v264zm0-304H40v-48c0-11.028 8.972-20 20-20h24v40h40V80h264v40h40V80h24c11.028 0 20 8.972 20 20v48z"></path>
+    <path d="M76 230h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 310h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 390h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80-80h40v40h-40z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="github">
+    <path d="M255.968 5.329C114.624 5.329 0 120.401 0 262.353c0 113.536 73.344 209.856 175.104 243.872 12.8 2.368 17.472-5.568 17.472-12.384 0-6.112-.224-22.272-.352-43.712-71.2 15.52-86.24-34.464-86.24-34.464-11.616-29.696-28.416-37.6-28.416-37.6-23.264-15.936 1.728-15.616 1.728-15.616 25.696 1.824 39.2 26.496 39.2 26.496 22.848 39.264 59.936 27.936 74.528 21.344 2.304-16.608 8.928-27.936 16.256-34.368-56.832-6.496-116.608-28.544-116.608-127.008 0-28.064 9.984-51.008 26.368-68.992-2.656-6.496-11.424-32.64 2.496-68 0 0 21.504-6.912 70.4 26.336 20.416-5.696 42.304-8.544 64.096-8.64 21.728.128 43.648 2.944 64.096 8.672 48.864-33.248 70.336-26.336 70.336-26.336 13.952 35.392 5.184 61.504 2.56 68 16.416 17.984 26.304 40.928 26.304 68.992 0 98.72-59.84 120.448-116.864 126.816 9.184 7.936 17.376 23.616 17.376 47.584 0 34.368-.32 62.08-.32 70.496 0 6.88 4.608 14.88 17.6 12.352C438.72 472.145 512 375.857 512 262.353 512 120.401 397.376 5.329 255.968 5.329z"></path>
+  </symbol>
+  <symbol viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="rss">
+    <circle cx="3.429" cy="20.571" r="3.429"></circle>
+    <path d="M11.429 24h4.57C15.999 15.179 8.821 8.001 0 8v4.572c6.302.001 11.429 5.126 11.429 11.428z"></path>
+    <path d="M24 24C24 10.766 13.234 0 0 0v4.571c10.714 0 19.43 8.714 19.43 19.429z"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 64 64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="anchor-link">
+    <g fill="var(--theme)">
+      <path d="m19 40c1.104 0 2-.896 2-2s-.896-2-2-2c-3.86 0-7-3.14-7-7 0-1.873.728-3.628 2.059-4.95 1.313-1.322 3.068-2.05 4.941-2.05h10c3.86 0 7 3.14 7 7 0 .258-.015.509-.048.78-.174 1.574-.885 3.052-2.017 4.176-.532.54-1.137.974-1.797 1.289-.997.476-1.419 1.669-.944 2.666.476.996 1.669 1.419 2.667.943 1.08-.516 2.063-1.219 2.908-2.075 1.763-1.75 2.885-4.08 3.156-6.539.051-.413.075-.819.075-1.24 0-6.065-4.935-11-11-11h-10c-2.947 0-5.709 1.147-7.77 3.221-2.083 2.07-3.23 4.832-3.23 7.779 0 6.065 4.935 11 11 11z"></path>
+      <path d="m45 28c-1.104 0-2 .896-2 2s.896 2 2 2c3.86 0 7 3.141 7 7 0 1.873-.728 3.628-2.059 4.95-1.313 1.322-3.068 2.05-4.941 2.05h-10c-3.86 0-7-3.141-7-7 0-.258.015-.509.048-.78.174-1.574.885-3.052 2.017-4.176.532-.54 1.136-.974 1.796-1.289.997-.476 1.419-1.67.944-2.667s-1.669-1.418-2.667-.944c-1.081.516-2.064 1.22-2.908 2.076-1.763 1.75-2.885 4.08-3.156 6.538-.05.415-.074.821-.074 1.242 0 6.065 4.935 11 11 11h10c2.946 0 5.709-1.147 7.77-3.221 2.083-2.07 3.23-4.833 3.23-7.779 0-6.065-4.935-11-11-11z"></path>
+    </g>
+  </symbol>
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="linkedin">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h362c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zM181 406h-60V196h60zm0-240h-60v-60h60zm210 240h-60V286c0-16.54-13.46-30-30-30s-30 13.46-30 30v120h-60V196h60v11.309C286.719 202.422 296.93 196 316 196c40.691.043 75 36.547 75 79.688zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" id="arrow">
+    <path d="M604.501 440.509L325.398 134.956c-5.331-5.357-12.423-7.627-19.386-7.27-6.989-.357-14.056 1.913-19.387 7.27L7.499 440.509c-9.999 10.024-9.999 26.298 0 36.323s26.223 10.024 36.222 0l262.293-287.164L568.28 476.832c9.999 10.024 26.222 10.024 36.221 0 9.999-10.023 9.999-26.298 0-36.323z"></path>
+  </symbol>
+  <symbol aria-hidden="true" viewBox="0 0 24 24" id="carly">
+    <path fill="currentColor" d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 512 512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="copy">
+    <path d="m366.905 108.016h-141.91c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h141.91c11.048 0 20.003-8.955 20.003-20.003s-8.956-20.003-20.003-20.003z"></path>
+    <path d="m366.905 188.027h-141.91c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h141.91c11.047 0 20.003-8.955 20.003-20.003s-8.955-20.003-20.003-20.003z"></path>
+    <path d="m286.004 268.039h-61.009c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h61.009c11.048 0 20.003-8.955 20.003-20.003s-8.955-20.003-20.003-20.003z"></path>
+    <path d="m448.028 272.039c11.048 0 20.003-8.955 20.003-20.003v-172.024c0-44.119-35.894-80.012-80.012-80.012h-184.027c-44.094 0-79.971 35.853-80.012 79.938-44.118 0-80.012 35.893-80.012 80.012v272.039c0 44.118 35.893 80.012 80.012 80.012h194.028c44.118 0 80.012-35.893 80.012-80.012v-.608c39.414-4.938 70.01-38.662 70.01-79.389 0-11.048-8.955-20.003-20.003-20.003s-20.003 8.955-20.003 20.003c0 22.054-17.942 40.001-39.996 40.006l-184.027.045h-.009c-10.685 0-20.73-4.16-28.285-11.715-7.558-7.556-11.721-17.604-11.721-28.291v-272.025c0-22.059 17.947-40.006 40.006-40.006h184.028c22.059 0 40.006 17.947 40.006 40.006v172.025c-.001 11.047 8.954 20.002 20.002 20.002zm-244.036 160.008h.02l154.002-.038c-.012 22.049-17.954 39.984-40.006 39.984h-194.027c-22.059 0-40.006-17.947-40.006-40.006v-272.039c0-22.059 17.947-40.006 40.006-40.006v232.094c0 21.375 8.325 41.471 23.441 56.583 15.113 15.11 35.2 23.428 56.57 23.428z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001" id="closeme">
+    <path d="M284.286 256.002L506.143 34.144c7.811-7.811 7.811-20.475 0-28.285-7.811-7.81-20.475-7.811-28.285 0L256 227.717 34.143 5.859c-7.811-7.811-20.475-7.811-28.285 0-7.81 7.811-7.811 20.475 0 28.285l221.857 221.857L5.858 477.859c-7.811 7.811-7.811 20.475 0 28.285a19.938 19.938 0 0 0 14.143 5.857 19.94 19.94 0 0 0 14.143-5.857L256 284.287l221.857 221.857c3.905 3.905 9.024 5.857 14.143 5.857s10.237-1.952 14.143-5.857c7.811-7.811 7.811-20.475 0-28.285L284.286 256.002z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="open-menu">
+    <path d="M492 236H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0-160H20C8.954 76 0 84.954 0 96s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0 320H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="instagram">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="youtube">
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="stackoverflow">
+    <path d="M21 27v-8h3v11H0V19h3v8h18z"></path><path d="M17.1.2L15 1.8l7.9 10.6 2.1-1.6L17.1.2zm3.7 14.7L10.6 6.4l1.7-2 10.2 8.5-1.7 2zM7.2 12.3l12 5.6 1.1-2.4-12-5.6-1.1 2.4zm-1.8 6.8l13.56 1.96.17-2.38-13.26-2.55-.47 2.97zM19 25H5v-3h14v3z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.016 512" id="expand">
+    <path d="m240 426.675781h-181.332031c-32.363281 0-58.667969-26.304687-58.667969-58.667969v-309.332031c0-32.363281 26.304688-58.6679685 58.667969-58.6679685h309.332031c32.363281 0 58.667969 26.3046875 58.667969 58.6679685v181.332031c0 8.832032-7.167969 16-16 16s-16-7.167968-16-16v-181.332031c0-14.699219-11.96875-26.667969-26.667969-26.667969h-309.332031c-14.699219 0-26.667969 11.96875-26.667969 26.667969v309.332031c0 14.699219 11.96875 26.667969 26.667969 26.667969h181.332031c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"></path>
+    <path d="m496 512.007812h-138.667969c-8.832031 0-16-7.167968-16-16 0-8.832031 7.167969-16 16-16h122.667969v-122.667968c0-8.832032 7.167969-16 16-16s16 7.167968 16 16v138.667968c0 8.832032-7.167969 16-16 16zm0 0"></path>
+    <path d="m496 512.007812c-4.097656 0-8.191406-1.558593-11.308594-4.691406l-181.332031-181.335937c-6.25-6.25-6.25-16.382813 0-22.632813s16.382813-6.25 22.636719 0l181.332031 181.332032c6.25 6.25 6.25 16.382812 0 22.636718-3.136719 3.132813-7.230469 4.691406-11.328125 4.691406zm0 0"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 512 512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="order">
+    <path d="m492 236h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <path d="m492 86h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <path d="m492 386h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <circle cx="27" cy="106" r="27"></circle>
+    <circle cx="27" cy="256" r="27"></circle>
+    <circle cx="27" cy="406" r="27"></circle>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" fill="#666" viewBox="0 0 512 512" id="check">
+    <path d="M99.941 293.748a21.78 21.78 0 0 1-7.175-16.153c0-11.938 9.823-21.765 21.764-21.765a21.772 21.772 0 0 1 15.737 6.733l85.958 83.825 164.42-194.504c18.463-21.833 51.574 6.326 33.213 28.125L234.276 392.324l-1.032 1.135c-8.327 8.55-22.218 8.74-30.773.412L99.941 293.748z"></path>
+  </symbol>
+</svg>
+
+<script>
+  "use strict";const doc=document.documentElement,toggle_id="toggle",show_id="show",menu="menu",active="active";let site_title=`hugo-template-factory-site`,root_url="/";root_url=root_url.startsWith("http")?root_url:window.location.origin;const go_back_class="button_back",line_class=".line",code_block_config=JSON.parse('{"maximum":100,"show":false}'),iconsPath=`icons/`,shell_based=["sh","shell","zsh","bash"],body=elem("body"),max_lines=code_block_config.maximum,show_lines=code_block_config.show,copy_id="panel_copy",wrap_id="panel_wrap",lines_id="panel_lines",panel_expand="panel_expand",panel_expanded="panel_expanded",panel_box="panel_box",panel_hide="panel_hide",panel_from="panel_from",full_height="initial",highlight="highlight",highlight_wrap="highlight_wrap",hash="#",light="light",dark="dark",storageKey=`${site_title}-color-mode`,mermaidThemeKey=`${site_title}-mermaid`,key="--color-mode",mode_data="data-mode",bank=window.localStorage;function isObj(e){return!!(e&&typeof e=="object"&&e!==null)}function createEl(e="div"){return document.createElement(e)}function emptyEl(e){for(;e.firstChild;)e.removeChild(e.firstChild)}function elem(e,t=document){let n=!!isObj(t)&&t.querySelector(e);return n||!1}function elems(e,t=document){return isObj(t)?t.querySelectorAll(e):[]}function pushClass(e,t){if(isObj(e)&&t){let n=e.classList;!n.contains(t)&&n.add(t)}}function deleteClass(e,t){if(isObj(e)&&t){let n=e.classList;!!n.contains(t)&&n.remove(t)}}function modifyClass(e,t){if(isObj(e)&&t){const n=e.classList;n.contains(t)?n.remove(t):n.add(t)}}function containsClass(e,t){if(isObj(e)&&t&&e!==document)return!!e.classList.contains(t)}function isChild(e,t){let n=isObj(e)&&t&&typeof t=="string";return!!(n&&e.closest(t))}function elemAttribute(e,t,n=null){if(n)e.setAttribute(t,n);else return n=e.getAttribute(t),n||!1}function deleteChars(e,t){let n=e;if(Array.isArray(t))for(let e=0;e<t.length;e++)n=n.replace(t[e],"");else n=n.replace(t,"");return n}function isBlank(e){return!e||e.trim().length===0}function isMatch(e,t){if(isObj(e)){if(t.isArray){let n=t.map(function(t){return e.matches(t)});return n.includes(!0)}return e.matches(t)}}function closestInt(e,t){return t.reduce(function(t,n){return Math.abs(n-e)<Math.abs(t-e)?n:t})}function hasClasses(e){if(isObj(e)){const t=e.classList;return t.length}}function wrapEl(e,t){e.parentNode.insertBefore(t,e),t.appendChild(e)}function wrapText(e,t,n="mark"){let s=`<${n}>`,o=`</${n}>`,r=`%3C${n}%3E`,c=`%3C/${n}%3E`;function i(t){let n=t.innerHTML,a=new RegExp(e,"gi"),i=e.length?n.match(a):null;if(i){i.forEach(function(e){n=n.replaceAll(e,`${s}${e}${o}`),t.innerHTML=n});const e=elems("img",t);e&&e.forEach(e=>{e.src=e.src.replaceAll(s,"").replaceAll(o,"").replaceAll(r,"").replaceAll(c,"")})}}const l=["h1","h2","h3","h4","h5","h6","p","code","td"];l.forEach(function(e){const n=elems(e,t);n.length&&n.forEach(function(e){e.children.length>=1?(Array.from(e.children).forEach(function(e){i(e)}),i(e)):i(e)})});const a=elems("a");a&&a.forEach(function(e){e.href=e.href.replaceAll(encodeURI(s),"").replaceAll(encodeURI(o),"")})}function parseBoolean(e=""){switch(e=e.trim().toLowerCase(),e){case"true":return!0;case"false":return!1;default:return 0[0]}}function loadSvg(e,t){t.innerHTML=`
+  <svg class="icon_${e}">
+    <use xlink:href="#${e}"></use>
+  </svg>`}function copyToClipboard(e){let t,n,s;t=createEl("textarea"),t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",n=document.getSelection(),doc.appendChild(t),s=n.rangeCount>0&&n.getRangeAt(0),t.select(),document.execCommand("copy"),doc.removeChild(t),s&&(n.removeAllRanges(),n.addRange(s))}const snippet_actions=[{icon:"copy",id:"copy",title:copy_text,show:!0},{icon:"order",id:"lines",title:toggle_line_numbers_text,show:!0},{icon:"carly",id:"wrap",title:toggle_line_wrap_text,show:!1},{icon:"expand",id:"expand",title:resize_snippet,show:!1}];function addLines(e){let t=e.textContent;const n=[];t.includes(`
+`)&&e.closest("pre")&&!e.children.length&&(t=t.split(`
+`),t.forEach((t,s)=>{if(t.trim().length){const o=`
+        <span class="line line-flex">
+          <span class="ln">${s+1}</span>
+          <span class="cl">${t.trim()}</span>
+        </span>`.trim();n.push(o),e.closest("pre").className="chroma",pushClass(e,"language-unknown"),e.dataset.lang=not_set}}),e.innerHTML=n.join("").trim(" "))}function wrapOrphanedPreElements(){const e=elems("pre");Array.from(e).forEach(function(e){const t=e.parentNode,n=!containsClass(t,highlight);if(n){const t=createEl();t.className=highlight;const n=createEl();n.className=highlight_wrap,wrapEl(e,t),wrapEl(t,n)}})}wrapOrphanedPreElements();function codeBlocks(){const e=elems("code"),t=Array.from(e).filter(function(e){return addLines(e),e.closest("pre")&&!Array.from(e.classList).includes("noClass")}).map(function(e){return e});return t}function codeBlockFits(e){const t=e.offsetWidth,n=e.closest(`.${highlight}`).offsetWidth;return t<=n}function maxHeightIsSet(e){let t=e.style.maxHeight;return t.includes("px")}function restrainCodeBlockHeight(e){const n=e[max_lines-1];let t=full_height;if(n){const s=n.offsetTop;if(s!==0){t=`${s}px`;const n=e[0].parentNode,o=n.closest(`.${highlight}`),i=containsClass(o,panel_expanded);i||(n.dataset.height=t,n.style.maxHeight=t)}}}const blocks=codeBlocks();function collapseCodeBlock(e){const t=elems(line_class,e),n=t.length;if(n>max_lines){const n=createEl();pushClass(n,panel_expand),pushClass(n,panel_from),n.title="Toggle snippet",n.textContent="...";const s=e.closest(".highlight");window.setTimeout(function(){const e=s.nextElementSibling.lastElementChild;deleteClass(e,panel_hide)},150),restrainCodeBlockHeight(t);const o=e.parentNode.parentNode;o.appendChild(n)}}blocks.forEach(function(e){collapseCodeBlock(e)});function actionPanel(){const e=createEl();return e.className=panel_box,snippet_actions.forEach(function(t){const n=createEl("a");n.href="#",n.title=t.title,n.className=`icon panel_icon panel_${t.id}`,!t.show&&pushClass(n,panel_hide),loadSvg(t.icon,n),e.appendChild(n)}),e}function toggleLineNumbers(e){e&&(e.forEach(e=>modifyClass(e,"pre_nolines")),restrainCodeBlockHeight(e))}function toggleLineWrap(e){modifyClass(e,"pre_wrap");const t=elems(".ln",e);restrainCodeBlockHeight(t)}function copyCode(e){const t=e.parentNode.parentNode.querySelector(`.${copy_id}`),s=t.title;loadSvg("check",t),t.title=copied_text,e=e.cloneNode(!0);const n=elems(".ln",e);!!n.length&&n.forEach(e=>e.remove());let o=elems("span",e);o.forEach(e=>{const t=e.textContent.trim(" ");t.indexOf("$")===0&&(e.textContent=e.textContent.replace("$ ",""))});const i=e.textContent.trim(" ");copyToClipboard(i),setTimeout(function(){t.title=s,loadSvg("copy",t)},2250)}(function(){const n=highlight_wrap;blocks.forEach(function(e){show_lines===!1&&toggleLineNumbers(elems(".ln",e));const o=e.parentNode.parentNode,t=createEl();t.className=n,wrapEl(o,t);const s=actionPanel(),i=elem(`.${wrap_id}`,s);!codeBlockFits(e)&&deleteClass(i,panel_hide),t.appendChild(s)});function t(e,t){return e.matches(`.${t}`)||e.closest(`.${t}`)}function s(e,t){const n=e.matches(`.${t}`)?e:e.closest(`.${t}`);deleteClass(n,active),setTimeout(function(){modifyClass(n,active)},50)}doc.addEventListener("click",function(e){const o=e.target,i=t(o,copy_id),a=t(o,wrap_id),r=t(o,lines_id),c=t(o,panel_expand),l=i||a||r||c;if(l){e.preventDefault(),s(o,"icon");const t=o.closest(`.${n}`).firstElementChild.firstElementChild;let l=elems(".ln",t);if(!!a&&toggleLineWrap(t),!!r&&toggleLineNumbers(l),c){let e=t.firstElementChild;const n=e.closest(".highlight");maxHeightIsSet(e)?(e.style.maxHeight=full_height,pushClass(n,panel_expanded)):(e.style.maxHeight=e.dataset.height,deleteClass(n,panel_expanded))}!!i&&copyCode(t)}}),function(){blocks.forEach(e=>{let t=e.dataset.lang;const n=shell_based.includes(t);if(n){const t=elems(line_class,e);Array.from(t).forEach(e=>{e=e.lastElementChild;let t=e.textContent.trim(" ");!!(t.indexOf("$")!==0&&t.trim(" ").length)&&pushClass(e,"shell")})}if(t=t==="sh"?"shell":t,t!=="fallback"){const n=createEl();n.textContent=t,pushClass(n,"lang"),e.closest(`.${highlight_wrap}`).appendChild(n)}})}()})();function prefersColor(e){return`(prefers-color-scheme: ${e})`}function systemMode(){return window.matchMedia&&window.matchMedia(prefersColor(dark)).matches?dark:light}function currentMode(){let e=light+dark;e=[...e];let t=getComputedStyle(doc).getPropertyValue(key).replace(/"/g,"").trim();return[...t].filter(t=>e.includes(t)).join("")}function changeMode(e){e?(bank.setItem(storageKey,light),elemAttribute(doc,mode_data,light)):(bank.setItem(storageKey,dark),elemAttribute(doc,mode_data,dark))}function pickModePicture(e){elems("picture").forEach(function(t){let o=t.firstElementChild;const n=t.dataset,s=[n.lit,n.dark];o.src=e=="dark"?s[1]:s[0]})}function setMermaidTheme(e){bank.setItem(mermaidThemeKey,e);let t=elem(".color_choice");t.value=e}function setUserColorMode(e=!1){const n=currentMode()==dark,s=bank.getItem(storageKey),o=systemMode();s?e?changeMode(n):elemAttribute(doc,mode_data,s):changeMode(e===!0?n:o!==dark);const t=doc.dataset.mode;doc.dataset.systemmode=o,!!t&&pickModePicture(t),setMermaidTheme(t)}setUserColorMode(),function(){return elem(".nav_header").offsetHeight+25}();function toggleMenu(e){const t=e.target,o=t.matches(`.${toggle_id}`),n=t.closest(`.${toggle_id}`),i=elems(`.${show_id}`)?Array.from(elems(`.${show_id}`)):[],a=t.closest(`.${menu}`);function s(e,t=!1){i.forEach(function(n){!t&&deleteClass(n,show_id),n!==e.closest(`.${menu}`)&&deleteClass(n,show_id)})}if(o||n){const s=n?n.parentNode.parentNode:t.parentNode.parentNode;e.preventDefault(),modifyClass(s,show_id)}else a?s(t,!0):s(t)}(function(){const t=elems("code");t&&t.forEach(function(e){hasClasses(e)||!e.children.length&&pushClass(e,"noClass")})})();function featureHeading(){const t="section_link",n="section_title",e=elem(".aside");if(e){let s=elem(`.${t}.${active}`);s=s||elem(`.${n}.${active}`),e.scroll({top:s.offsetTop,left:0})}}function activeHeading(e,t){let n=Object.create(null);n.active=t.filter(function(e){return containsClass(e,active)})[0],n.new=t[e],n.active!=n.new&&(!!n.active&&deleteClass(n.active,active),pushClass(n.new,active))}setTimeout(()=>{featureHeading()},50);function updateDate(){const t=new Date,e=t.getFullYear().toString,n=elem(".year");!!n&&(e.textContent=e)}function customizeSidebar(){const e="toc_active",n=elem("aside"),t=elems("nav",n);if(t){t.forEach(function(t){if(t.id="",pushClass(t,"toc"),t.children.length>=1){const n=Array.from(t.children[0].children),s=t.previousElementSibling;!!s.matches(`.${active}`)&&pushClass(t,e),n.forEach(function(e){pushClass(e,"toc_item"),pushClass(e.firstElementChild,"toc_link")})}});const n=elem(`.${e}`);if(n){const e=Array.from(elems("a",n)),t=e.map(function(e){return document.getElementById(decodeURIComponent(e.hash.replace("#","")))});window.addEventListener("scroll",function(){let o=window.scrollY+window.innerHeight/2,s=0;for(const[n,e]of t.entries())e.offsetTop<o&&e.offsetTop>t[s].offsetTop&&(s=n);activeHeading(s,e)})}}elems("p").forEach(function(e){const t=elems(".button",e);t.length>1&&pushClass(e,"button_grid")})}function markExternalLinks(){let e=elems("a");e&&Array.from(e).forEach(function(e){let n,o,i,s,a,r,t,c;t=new URL(e.href),c=t.host!==location.host||t.protocol!==location.protocol||t.port!==location.port,c&&(n="target",o="rel",i="_blank",s="noopener",a=elemAttribute(e,n),r=elemAttribute(e,s),!a&&elemAttribute(e,n,i),!r&&elemAttribute(e,o,s))})}function sanitizeURL(e){const t=e.indexOf(hash);if(t>-1){const n=e.substr(t,e.length-1);e=e.replace(n,"")}return e}function copyFeedback(e){const t=document.createElement("div"),n="link_yanked";if(t.classList.add(n),t.innerText=copied_text,!elem(`.${n}`,e)){const n=e.getElementsByTagName("svg")[0],s=n.src;n.src="https://info-tech-io.github.io/icons/check.svg",e.appendChild(t),setTimeout(function(){e.removeChild(t),n.src=s},2250)}}function copyHeadingLink(){let t,n,s,o,e;t="link",n=elems(`.${t}`),n&&document.addEventListener("click",function(n){e=n.target,o=e.parentNode,(e&&containsClass(e,t)||containsClass(o,t))&&(n.preventDefault(),s=e.href!=0[0]?e.href:e.parentNode.href,copyToClipboard(s),copyFeedback(e.href!=0[0]?e:e.parentNode))})}function makeTablesResponsive(){const e=elems("table");e&&e.forEach(function(e){const t=createEl();pushClass(t,"scrollable"),wrapEl(e,t)})}function backToTop(){const e=elem("#toTop");window.addEventListener("scroll",()=>{const t=window.scrollY;t>=200?(e.style.display="flex",pushClass(e,active)):deleteClass(e,active)})}function lazyLoadMedia(e=[]){e.forEach(e=>{let t=elems(e);t&&Array.from(t).forEach(function(e){e.loading="lazy"})})}function loadActions(){updateDate(),customizeSidebar(),markExternalLinks(),copyHeadingLink(),makeTablesResponsive(),backToTop(),lazyLoadMedia(["iframe","img"]),doc.addEventListener("click",e=>{let t=e.target,n="color_choice",s=containsClass(t,n);!!s&&setUserColorMode(!0),toggleMenu(e)})}window.addEventListener("load",loadActions())
+</script>
+
+<script src="https://info-tech-io.github.io/js/search.min.ced9096e00d5ed374b805a5ba6ac7c85f5269f7ba65c8b35482af33128ccdb3d890f44edf7ce462465dc94225c182b77086a3fdabb0f211947a23e32fd4bb82d.js" async></script>
+
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+baseURL = 'https://info-tech-io.github.io'
+languageCode = 'en-us'
+title = 'Test Site'
+theme = 'compose'

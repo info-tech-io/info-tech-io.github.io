@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>InfoTech.io Blog on Test Site</title>
+    <link>https://info-tech-io.github.io/blog/</link>
+    <description>Recent content in InfoTech.io Blog on Test Site</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 23 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://info-tech-io.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building INFOTEKA: Our Journey to a Scalable Educational Platform</title>
+      <link>https://info-tech-io.github.io/blog/posts/building-infoteka/</link>
+      <pubDate>Tue, 23 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://info-tech-io.github.io/blog/posts/building-infoteka/</guid>
+      <description>&lt;h1 id=&#34;building-infoteka-our-journey-to-a-scalable-educational-platform&#34; class=link_owner&gt;&#xA;  Building INFOTEKA: Our Journey to a Scalable Educational Platform&#xA;  &lt;a href=&#34;#building-infoteka-our-journey-to-a-scalable-educational-platform&#34; class=&#34;link icon&#34;&gt;&#xA;    &lt;svg&gt;&#xA;      &lt;use xlink:href=&#34;#anchor-link&#34;&gt;&lt;/use&gt;&#xA;    &lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;When we started InfoTech.io, we had a simple but ambitious goal: make high-quality IT education accessible to everyone. What we didn&amp;rsquo;t anticipate was the technical complexity of building an educational platform that could scale, remain fast, and be maintainable by a small team.&lt;/p&gt;&#xA;&lt;p&gt;Today, &lt;a href=&#34;https://infotecha.ru&#34;&gt;INFOTEKA&lt;/a&gt; serves thousands of learners with three comprehensive Linux courses, delivers content in under 500ms, and can deploy updates from commit to production in 2-3 minutes. Here&amp;rsquo;s how we built it.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Hugo Templates Factory: A Flexible Static Site Generation Framework</title>
+      <link>https://info-tech-io.github.io/blog/posts/hugo-templates-factory/</link>
+      <pubDate>Tue, 23 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://info-tech-io.github.io/blog/posts/hugo-templates-factory/</guid>
+      <description>&lt;h1 id=&#34;hugo-templates-factory-a-flexible-static-site-generation-framework&#34; class=link_owner&gt;&#xA;  Hugo Templates Factory: A Flexible Static Site Generation Framework&#xA;  &lt;a href=&#34;#hugo-templates-factory-a-flexible-static-site-generation-framework&#34; class=&#34;link icon&#34;&gt;&#xA;    &lt;svg&gt;&#xA;      &lt;use xlink:href=&#34;#anchor-link&#34;&gt;&lt;/use&gt;&#xA;    &lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;When we started building InfoTech.io&amp;rsquo;s educational platform, we quickly realized that different types of content needed different presentations. A corporate website has different requirements than educational courses, which differ from technical documentation. Yet we wanted consistency, maintainability, and the ability to rapidly deploy new sites.&lt;/p&gt;&#xA;&lt;p&gt;Our solution was the Hugo Templates Factory – a flexible, modular framework that generates Hugo-based static sites with configurable templates, themes, and components. Today, it powers not just our educational platform but also our corporate site, product documentation, and this blog.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

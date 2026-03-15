@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>About InfoTech.io on Test Site</title>
+    <link>https://info-tech-io.github.io/about/</link>
+    <description>Recent content in About InfoTech.io on Test Site</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 23 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://info-tech-io.github.io/about/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Development Roadmap</title>
+      <link>https://info-tech-io.github.io/about/roadmap/</link>
+      <pubDate>Tue, 23 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://info-tech-io.github.io/about/roadmap/</guid>
+      <description>&lt;h1 id=&#34;infotechio-development-roadmap&#34; class=link_owner&gt;&#xA;  InfoTech.io Development Roadmap&#xA;  &lt;a href=&#34;#infotechio-development-roadmap&#34; class=&#34;link icon&#34;&gt;&#xA;    &lt;svg&gt;&#xA;      &lt;use xlink:href=&#34;#anchor-link&#34;&gt;&lt;/use&gt;&#xA;    &lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;Our roadmap reflects our journey from initial concept to a comprehensive, self-sustaining educational platform.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-stage-1-mvp-minimum-viable-product---completed&#34; class=link_owner&gt;&#xA;  ✅ Stage 1: MVP (Minimum Viable Product) - COMPLETED&#xA;  &lt;a href=&#34;#-stage-1-mvp-minimum-viable-product---completed&#34; class=&#34;link icon&#34;&gt;&#xA;    &lt;svg&gt;&#xA;      &lt;use xlink:href=&#34;#anchor-link&#34;&gt;&lt;/use&gt;&#xA;    &lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Timeline:&lt;/strong&gt; July-September 2025&#xA;&lt;strong&gt;Goal:&lt;/strong&gt; Quickly and cost-effectively validate our core concept: is there market demand for our approach to open and interactive education?&lt;/p&gt;&#xA;&lt;h3 id=&#34;achieved-results&#34; class=link_owner&gt;&#xA;  Achieved Results&#xA;  &lt;a href=&#34;#achieved-results&#34; class=&#34;link icon&#34;&gt;&#xA;    &lt;svg&gt;&#xA;      &lt;use xlink:href=&#34;#anchor-link&#34;&gt;&lt;/use&gt;&#xA;    &lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;Domain and Platform:&lt;/strong&gt; &lt;a href=&#34;https://infotecha.ru&#34;&gt;https://infotecha.ru&lt;/a&gt; - INFOTEKA educational platform&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;Hub and Spoke Architecture&lt;/strong&gt; implemented and stable&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;3 Linux Modules&lt;/strong&gt; created and deployed to production&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;Quiz Engine v1.0.0&lt;/strong&gt; with full interactive testing system&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;Hugo + Apache2 + Wildcard SSL&lt;/strong&gt; - fast and secure infrastructure&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;Full CI/CD Automation&lt;/strong&gt; via GitHub Actions (commit to production in 2-3 minutes)&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;GitHub Organization info-tech-io&lt;/strong&gt; with 10+ repositories&lt;/li&gt;&#xA;&lt;li&gt;✅ &lt;strong&gt;100% Open Source&lt;/strong&gt; - all platform code and content is open&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;strong&gt;Outcome:&lt;/strong&gt; Fully functional educational platform with interactive content, ready for public use and scaling. &lt;strong&gt;Hypothesis confirmed - we&amp;rsquo;ve created a working ecosystem for IT education.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

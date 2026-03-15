@@ -1,0 +1,1590 @@
+<!doctype html>
+<html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Hugo 0.148.0">
+<link rel="apple-touch-icon" sizes="180x180" href='https://info-tech-io.github.io/favicons/apple-touch-icon.png'>
+<link rel="icon" type="image/png" sizes="32x32" href='https://info-tech-io.github.io/favicons/favicon-32x32.png'>
+<link rel="icon" type="image/png" sizes="16x16" href='https://info-tech-io.github.io/favicons/favicon-16x16.png'>
+<link rel="manifest" href='https://info-tech-io.github.io/favicons/site.webmanifest'>
+<link rel="mask-icon" href='https://info-tech-io.github.io/favicons/safari-pinned-tab.svg' color="#004750">
+<link rel="shortcut icon" href='https://info-tech-io.github.io/favicons/favicon.ico'>
+<meta name="msapplication-config" content='https://info-tech-io.github.io/favicons/browserconfig.xml'>
+<title>Hugo Template Factory Site</title><meta property="og:url" content="https://info-tech-io.github.io/user-guides/federated-builds/">
+  <meta property="og:site_name" content="Hugo Template Factory Site">
+  <meta property="og:title" content="Hugo Template Factory Site">
+  <meta property="og:description" content="Federated Build System Guide Overview The Federated Build System enables you to orchestrate multiple Hugo sites from different Git repositories into a single unified GitHub Pages deployment. This guide covers configuration, validation, and best practices for federated builds.
+Configuration File: modules.json The modules.json file defines your federation configuration, including global settings and individual module definitions.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="user-guides">
+
+  <meta itemprop="name" content="Hugo Template Factory Site">
+  <meta itemprop="description" content="Federated Build System Guide Overview The Federated Build System enables you to orchestrate multiple Hugo sites from different Git repositories into a single unified GitHub Pages deployment. This guide covers configuration, validation, and best practices for federated builds.
+Configuration File: modules.json The modules.json file defines your federation configuration, including global settings and individual module definitions.">
+  <meta itemprop="wordCount" content="2282">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Hugo Template Factory Site">
+  <meta name="twitter:description" content="Federated Build System Guide Overview The Federated Build System enables you to orchestrate multiple Hugo sites from different Git repositories into a single unified GitHub Pages deployment. This guide covers configuration, validation, and best practices for federated builds.
+Configuration File: modules.json The modules.json file defines your federation configuration, including global settings and individual module definitions.">
+
+<link rel="stylesheet" href="https://info-tech-io.github.io/css/styles.74d7fb78947094a526973c2c67c02cf6d516c4cc4f8f410c6df278dbba989ae7d016bc6d5d9be9aa8eb439586aa8cffa76cd786d523ac7d5fb09cc6e77bcf3dd.css" integrity="sha512-dNf7eJRwlKUmlzwsZ8As9tUWxMxPj0EMbfJ427qYmufQFrxtXZvpqo60OVhqqM/6ds14bVI6x9X7Ccxud7zz3Q==">
+<meta name="description" content=" Federated Build System Guide Overview The Federated Build System enables you to orchestrate multiple Hugo sites from different Git repositories into a single unified GitHub Pages deployment. This guide covers configuration, validation, and best practices for federated builds.
+Configuration File: modules.json The modules.json file defines your federation configuration, including global settings and individual module definitions.
+">
+
+</head>
+<body class="page-page" id="pagetop">
+  <header class="nav_header">
+<nav class="wrap nav menu">
+	<a href='https://info-tech-io.github.io/' class="nav_brand">
+		<picture data-lit="https://info-tech-io.github.io/" data-dark="https://info-tech-io.github.io/">
+			<img src="https://info-tech-io.github.io/" alt="Hugo Template Factory Site Logo">
+		</picture>
+		<div class="nav_toggle toggle" title='Site Menu'><svg class="icon icon_harmburger">
+  <use href="#harmburger"></use>
+</svg>
+		</div>
+	</a>
+	<ul class="nav_body">
+		<li class="nav-item">
+  <div class="search">
+    <label for="find" class="search_label"><svg class="icon icon_search">
+  <use href="#search"></use>
+</svg>
+    </label>
+    
+    <input type="search" class="search_field  standardize-input" placeholder="Search site" id="find" autocomplete="off" data-scope='user-guides'>
+    <div class="search_results results"></div>
+  </div>
+		</li>
+		<li class="nav-item"><div class=color_mode>
+  <label for=mode></label>
+  <input type="checkbox" class="color_choice standardize-input" id="mode" title="Toggle Dark Mode">
+</div>
+</li>
+	</ul>
+</nav>
+
+  </header>
+  <div class="main wrap pt-4">
+      <div class="content">
+<div class="content">
+	<h1></h1>
+	<h1 id="federated-build-system-guide" class=link_owner>
+  Federated Build System Guide
+  <a href="#federated-build-system-guide" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h1>
+<h2 id="overview" class=link_owner>
+  Overview
+  <a href="#overview" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>The Federated Build System enables you to orchestrate multiple Hugo sites from different Git repositories into a single unified GitHub Pages deployment. This guide covers configuration, validation, and best practices for federated builds.</p>
+<h2 id="configuration-file-modulesjson" class=link_owner>
+  Configuration File: modules.json
+  <a href="#configuration-file-modulesjson" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>The <code>modules.json</code> file defines your federation configuration, including global settings and individual module definitions.</p>
+<h3 id="json-schema-validation" class=link_owner>
+  JSON Schema Validation
+  <a href="#json-schema-validation" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>All <code>modules.json</code> files are validated against a JSON Schema to ensure configuration correctness. The schema provides:</p>
+<ul>
+<li><strong>Type checking</strong>: Validates data types for all fields</li>
+<li><strong>Pattern validation</strong>: Enforces naming conventions and URL formats</li>
+<li><strong>Required fields</strong>: Ensures all mandatory configuration is present</li>
+<li><strong>IDE support</strong>: Autocomplete and inline validation in modern editors</li>
+</ul>
+<h3 id="basic-structure" class=link_owner>
+  Basic Structure
+  <a href="#basic-structure" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;$schema&#34;</span>: <span style="color:#e6db74">&#34;./schemas/modules.schema.json&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;federation&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;My Federation&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;baseURL&#34;</span>: <span style="color:#e6db74">&#34;https://example.github.io&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;strategy&#34;</span>: <span style="color:#e6db74">&#34;download-merge-deploy&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;module-name&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;repository&#34;</span>: <span style="color:#e6db74">&#34;https://github.com/user/repo&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;docs&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;branch&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;destination&#34;</span>: <span style="color:#e6db74">&#34;/module-path/&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;module_json&#34;</span>: <span style="color:#e6db74">&#34;module.json&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="federation-configuration" class=link_owner>
+  Federation Configuration
+  <a href="#federation-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="required-fields" class=link_owner>
+  Required Fields
+  <a href="#required-fields" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="name" class=link_owner>
+  <code>name</code>
+  <a href="#name" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Pattern</strong>: <code>^[a-zA-Z0-9][a-zA-Z0-9 ._-]*[a-zA-Z0-9]$</code></li>
+<li><strong>Description</strong>: Human-readable name for your federation</li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>&quot;InfoTech.io Pages&quot;</code></li>
+<li><code>&quot;Corporate Documentation&quot;</code></li>
+<li><code>&quot;Multi-Project Federation&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="baseurl" class=link_owner>
+  <code>baseURL</code>
+  <a href="#baseurl" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String (URI)</li>
+<li><strong>Pattern</strong>: <code>^https?://[^/]+[^/]$</code> (no trailing slash)</li>
+<li><strong>Description</strong>: Base URL where the federation will be deployed</li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>&quot;https://info-tech-io.github.io&quot;</code></li>
+<li><code>&quot;https://example.com&quot;</code></li>
+<li><code>&quot;http://localhost:1313&quot;</code> (for local development)</li>
+</ul>
+</li>
+</ul>
+<h4 id="strategy" class=link_owner>
+  <code>strategy</code>
+  <a href="#strategy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String (enum)</li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>&quot;download-merge-deploy&quot;</code>: Download all modules and merge into single site</li>
+<li><code>&quot;preserve-base-site&quot;</code>: Preserve existing base site and add modules</li>
+</ul>
+</li>
+<li><strong>Default</strong>: <code>&quot;download-merge-deploy&quot;</code></li>
+</ul>
+<h3 id="optional-fields" class=link_owner>
+  Optional Fields
+  <a href="#optional-fields" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="build_settings" class=link_owner>
+  <code>build_settings</code>
+  <a href="#build_settings" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p>Optional federation-wide build configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;build_settings&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;parallel&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;max_parallel_builds&#34;</span>: <span style="color:#ae81ff">5</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;cache_enabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;performance_tracking&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;fail_fast&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li><strong><code>parallel</code></strong>: Enable parallel module builds (experimental)</li>
+<li><strong><code>max_parallel_builds</code></strong>: Maximum concurrent builds (1-10)</li>
+<li><strong><code>cache_enabled</code></strong>: Enable build caching system</li>
+<li><strong><code>performance_tracking</code></strong>: Enable performance monitoring</li>
+<li><strong><code>fail_fast</code></strong>: Stop on first module failure</li>
+</ul>
+<h2 id="module-configuration" class=link_owner>
+  Module Configuration
+  <a href="#module-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="required-fields-1" class=link_owner>
+  Required Fields
+  <a href="#required-fields-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="name-1" class=link_owner>
+  <code>name</code>
+  <a href="#name-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Pattern</strong>: <code>^[a-z0-9]+(-[a-z0-9]+)*$</code> (lowercase with hyphens)</li>
+<li><strong>Description</strong>: Unique identifier for this module</li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>&quot;corporate-site&quot;</code></li>
+<li><code>&quot;quiz-docs&quot;</code></li>
+<li><code>&quot;hugo-templates-docs&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="source" class=link_owner>
+  <code>source</code>
+  <a href="#source" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p>Repository source configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;source&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;repository&#34;</span>: <span style="color:#e6db74">&#34;https://github.com/info-tech-io/repo&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;docs&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;branch&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li><strong><code>repository</code></strong>: GitHub URL or <code>&quot;local&quot;</code> for local sources
+<ul>
+<li>GitHub pattern: <code>^(https://github\.com/|git@github\.com:)[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+(\.git)?$</code></li>
+</ul>
+</li>
+<li><strong><code>path</code></strong>: Path within repository to content directory</li>
+<li><strong><code>branch</code></strong>: Git branch name (default: <code>&quot;main&quot;</code>)</li>
+</ul>
+<h4 id="destination" class=link_owner>
+  <code>destination</code>
+  <a href="#destination" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Pattern</strong>: <code>^/[a-zA-Z0-9/_-]*$</code> (must start with <code>/</code>)</li>
+<li><strong>Description</strong>: URL path where module will be deployed</li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>&quot;/&quot;</code> (root path)</li>
+<li><code>&quot;/quiz/&quot;</code></li>
+<li><code>&quot;/docs/hugo-templates/&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="module_json" class=link_owner>
+  <code>module_json</code>
+  <a href="#module_json" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Pattern</strong>: <code>^[^/].*\.json$</code> (relative path ending in .json)</li>
+<li><strong>Default</strong>: <code>&quot;module.json&quot;</code></li>
+<li><strong>Description</strong>: Path to module.json within source</li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>&quot;module.json&quot;</code></li>
+<li><code>&quot;docs/module.json&quot;</code></li>
+<li><code>&quot;config/module.json&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="optional-fields-1" class=link_owner>
+  Optional Fields
+  <a href="#optional-fields-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="css_path_prefix" class=link_owner>
+  <code>css_path_prefix</code>
+  <a href="#css_path_prefix" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Pattern</strong>: <code>^(/[a-zA-Z0-9/_-]*)?$</code> (empty string or path with leading <code>/</code>)</li>
+<li><strong>Default</strong>: <code>&quot;&quot;</code></li>
+<li><strong>Description</strong>: CSS path prefix for theme assets in subdirectory deployments</li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>&quot;&quot;</code> (no prefix)</li>
+<li><code>&quot;/&quot;</code></li>
+<li><code>&quot;/quiz&quot;</code></li>
+<li><code>&quot;/docs/hugo-templates&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="overrides" class=link_owner>
+  <code>overrides</code>
+  <a href="#overrides" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p>Override specific module.json settings:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;overrides&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;baseURL&#34;</span>: <span style="color:#e6db74">&#34;https://info-tech-io.github.io&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;theme&#34;</span>: <span style="color:#e6db74">&#34;compose&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;components&#34;</span>: [<span style="color:#e6db74">&#34;quiz-engine&#34;</span>, <span style="color:#e6db74">&#34;code-highlighter&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;InfoTech.io Documentation&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="build_options" class=link_owner>
+  <code>build_options</code>
+  <a href="#build_options" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p>Per-module build configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;build_options&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;cache_enabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;skip_on_error&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;build_timeout&#34;</span>: <span style="color:#ae81ff">600</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;priority&#34;</span>: <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li><strong><code>cache_enabled</code></strong>: Enable caching for this module</li>
+<li><strong><code>skip_on_error</code></strong>: Continue federation build if module fails</li>
+<li><strong><code>build_timeout</code></strong>: Build timeout in seconds (30-3600)</li>
+<li><strong><code>priority</code></strong>: Build priority, higher builds first (0-100)</li>
+</ul>
+<h2 id="ide-integration" class=link_owner>
+  IDE Integration
+  <a href="#ide-integration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="visual-studio-code" class=link_owner>
+  Visual Studio Code
+  <a href="#visual-studio-code" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Add the <code>$schema</code> reference to get autocomplete and validation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;$schema&#34;</span>: <span style="color:#e6db74">&#34;./schemas/modules.schema.json&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;federation&#34;</span>: { <span style="color:#960050;background-color:#1e0010">...</span> }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>VSCode will automatically:</p>
+<ul>
+<li>Validate your configuration as you type</li>
+<li>Provide autocomplete suggestions</li>
+<li>Show field descriptions on hover</li>
+<li>Highlight errors and warnings</li>
+</ul>
+<h3 id="other-editors" class=link_owner>
+  Other Editors
+  <a href="#other-editors" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Most modern editors support JSON Schema:</p>
+<ul>
+<li><strong>IntelliJ IDEA</strong>: Automatic detection via <code>$schema</code></li>
+<li><strong>Sublime Text</strong>: Install &ldquo;LSP-json&rdquo; package</li>
+<li><strong>Vim/Neovim</strong>: Use coc-json or ALE with jsonlint</li>
+</ul>
+<h2 id="validation-commands" class=link_owner>
+  Validation Commands
+  <a href="#validation-commands" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="validate-configuration-only" class=link_owner>
+  Validate Configuration Only
+  <a href="#validate-configuration-only" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Test your configuration without running the build:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>modules.json --validate-only
+</span></span></code></pre></div><p>This will:</p>
+<ol>
+<li>Parse the JSON file</li>
+<li>Validate against the schema</li>
+<li>Report any errors with helpful messages</li>
+<li>Exit without building</li>
+</ol>
+<h3 id="example-output" class=link_owner>
+  Example Output
+  <a href="#example-output" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p><strong>Valid configuration:</strong></p>
+<pre tabindex="0"><code>ℹ️  Loading federation configuration from: modules.json
+✅ Configuration validated successfully against schema
+</code></pre><p><strong>Invalid configuration:</strong></p>
+<pre tabindex="0"><code>❌ Failed to load federation configuration
+ERROR: Configuration validation failed against JSON Schema:
+  • root.federation.baseURL: String &#34;https://example.com/&#34; does not match required pattern
+  • root.modules[0].name: String &#34;Test_Module&#34; does not match required pattern
+
+Please fix these errors and try again.
+Schema reference: schemas/modules.schema.json
+</code></pre><h2 id="common-validation-errors" class=link_owner>
+  Common Validation Errors
+  <a href="#common-validation-errors" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="trailing-slash-in-baseurl" class=link_owner>
+  Trailing Slash in baseURL
+  <a href="#trailing-slash-in-baseurl" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>❌ <strong>Error</strong>: <code>baseURL: String does not match required pattern</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;federation&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;baseURL&#34;</span>: <span style="color:#e6db74">&#34;https://example.com/&#34;</span>  <span style="color:#75715e">// ❌ Trailing slash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>✅ <strong>Fix</strong>: Remove trailing slash</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;federation&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;baseURL&#34;</span>: <span style="color:#e6db74">&#34;https://example.com&#34;</span>  <span style="color:#75715e">// ✅ No trailing slash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="invalid-module-name" class=link_owner>
+  Invalid Module Name
+  <a href="#invalid-module-name" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>❌ <strong>Error</strong>: <code>modules[0].name: String does not match required pattern</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Test_Module_With_Uppercase&#34;</span>  <span style="color:#75715e">// ❌ Uppercase and underscores
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>✅ <strong>Fix</strong>: Use lowercase with hyphens</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;test-module-with-hyphens&#34;</span>  <span style="color:#75715e">// ✅ Lowercase with hyphens
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="missing-leading-slash-in-destination" class=link_owner>
+  Missing Leading Slash in Destination
+  <a href="#missing-leading-slash-in-destination" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>❌ <strong>Error</strong>: <code>modules[0].destination: String does not match required pattern</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;destination&#34;</span>: <span style="color:#e6db74">&#34;no-slash&#34;</span>  <span style="color:#75715e">// ❌ No leading slash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>✅ <strong>Fix</strong>: Add leading slash</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;destination&#34;</span>: <span style="color:#e6db74">&#34;/no-slash&#34;</span>  <span style="color:#75715e">// ✅ Leading slash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="invalid-repository-url" class=link_owner>
+  Invalid Repository URL
+  <a href="#invalid-repository-url" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>❌ <strong>Error</strong>: <code>modules[0].source.repository: Value does not match any of the allowed schemas</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;source&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;repository&#34;</span>: <span style="color:#e6db74">&#34;https://gitlab.com/user/repo&#34;</span>  <span style="color:#75715e">// ❌ Not GitHub
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>✅ <strong>Fix</strong>: Use GitHub URL or &ldquo;local&rdquo;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;source&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;repository&#34;</span>: <span style="color:#e6db74">&#34;https://github.com/user/repo&#34;</span>  <span style="color:#75715e">// ✅ GitHub URL
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>or for local development:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;source&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;repository&#34;</span>: <span style="color:#e6db74">&#34;local&#34;</span>  <span style="color:#75715e">// ✅ Local source
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="examples" class=link_owner>
+  Examples
+  <a href="#examples" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>See complete examples in <code>docs/content/examples/</code>:</p>
+<ul>
+<li><strong><code>modules-simple.json</code></strong>: Minimal configuration with required fields only</li>
+<li><strong><code>modules-infotech.json</code></strong>: Real production configuration with 5 modules</li>
+<li><strong><code>modules-advanced.json</code></strong>: Showcases all advanced features (build_settings, overrides, build_options)</li>
+</ul>
+<h2 id="testing-your-configuration" class=link_owner>
+  Testing Your Configuration
+  <a href="#testing-your-configuration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<h3 id="1-validate-schema" class=link_owner>
+  1. Validate Schema
+  <a href="#1-validate-schema" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>modules.json --validate-only
+</span></span></code></pre></div><h3 id="2-dry-run" class=link_owner>
+  2. Dry Run
+  <a href="#2-dry-run" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>modules.json --dry-run
+</span></span></code></pre></div><h3 id="3-full-build" class=link_owner>
+  3. Full Build
+  <a href="#3-full-build" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>modules.json
+</span></span></code></pre></div><h2 id="command-line-reference" class=link_owner>
+  Command-Line Reference
+  <a href="#command-line-reference" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>Complete reference for <code>federated-build.sh</code> command-line options.</p>
+<h3 id="basic-syntax" class=link_owner>
+  Basic Syntax
+  <a href="#basic-syntax" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh <span style="color:#f92672">[</span>OPTIONS<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h3 id="required-options" class=link_owner>
+  Required Options
+  <a href="#required-options" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="--configfile" class=link_owner>
+  <code>--config=FILE</code>
+  <a href="#--configfile" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Path to modules.json configuration file
+<strong>Example</strong>: <code>--config=modules.json</code>
+<strong>Default</strong>: None (required)</p>
+<h3 id="output-options" class=link_owner>
+  Output Options
+  <a href="#output-options" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="--outputdir" class=link_owner>
+  <code>--output=DIR</code>
+  <a href="#--outputdir" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Output directory for merged site
+<strong>Example</strong>: <code>--output=public</code>
+<strong>Default</strong>: <code>./federated-output</code></p>
+<h4 id="--minify" class=link_owner>
+  <code>--minify</code>
+  <a href="#--minify" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Minify HTML/CSS/JS in final output
+<strong>Example</strong>: <code>--minify</code>
+<strong>Default</strong>: false (no minification)</p>
+<h3 id="execution-modes" class=link_owner>
+  Execution Modes
+  <a href="#execution-modes" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="--dry-run" class=link_owner>
+  <code>--dry-run</code>
+  <a href="#--dry-run" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Test configuration without building
+<strong>Example</strong>: <code>--dry-run</code>
+<strong>Effect</strong>:</p>
+<ul>
+<li>Validates configuration</li>
+<li>Checks module sources accessible</li>
+<li>Reports what would be done</li>
+<li>Does not build or download anything</li>
+</ul>
+<h4 id="--validate-only" class=link_owner>
+  <code>--validate-only</code>
+  <a href="#--validate-only" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Validate configuration and exit
+<strong>Example</strong>: <code>--validate-only</code>
+<strong>Effect</strong>:</p>
+<ul>
+<li>Schema validation only</li>
+<li>Faster than <code>--dry-run</code></li>
+<li>Does not check module accessibility</li>
+</ul>
+<h3 id="advanced-options" class=link_owner>
+  Advanced Options
+  <a href="#advanced-options" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="--strategystrategy" class=link_owner>
+  <code>--strategy=STRATEGY</code>
+  <a href="#--strategystrategy" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Override strategy from config
+<strong>Values</strong>: <code>download-merge-deploy</code>, <code>merge-and-build</code>, <code>preserve-base-site</code>
+<strong>Example</strong>: <code>--strategy=merge-and-build</code>
+<strong>Default</strong>: Value from modules.json</p>
+<h4 id="--verbose" class=link_owner>
+  <code>--verbose</code>
+  <a href="#--verbose" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Enable verbose logging
+<strong>Example</strong>: <code>--verbose</code>
+<strong>Effect</strong>: Show detailed build progress</p>
+<h4 id="--quiet" class=link_owner>
+  <code>--quiet</code>
+  <a href="#--quiet" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Suppress non-error output
+<strong>Example</strong>: <code>--quiet</code>
+<strong>Effect</strong>: Only show errors and warnings</p>
+<h4 id="--paralleln" class=link_owner>
+  <code>--parallel=N</code>
+  <a href="#--paralleln" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Maximum parallel module builds
+<strong>Example</strong>: <code>--parallel=3</code>
+<strong>Default</strong>: 1 (sequential builds)
+<strong>Range</strong>: 1-10</p>
+<h3 id="environment-variables" class=link_owner>
+  Environment Variables
+  <a href="#environment-variables" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="temp_dir" class=link_owner>
+  <code>TEMP_DIR</code>
+  <a href="#temp_dir" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Override temporary directory
+<strong>Example</strong>: <code>TEMP_DIR=/tmp/federation ./scripts/federated-build.sh --config=modules.json</code>
+<strong>Default</strong>: System temp directory</p>
+<h4 id="node_path" class=link_owner>
+  <code>NODE_PATH</code>
+  <a href="#node_path" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Path to Node.js executable
+<strong>Example</strong>: <code>NODE_PATH=/usr/local/bin/node</code>
+<strong>Default</strong>: Detected from PATH</p>
+<h4 id="hugo_path" class=link_owner>
+  <code>HUGO_PATH</code>
+  <a href="#hugo_path" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<p><strong>Description</strong>: Path to Hugo executable
+<strong>Example</strong>: <code>HUGO_PATH=/usr/local/bin/hugo</code>
+<strong>Default</strong>: Detected from PATH</p>
+<h3 id="exit-codes" class=link_owner>
+  Exit Codes
+  <a href="#exit-codes" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Code</th>
+          <th>Meaning</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>0</code></td>
+          <td>Success</td>
+          <td>Build completed successfully</td>
+      </tr>
+      <tr>
+          <td><code>1</code></td>
+          <td>Configuration error</td>
+          <td>Check modules.json syntax/validation</td>
+      </tr>
+      <tr>
+          <td><code>2</code></td>
+          <td>Module source error</td>
+          <td>Verify repository URLs or paths</td>
+      </tr>
+      <tr>
+          <td><code>3</code></td>
+          <td>Build failure</td>
+          <td>Check individual module build logs</td>
+      </tr>
+      <tr>
+          <td><code>4</code></td>
+          <td>Merge conflict</td>
+          <td>Review conflict resolution in output</td>
+      </tr>
+      <tr>
+          <td><code>5</code></td>
+          <td>Missing dependency</td>
+          <td>Install Hugo, Node.js, or Git</td>
+      </tr>
+      <tr>
+          <td><code>6</code></td>
+          <td>Permission error</td>
+          <td>Check file/directory permissions</td>
+      </tr>
+      <tr>
+          <td><code>7</code></td>
+          <td>Timeout</td>
+          <td>Increase build timeout or check network</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="complete-examples" class=link_owner>
+  Complete Examples
+  <a href="#complete-examples" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p><strong>Production Build</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --config<span style="color:#f92672">=</span>modules-prod.json <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --output<span style="color:#f92672">=</span>public <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --minify <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --strategy<span style="color:#f92672">=</span>download-merge-deploy
+</span></span></code></pre></div><p><strong>Development Build</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --config<span style="color:#f92672">=</span>modules-dev.json <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --output<span style="color:#f92672">=</span>dev-output <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --verbose <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --strategy<span style="color:#f92672">=</span>merge-and-build
+</span></span></code></pre></div><p><strong>CI/CD Validation</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --config<span style="color:#f92672">=</span>modules.json <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --validate-only <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --quiet
+</span></span></code></pre></div><p><strong>Parallel Build</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --config<span style="color:#f92672">=</span>modules.json <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --parallel<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --output<span style="color:#f92672">=</span>public
+</span></span></code></pre></div><hr>
+<h2 id="error-handling" class=link_owner>
+  Error Handling
+  <a href="#error-handling" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>Understanding and resolving common federation errors.</p>
+<h3 id="configuration-errors-exit-code-1" class=link_owner>
+  Configuration Errors (Exit Code 1)
+  <a href="#configuration-errors-exit-code-1" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="error-json-parse-failure" class=link_owner>
+  Error: JSON Parse Failure
+  <a href="#error-json-parse-failure" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Failed to parse modules.json
+Syntax error at line 15: Unexpected token }
+</code></pre><p><strong>Cause</strong>: Invalid JSON syntax
+<strong>Solution</strong>: Validate JSON with <code>jsonlint</code> or online validator</p>
+<h4 id="error-schema-validation-failure" class=link_owner>
+  Error: Schema Validation Failure
+  <a href="#error-schema-validation-failure" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Configuration validation failed against JSON Schema:
+  • root.modules[0].name: String does not match required pattern
+</code></pre><p><strong>Cause</strong>: Configuration doesn&rsquo;t meet schema requirements
+<strong>Solution</strong>: Review field requirements in this guide or use IDE autocomplete</p>
+<h3 id="module-source-errors-exit-code-2" class=link_owner>
+  Module Source Errors (Exit Code 2)
+  <a href="#module-source-errors-exit-code-2" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="error-repository-not-found" class=link_owner>
+  Error: Repository Not Found
+  <a href="#error-repository-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Failed to clone repository https://github.com/user/nonexistent
+fatal: repository not found
+</code></pre><p><strong>Cause</strong>: Repository doesn&rsquo;t exist or is private without credentials
+<strong>Solution</strong>:</p>
+<ul>
+<li>Verify repository URL is correct</li>
+<li>For private repos, configure Git credentials or SSH keys</li>
+<li>Use GitHub Personal Access Token in CI/CD</li>
+</ul>
+<h4 id="error-branch-not-found" class=link_owner>
+  Error: Branch Not Found
+  <a href="#error-branch-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Branch &#39;feature-branch&#39; not found in repository
+</code></pre><p><strong>Cause</strong>: Specified branch doesn&rsquo;t exist
+<strong>Solution</strong>: Check branch name, use <code>main</code> or <code>master</code> for default branch</p>
+<h4 id="error-local-path-not-found" class=link_owner>
+  Error: Local Path Not Found
+  <a href="#error-local-path-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Local module path &#39;./modules/api-docs&#39; does not exist
+</code></pre><p><strong>Cause</strong>: Local path is incorrect or directory missing
+<strong>Solution</strong>: Verify path relative to project root</p>
+<h3 id="build-errors-exit-code-3" class=link_owner>
+  Build Errors (Exit Code 3)
+  <a href="#build-errors-exit-code-3" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="error-hugo-build-failed" class=link_owner>
+  Error: Hugo Build Failed
+  <a href="#error-hugo-build-failed" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Module &#39;module-api&#39; build failed
+Hugo error: ERROR 2024/01/15 12:34:56 Transformation failed: SCSS processing failed
+</code></pre><p><strong>Cause</strong>: Individual module has Hugo build error
+<strong>Solution</strong>:</p>
+<ul>
+<li>Test module builds independently</li>
+<li>Review module&rsquo;s hugo.toml/yaml/json configuration</li>
+<li>Check for missing dependencies or themes</li>
+</ul>
+<h4 id="error-theme-not-found" class=link_owner>
+  Error: Theme Not Found
+  <a href="#error-theme-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Module &#39;docs&#39; build failed: theme &#34;compose&#34; not found
+</code></pre><p><strong>Cause</strong>: Hugo theme not available in module
+<strong>Solution</strong>:</p>
+<ul>
+<li>Add theme as Git submodule in module repository</li>
+<li>Or use overrides to specify alternate theme</li>
+<li>Or centralize themes in base site</li>
+</ul>
+<h3 id="merge-errors-exit-code-4" class=link_owner>
+  Merge Errors (Exit Code 4)
+  <a href="#merge-errors-exit-code-4" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="error-path-conflict-detected" class=link_owner>
+  Error: Path Conflict Detected
+  <a href="#error-path-conflict-detected" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>WARNING: Conflict detected in path: content/about.md
+Module &#39;module-b&#39; overwrites file from &#39;module-a&#39;
+Resolution: Using version from higher priority module
+</code></pre><p><strong>Cause</strong>: Multiple modules have same file path
+<strong>Solution</strong>:</p>
+<ul>
+<li>Adjust module priorities (higher priority wins)</li>
+<li>Restructure module content to avoid overlaps</li>
+<li>Review conflict resolution strategy</li>
+</ul>
+<h4 id="error-css-path-rewriting-failed" class=link_owner>
+  Error: CSS Path Rewriting Failed
+  <a href="#error-css-path-rewriting-failed" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>WARNING: Failed to rewrite CSS path in content/posts/style.md
+Path: ../assets/style.css
+</code></pre><p><strong>Cause</strong>: CSS path detection couldn&rsquo;t determine correct rewrite
+<strong>Solution</strong>: Use absolute paths or verify css_path_prefix configuration</p>
+<h3 id="dependency-errors-exit-code-5" class=link_owner>
+  Dependency Errors (Exit Code 5)
+  <a href="#dependency-errors-exit-code-5" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<h4 id="error-hugo-not-found" class=link_owner>
+  Error: Hugo Not Found
+  <a href="#error-hugo-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Hugo not found. Please install Hugo Extended ≥ 0.148.0
+</code></pre><p><strong>Cause</strong>: Hugo not installed or not in PATH
+<strong>Solution</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># macOS (Homebrew)</span>
+</span></span><span style="display:flex;"><span>brew install hugo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Linux (Snap)</span>
+</span></span><span style="display:flex;"><span>snap install hugo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or download from https://github.com/gohugoio/hugo/releases</span>
+</span></span></code></pre></div><h4 id="error-nodejs-not-found" class=link_owner>
+  Error: Node.js Not Found
+  <a href="#error-nodejs-not-found" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h4>
+<pre tabindex="0"><code>ERROR: Node.js not found. Required for JSON Schema validation
+</code></pre><p><strong>Cause</strong>: Node.js not installed or not in PATH
+<strong>Solution</strong>: Install Node.js ≥ 18.0.0 from <a href="https://nodejs.org/">https://nodejs.org/</a></p>
+<hr>
+<h2 id="performance-tips" class=link_owner>
+  Performance Tips
+  <a href="#performance-tips" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>Optimize federation builds for speed and efficiency.</p>
+<h3 id="strategy-selection" class=link_owner>
+  Strategy Selection
+  <a href="#strategy-selection" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p><strong>Fastest: download-merge-deploy</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;strategy&#34;</span>: <span style="color:#e6db74">&#34;download-merge-deploy&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>Downloads pre-built modules from GitHub Releases</li>
+<li>Skips individual module builds (fastest)</li>
+<li><strong>Best for</strong>: CI/CD, production deployments</li>
+<li><strong>Speedup</strong>: 5-10x faster than merge-and-build</li>
+</ul>
+<p><strong>Most Control: merge-and-build</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;strategy&#34;</span>: <span style="color:#e6db74">&#34;merge-and-build&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>Clones and builds each module from source</li>
+<li>Full control over build process</li>
+<li><strong>Best for</strong>: Development, testing, full rebuilds</li>
+<li><strong>Tradeoff</strong>: Slower but always uses latest source</li>
+</ul>
+<p><strong>Incremental: preserve-base-site</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;strategy&#34;</span>: <span style="color:#e6db74">&#34;preserve-base-site&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>Keeps existing base site, merges modules on top</li>
+<li>Skips base site rebuild</li>
+<li><strong>Best for</strong>: Adding modules to existing site</li>
+<li><strong>Speedup</strong>: Faster when base site doesn&rsquo;t change</li>
+</ul>
+<h3 id="parallel-builds" class=link_owner>
+  Parallel Builds
+  <a href="#parallel-builds" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Enable parallel module builds for faster processing:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>modules.json --parallel<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p><strong>Recommendations</strong>:</p>
+<ul>
+<li>Local machine: <code>--parallel=3</code> (avoid overloading)</li>
+<li>CI/CD (4 cores): <code>--parallel=4</code></li>
+<li>CI/CD (8+ cores): <code>--parallel=6</code></li>
+<li>Do not exceed number of CPU cores</li>
+</ul>
+<p><strong>Note</strong>: Parallel builds are experimental and may have race conditions with shared resources.</p>
+<h3 id="caching" class=link_owner>
+  Caching
+  <a href="#caching" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Federation builds support multiple cache levels:</p>
+<p><strong>L1 Cache</strong> (Hugo&rsquo;s built-in):</p>
+<ul>
+<li>Enabled automatically</li>
+<li>Caches Hugo processing (SCSS, images, etc.)</li>
+<li>Persists in <code>/tmp/hugo_cache</code></li>
+</ul>
+<p><strong>L2 Cache</strong> (Module builds):</p>
+<ul>
+<li>Cache individual module builds</li>
+<li>Enable in configuration:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;build_settings&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;cache_enabled&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>CI/CD Caching</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Cache Federation Builds</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/cache@v3</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      /tmp/hugo_cache
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      ~/.cache/hugo_cache
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      ./federated-output</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">key</span>: <span style="color:#ae81ff">federation-${{ hashFiles(&#39;modules.json&#39;) }}</span>
+</span></span></code></pre></div><h3 id="resource-optimization" class=link_owner>
+  Resource Optimization
+  <a href="#resource-optimization" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p><strong>Reduce Module Size</strong>:</p>
+<ul>
+<li>Exclude unnecessary files in <code>.gitignore</code></li>
+<li>Use <code>download-merge-deploy</code> to avoid cloning large repos</li>
+<li>Minimize static assets in modules</li>
+</ul>
+<p><strong>Timeout Configuration</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules&#34;</span>: [{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;build_options&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;build_timeout&#34;</span>: <span style="color:#ae81ff">300</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>Default: 600 seconds (10 minutes)</li>
+<li>Reduce for small modules: 60-120 seconds</li>
+<li>Increase for large sites: 900-1800 seconds</li>
+</ul>
+<h3 id="monitoring-performance" class=link_owner>
+  Monitoring Performance
+  <a href="#monitoring-performance" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>Enable performance tracking:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>modules.json --verbose
+</span></span></code></pre></div><p>Review build times in output:</p>
+<pre tabindex="0"><code>Module &#39;main-docs&#39;: 45.2s
+Module &#39;api-reference&#39;: 12.8s
+Module &#39;tutorials&#39;: 8.3s
+Total federation time: 66.3s
+</code></pre><p>Optimize slowest modules first for maximum impact.</p>
+<hr>
+<h2 id="whats-new" class=link_owner>
+  What&rsquo;s New
+  <a href="#whats-new" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>Latest features and improvements in the federated build system.</p>
+<h3 id="version-20-current---october-2025" class=link_owner>
+  Version 2.0 (Current) - October 2025
+  <a href="#version-20-current---october-2025" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p><strong>Major Features</strong>:</p>
+<ul>
+<li>✅ <strong>Local Repository Support</strong>: Use local paths for module sources</li>
+<li>✅ <strong>oneOf Source Validation</strong>: Proper Git vs GitHub vs local source validation</li>
+<li>✅ <strong>140 Comprehensive Tests</strong>: 100% test coverage (Layer 1 + Layer 2 + Integration)</li>
+<li>✅ <strong>Performance Benchmarks</strong>: Baseline performance tracking for regression detection</li>
+</ul>
+<p><strong>Enhancements</strong>:</p>
+<ul>
+<li>Improved CSS path rewriting for complex layouts</li>
+<li>Better error messages with exit codes</li>
+<li>Dry-run mode for configuration testing</li>
+<li>Parallel build support (experimental)</li>
+</ul>
+<p><strong>Bug Fixes</strong>:</p>
+<ul>
+<li>Fixed oneOf schema validation for source types</li>
+<li>Fixed local repository path resolution</li>
+<li>Fixed merge conflicts with preserve-base-site strategy</li>
+<li>Fixed CSS path detection for nested directories</li>
+</ul>
+<p><strong>Testing</strong>:</p>
+<ul>
+<li>Unit tests: 45 BATS tests (Layer 2)</li>
+<li>Integration tests: 14 E2E tests</li>
+<li>Shell script tests: 37 tests</li>
+<li>Performance tests: 5 benchmarks</li>
+<li><strong>Total</strong>: 140 tests, all passing</li>
+</ul>
+<h3 id="upcoming-features-roadmap" class=link_owner>
+  Upcoming Features (Roadmap)
+  <a href="#upcoming-features-roadmap" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p><strong>Planned for v2.1</strong>:</p>
+<ul>
+<li>Incremental builds (build only changed modules)</li>
+<li>Distributed caching (shared cache across CI/CD runs)</li>
+<li>Module dependency resolution</li>
+<li>Automatic conflict resolution strategies</li>
+</ul>
+<p><strong>Under Consideration</strong>:</p>
+<ul>
+<li>Support for non-GitHub Git providers (GitLab, Bitbucket)</li>
+<li>Module versioning and pinning</li>
+<li>Webhook-triggered federation builds</li>
+<li>Federation status dashboard</li>
+</ul>
+<p><strong>Community Requests</strong>:</p>
+<ul>
+<li>YAML configuration support (in addition to JSON)</li>
+<li>Docker container for federation builds</li>
+<li>Windows native support (currently requires Git Bash)</li>
+</ul>
+<h3 id="migration-from-v1x" class=link_owner>
+  Migration from v1.x
+  <a href="#migration-from-v1x" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h3>
+<p>If upgrading from earlier version:</p>
+<ol>
+<li>
+<p><strong>Configuration Changes</strong>:</p>
+<ul>
+<li><code>source.repository</code> now requires GitHub URL or &ldquo;local&rdquo;</li>
+<li>New <code>source</code> field structure with oneOf validation</li>
+<li><code>strategy</code> field added (defaults to <code>download-merge-deploy</code>)</li>
+</ul>
+</li>
+<li>
+<p><strong>Breaking Changes</strong>:</p>
+<ul>
+<li>Local sources must use <code>&quot;type&quot;: &quot;local&quot;</code> and <code>&quot;path&quot;: &quot;...&quot;</code></li>
+<li>Module names must be lowercase-with-hyphens</li>
+<li>baseURL must not have trailing slash</li>
+</ul>
+</li>
+<li>
+<p><strong>Migration Script</strong>:</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Validate old configuration</span>
+</span></span><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>old-modules.json --validate-only
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Review errors and update configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Then test with dry-run</span>
+</span></span><span style="display:flex;"><span>./scripts/federated-build.sh --config<span style="color:#f92672">=</span>new-modules.json --dry-run
+</span></span></code></pre></div><ol start="4">
+<li><strong>See Also</strong>: <a href="../tutorials/federation-migration-checklist.md">Migration Checklist</a></li>
+</ol>
+<hr>
+<h2 id="cicd-integration" class=link_owner>
+  CI/CD Integration
+  <a href="#cicd-integration" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>The schema validation is automatically run in CI/CD:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Validate configuration</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ./scripts/federated-build.sh --config=modules.json --validate-only</span>
+</span></span></code></pre></div><p>See <code>.github/workflows/validate-schemas.yml</code> for the complete CI/CD workflow.</p>
+<h2 id="best-practices" class=link_owner>
+  Best Practices
+  <a href="#best-practices" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<ol>
+<li><strong>Always use <code>$schema</code> reference</strong> for IDE support</li>
+<li><strong>Validate before committing</strong> using <code>--validate-only</code></li>
+<li><strong>Use descriptive federation names</strong> (e.g., &ldquo;InfoTech.io Documentation&rdquo;)</li>
+<li><strong>Follow naming conventions</strong>:
+<ul>
+<li>Federation names: Mixed case with spaces, periods, hyphens</li>
+<li>Module names: lowercase-with-hyphens</li>
+</ul>
+</li>
+<li><strong>Test with dry-run</strong> before deploying</li>
+<li><strong>Use cache for faster builds</strong> (default: enabled)</li>
+<li><strong>Set appropriate timeouts</strong> based on module size</li>
+<li><strong>Use priorities</strong> to build critical modules first</li>
+</ol>
+<h2 id="troubleshooting" class=link_owner>
+  Troubleshooting
+  <a href="#troubleshooting" class="link icon">
+    <svg>
+      <use xlink:href="#anchor-link"></use>
+    </svg>
+  </a>
+</h2>
+<p>For common issues and solutions, see <a href="../troubleshooting/schema-validation.md">Schema Validation Troubleshooting</a>.</p>
+<p>For general build issues, see <a href="../troubleshooting/common-issues.md">Common Issues</a>.</p>
+
+</div>
+      </div></div><script>
+
+const copy_text = 'Copy';
+const copied_text = 'Copied';
+const toggle_line_numbers_text = 'Toggle line numbers';
+const toggle_line_wrap_text = 'Toggle line wrap';
+const resize_snippet = 'Resize snippet height';
+const not_set = 'not set';
+const quick_links = 'Quick links';
+const search_results_label = 'Search Results';
+const short_search_query = 'Query is too short'
+const type_to_search = 'Type to search';
+const no_matches_found = 'No matches found';
+</script>
+<footer class="pt-2 pb-2">
+  <div class="wrap">
+    <p>
+      &copy; <span class="year">2026</span>
+    </p>
+    <a href="#pagetop" id="toTop" title=Back&#32;to&#32;top></a>
+  </div>
+</footer>
+<svg width="0" height="0" class="hidden">
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492.004 492.004" id="next">
+    <path d="M484.14 226.886L306.46 49.202c-5.072-5.072-11.832-7.856-19.04-7.856-7.216 0-13.972 2.788-19.044 7.856l-16.132 16.136c-5.068 5.064-7.86 11.828-7.86 19.04 0 7.208 2.792 14.2 7.86 19.264L355.9 207.526H26.58C11.732 207.526 0 219.15 0 234.002v22.812c0 14.852 11.732 27.648 26.58 27.648h330.496L252.248 388.926c-5.068 5.072-7.86 11.652-7.86 18.864 0 7.204 2.792 13.88 7.86 18.948l16.132 16.084c5.072 5.072 11.828 7.836 19.044 7.836 7.208 0 13.968-2.8 19.04-7.872l177.68-177.68c5.084-5.088 7.88-11.88 7.86-19.1.016-7.244-2.776-14.04-7.864-19.12z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" id="search">
+    <path d="M508.874 478.708L360.142 329.976c28.21-34.827 45.191-79.103 45.191-127.309C405.333 90.917 314.416 0 202.666 0S0 90.917 0 202.667s90.917 202.667 202.667 202.667c48.206 0 92.482-16.982 127.309-45.191l148.732 148.732c4.167 4.165 10.919 4.165 15.086 0l15.081-15.082c4.165-4.166 4.165-10.92-.001-15.085zM202.667 362.667c-88.229 0-160-71.771-160-160s71.771-160 160-160 160 71.771 160 160-71.771 160-160 160z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 241 179" id="harmburger">
+    <path d="M1 10C1 4.477 5.477 0 11 0h220c5.523 0 10 4.477 10 10s-4.477 10-10 10H11C5.477 20 1 15.523 1 10zm0 80c0-5.523 4.477-10 10-10h220c5.523 0 10 4.477 10 10s-4.477 10-10 10H11c-5.523 0-10-4.477-10-10zm9 69c-5.523 0-10 4.477-10 10s4.477 10 10 10h220c5.523 0 10-4.477 10-10s-4.477-10-10-10H10z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 401.998 401.998" id="sort">
+    <path d="M73.092 164.452h255.813c4.949 0 9.233-1.807 12.848-5.424 3.613-3.616 5.427-7.898 5.427-12.847s-1.813-9.229-5.427-12.85L213.846 5.424C210.232 1.812 205.951 0 200.999 0s-9.233 1.812-12.85 5.424L60.242 133.331c-3.617 3.617-5.424 7.901-5.424 12.85 0 4.948 1.807 9.231 5.424 12.847 3.621 3.617 7.902 5.424 12.85 5.424zm255.813 73.097H73.092c-4.952 0-9.233 1.808-12.85 5.421-3.617 3.617-5.424 7.898-5.424 12.847s1.807 9.233 5.424 12.848L188.149 396.57c3.621 3.617 7.902 5.428 12.85 5.428s9.233-1.811 12.847-5.428l127.907-127.906c3.613-3.614 5.427-7.898 5.427-12.848 0-4.948-1.813-9.229-5.427-12.847-3.614-3.616-7.899-5.42-12.848-5.42z"></path>
+  </symbol>
+</svg>
+
+<svg width="0" height="0" class="hidden">
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="facebook">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h151V331h-60v-90h60v-61c0-49.629 40.371-90 90-90h91v90h-91v61h91l-15 90h-76v181h121c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.001 18.001" id="twitter">
+    <path d="M15.891 4.013c.808-.496 1.343-1.173 1.605-2.034a8.68 8.68 0 0 1-2.351.861c-.703-.756-1.593-1.14-2.66-1.14-1.043 0-1.924.366-2.643 1.078a3.56 3.56 0 0 0-1.076 2.605c0 .309.039.585.117.819-3.076-.105-5.622-1.381-7.628-3.837-.34.601-.51 1.213-.51 1.846 0 1.301.549 2.332 1.645 3.089-.625-.053-1.176-.211-1.645-.47 0 .929.273 1.705.82 2.388a3.623 3.623 0 0 0 2.115 1.291c-.312.08-.641.118-.979.118-.312 0-.533-.026-.664-.083.23.757.664 1.371 1.291 1.841a3.652 3.652 0 0 0 2.152.743C4.148 14.173 2.625 14.69.902 14.69c-.422 0-.721-.006-.902-.038 1.697 1.102 3.586 1.649 5.676 1.649 2.139 0 4.029-.542 5.674-1.626 1.645-1.078 2.859-2.408 3.639-3.974a10.77 10.77 0 0 0 1.172-4.892v-.468a7.788 7.788 0 0 0 1.84-1.921 8.142 8.142 0 0 1-2.11.593z"
+      ></path>
+  </symbol>
+  <symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="mail">
+    <path  d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="calendar">
+    <path d="M452 40h-24V0h-40v40H124V0H84v40H60C26.916 40 0 66.916 0 100v352c0 33.084 26.916 60 60 60h392c33.084 0 60-26.916 60-60V100c0-33.084-26.916-60-60-60zm20 412c0 11.028-8.972 20-20 20H60c-11.028 0-20-8.972-20-20V188h432v264zm0-304H40v-48c0-11.028 8.972-20 20-20h24v40h40V80h264v40h40V80h24c11.028 0 20 8.972 20 20v48z"></path>
+    <path d="M76 230h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 310h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 390h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80-80h40v40h-40z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="github">
+    <path d="M255.968 5.329C114.624 5.329 0 120.401 0 262.353c0 113.536 73.344 209.856 175.104 243.872 12.8 2.368 17.472-5.568 17.472-12.384 0-6.112-.224-22.272-.352-43.712-71.2 15.52-86.24-34.464-86.24-34.464-11.616-29.696-28.416-37.6-28.416-37.6-23.264-15.936 1.728-15.616 1.728-15.616 25.696 1.824 39.2 26.496 39.2 26.496 22.848 39.264 59.936 27.936 74.528 21.344 2.304-16.608 8.928-27.936 16.256-34.368-56.832-6.496-116.608-28.544-116.608-127.008 0-28.064 9.984-51.008 26.368-68.992-2.656-6.496-11.424-32.64 2.496-68 0 0 21.504-6.912 70.4 26.336 20.416-5.696 42.304-8.544 64.096-8.64 21.728.128 43.648 2.944 64.096 8.672 48.864-33.248 70.336-26.336 70.336-26.336 13.952 35.392 5.184 61.504 2.56 68 16.416 17.984 26.304 40.928 26.304 68.992 0 98.72-59.84 120.448-116.864 126.816 9.184 7.936 17.376 23.616 17.376 47.584 0 34.368-.32 62.08-.32 70.496 0 6.88 4.608 14.88 17.6 12.352C438.72 472.145 512 375.857 512 262.353 512 120.401 397.376 5.329 255.968 5.329z"></path>
+  </symbol>
+  <symbol viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="rss">
+    <circle cx="3.429" cy="20.571" r="3.429"></circle>
+    <path d="M11.429 24h4.57C15.999 15.179 8.821 8.001 0 8v4.572c6.302.001 11.429 5.126 11.429 11.428z"></path>
+    <path d="M24 24C24 10.766 13.234 0 0 0v4.571c10.714 0 19.43 8.714 19.43 19.429z"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 64 64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="anchor-link">
+    <g fill="var(--theme)">
+      <path d="m19 40c1.104 0 2-.896 2-2s-.896-2-2-2c-3.86 0-7-3.14-7-7 0-1.873.728-3.628 2.059-4.95 1.313-1.322 3.068-2.05 4.941-2.05h10c3.86 0 7 3.14 7 7 0 .258-.015.509-.048.78-.174 1.574-.885 3.052-2.017 4.176-.532.54-1.137.974-1.797 1.289-.997.476-1.419 1.669-.944 2.666.476.996 1.669 1.419 2.667.943 1.08-.516 2.063-1.219 2.908-2.075 1.763-1.75 2.885-4.08 3.156-6.539.051-.413.075-.819.075-1.24 0-6.065-4.935-11-11-11h-10c-2.947 0-5.709 1.147-7.77 3.221-2.083 2.07-3.23 4.832-3.23 7.779 0 6.065 4.935 11 11 11z"></path>
+      <path d="m45 28c-1.104 0-2 .896-2 2s.896 2 2 2c3.86 0 7 3.141 7 7 0 1.873-.728 3.628-2.059 4.95-1.313 1.322-3.068 2.05-4.941 2.05h-10c-3.86 0-7-3.141-7-7 0-.258.015-.509.048-.78.174-1.574.885-3.052 2.017-4.176.532-.54 1.136-.974 1.796-1.289.997-.476 1.419-1.67.944-2.667s-1.669-1.418-2.667-.944c-1.081.516-2.064 1.22-2.908 2.076-1.763 1.75-2.885 4.08-3.156 6.538-.05.415-.074.821-.074 1.242 0 6.065 4.935 11 11 11h10c2.946 0 5.709-1.147 7.77-3.221 2.083-2.07 3.23-4.833 3.23-7.779 0-6.065-4.935-11-11-11z"></path>
+    </g>
+  </symbol>
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="linkedin">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h362c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zM181 406h-60V196h60zm0-240h-60v-60h60zm210 240h-60V286c0-16.54-13.46-30-30-30s-30 13.46-30 30v120h-60V196h60v11.309C286.719 202.422 296.93 196 316 196c40.691.043 75 36.547 75 79.688zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" id="arrow">
+    <path d="M604.501 440.509L325.398 134.956c-5.331-5.357-12.423-7.627-19.386-7.27-6.989-.357-14.056 1.913-19.387 7.27L7.499 440.509c-9.999 10.024-9.999 26.298 0 36.323s26.223 10.024 36.222 0l262.293-287.164L568.28 476.832c9.999 10.024 26.222 10.024 36.221 0 9.999-10.023 9.999-26.298 0-36.323z"></path>
+  </symbol>
+  <symbol aria-hidden="true" viewBox="0 0 24 24" id="carly">
+    <path fill="currentColor" d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 512 512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="copy">
+    <path d="m366.905 108.016h-141.91c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h141.91c11.048 0 20.003-8.955 20.003-20.003s-8.956-20.003-20.003-20.003z"></path>
+    <path d="m366.905 188.027h-141.91c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h141.91c11.047 0 20.003-8.955 20.003-20.003s-8.955-20.003-20.003-20.003z"></path>
+    <path d="m286.004 268.039h-61.009c-11.048 0-20.003 8.955-20.003 20.003s8.955 20.003 20.003 20.003h61.009c11.048 0 20.003-8.955 20.003-20.003s-8.955-20.003-20.003-20.003z"></path>
+    <path d="m448.028 272.039c11.048 0 20.003-8.955 20.003-20.003v-172.024c0-44.119-35.894-80.012-80.012-80.012h-184.027c-44.094 0-79.971 35.853-80.012 79.938-44.118 0-80.012 35.893-80.012 80.012v272.039c0 44.118 35.893 80.012 80.012 80.012h194.028c44.118 0 80.012-35.893 80.012-80.012v-.608c39.414-4.938 70.01-38.662 70.01-79.389 0-11.048-8.955-20.003-20.003-20.003s-20.003 8.955-20.003 20.003c0 22.054-17.942 40.001-39.996 40.006l-184.027.045h-.009c-10.685 0-20.73-4.16-28.285-11.715-7.558-7.556-11.721-17.604-11.721-28.291v-272.025c0-22.059 17.947-40.006 40.006-40.006h184.028c22.059 0 40.006 17.947 40.006 40.006v172.025c-.001 11.047 8.954 20.002 20.002 20.002zm-244.036 160.008h.02l154.002-.038c-.012 22.049-17.954 39.984-40.006 39.984h-194.027c-22.059 0-40.006-17.947-40.006-40.006v-272.039c0-22.059 17.947-40.006 40.006-40.006v232.094c0 21.375 8.325 41.471 23.441 56.583 15.113 15.11 35.2 23.428 56.57 23.428z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001" id="closeme">
+    <path d="M284.286 256.002L506.143 34.144c7.811-7.811 7.811-20.475 0-28.285-7.811-7.81-20.475-7.811-28.285 0L256 227.717 34.143 5.859c-7.811-7.811-20.475-7.811-28.285 0-7.81 7.811-7.811 20.475 0 28.285l221.857 221.857L5.858 477.859c-7.811 7.811-7.811 20.475 0 28.285a19.938 19.938 0 0 0 14.143 5.857 19.94 19.94 0 0 0 14.143-5.857L256 284.287l221.857 221.857c3.905 3.905 9.024 5.857 14.143 5.857s10.237-1.952 14.143-5.857c7.811-7.811 7.811-20.475 0-28.285L284.286 256.002z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="open-menu">
+    <path d="M492 236H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0-160H20C8.954 76 0 84.954 0 96s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0 320H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="instagram">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="youtube">
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="stackoverflow">
+    <path d="M21 27v-8h3v11H0V19h3v8h18z"></path><path d="M17.1.2L15 1.8l7.9 10.6 2.1-1.6L17.1.2zm3.7 14.7L10.6 6.4l1.7-2 10.2 8.5-1.7 2zM7.2 12.3l12 5.6 1.1-2.4-12-5.6-1.1 2.4zm-1.8 6.8l13.56 1.96.17-2.38-13.26-2.55-.47 2.97zM19 25H5v-3h14v3z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.016 512" id="expand">
+    <path d="m240 426.675781h-181.332031c-32.363281 0-58.667969-26.304687-58.667969-58.667969v-309.332031c0-32.363281 26.304688-58.6679685 58.667969-58.6679685h309.332031c32.363281 0 58.667969 26.3046875 58.667969 58.6679685v181.332031c0 8.832032-7.167969 16-16 16s-16-7.167968-16-16v-181.332031c0-14.699219-11.96875-26.667969-26.667969-26.667969h-309.332031c-14.699219 0-26.667969 11.96875-26.667969 26.667969v309.332031c0 14.699219 11.96875 26.667969 26.667969 26.667969h181.332031c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"></path>
+    <path d="m496 512.007812h-138.667969c-8.832031 0-16-7.167968-16-16 0-8.832031 7.167969-16 16-16h122.667969v-122.667968c0-8.832032 7.167969-16 16-16s16 7.167968 16 16v138.667968c0 8.832032-7.167969 16-16 16zm0 0"></path>
+    <path d="m496 512.007812c-4.097656 0-8.191406-1.558593-11.308594-4.691406l-181.332031-181.335937c-6.25-6.25-6.25-16.382813 0-22.632813s16.382813-6.25 22.636719 0l181.332031 181.332032c6.25 6.25 6.25 16.382812 0 22.636718-3.136719 3.132813-7.230469 4.691406-11.328125 4.691406zm0 0"></path>
+  </symbol>
+  <symbol enable-background="new 0 0 512 512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="order">
+    <path d="m492 236h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <path d="m492 86h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <path d="m492 386h-347.738c-11.046 0-20 8.954-20 20s8.954 20 20 20h347.738c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+    <circle cx="27" cy="106" r="27"></circle>
+    <circle cx="27" cy="256" r="27"></circle>
+    <circle cx="27" cy="406" r="27"></circle>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" fill="#666" viewBox="0 0 512 512" id="check">
+    <path d="M99.941 293.748a21.78 21.78 0 0 1-7.175-16.153c0-11.938 9.823-21.765 21.764-21.765a21.772 21.772 0 0 1 15.737 6.733l85.958 83.825 164.42-194.504c18.463-21.833 51.574 6.326 33.213 28.125L234.276 392.324l-1.032 1.135c-8.327 8.55-22.218 8.74-30.773.412L99.941 293.748z"></path>
+  </symbol>
+</svg>
+
+<script>
+  "use strict";const doc=document.documentElement,toggle_id="toggle",show_id="show",menu="menu",active="active";let site_title=`hugo-template-factory-site`,root_url="/";root_url=root_url.startsWith("http")?root_url:window.location.origin;const go_back_class="button_back",line_class=".line",code_block_config=JSON.parse('{"maximum":100,"show":false}'),iconsPath=`icons/`,shell_based=["sh","shell","zsh","bash"],body=elem("body"),max_lines=code_block_config.maximum,show_lines=code_block_config.show,copy_id="panel_copy",wrap_id="panel_wrap",lines_id="panel_lines",panel_expand="panel_expand",panel_expanded="panel_expanded",panel_box="panel_box",panel_hide="panel_hide",panel_from="panel_from",full_height="initial",highlight="highlight",highlight_wrap="highlight_wrap",hash="#",light="light",dark="dark",storageKey=`${site_title}-color-mode`,mermaidThemeKey=`${site_title}-mermaid`,key="--color-mode",mode_data="data-mode",bank=window.localStorage;function isObj(e){return!!(e&&typeof e=="object"&&e!==null)}function createEl(e="div"){return document.createElement(e)}function emptyEl(e){for(;e.firstChild;)e.removeChild(e.firstChild)}function elem(e,t=document){let n=!!isObj(t)&&t.querySelector(e);return n||!1}function elems(e,t=document){return isObj(t)?t.querySelectorAll(e):[]}function pushClass(e,t){if(isObj(e)&&t){let n=e.classList;!n.contains(t)&&n.add(t)}}function deleteClass(e,t){if(isObj(e)&&t){let n=e.classList;!!n.contains(t)&&n.remove(t)}}function modifyClass(e,t){if(isObj(e)&&t){const n=e.classList;n.contains(t)?n.remove(t):n.add(t)}}function containsClass(e,t){if(isObj(e)&&t&&e!==document)return!!e.classList.contains(t)}function isChild(e,t){let n=isObj(e)&&t&&typeof t=="string";return!!(n&&e.closest(t))}function elemAttribute(e,t,n=null){if(n)e.setAttribute(t,n);else return n=e.getAttribute(t),n||!1}function deleteChars(e,t){let n=e;if(Array.isArray(t))for(let e=0;e<t.length;e++)n=n.replace(t[e],"");else n=n.replace(t,"");return n}function isBlank(e){return!e||e.trim().length===0}function isMatch(e,t){if(isObj(e)){if(t.isArray){let n=t.map(function(t){return e.matches(t)});return n.includes(!0)}return e.matches(t)}}function closestInt(e,t){return t.reduce(function(t,n){return Math.abs(n-e)<Math.abs(t-e)?n:t})}function hasClasses(e){if(isObj(e)){const t=e.classList;return t.length}}function wrapEl(e,t){e.parentNode.insertBefore(t,e),t.appendChild(e)}function wrapText(e,t,n="mark"){let s=`<${n}>`,o=`</${n}>`,r=`%3C${n}%3E`,c=`%3C/${n}%3E`;function i(t){let n=t.innerHTML,a=new RegExp(e,"gi"),i=e.length?n.match(a):null;if(i){i.forEach(function(e){n=n.replaceAll(e,`${s}${e}${o}`),t.innerHTML=n});const e=elems("img",t);e&&e.forEach(e=>{e.src=e.src.replaceAll(s,"").replaceAll(o,"").replaceAll(r,"").replaceAll(c,"")})}}const l=["h1","h2","h3","h4","h5","h6","p","code","td"];l.forEach(function(e){const n=elems(e,t);n.length&&n.forEach(function(e){e.children.length>=1?(Array.from(e.children).forEach(function(e){i(e)}),i(e)):i(e)})});const a=elems("a");a&&a.forEach(function(e){e.href=e.href.replaceAll(encodeURI(s),"").replaceAll(encodeURI(o),"")})}function parseBoolean(e=""){switch(e=e.trim().toLowerCase(),e){case"true":return!0;case"false":return!1;default:return 0[0]}}function loadSvg(e,t){t.innerHTML=`
+  <svg class="icon_${e}">
+    <use xlink:href="#${e}"></use>
+  </svg>`}function copyToClipboard(e){let t,n,s;t=createEl("textarea"),t.value=e,t.setAttribute("readonly",""),t.style.position="absolute",t.style.left="-9999px",n=document.getSelection(),doc.appendChild(t),s=n.rangeCount>0&&n.getRangeAt(0),t.select(),document.execCommand("copy"),doc.removeChild(t),s&&(n.removeAllRanges(),n.addRange(s))}const snippet_actions=[{icon:"copy",id:"copy",title:copy_text,show:!0},{icon:"order",id:"lines",title:toggle_line_numbers_text,show:!0},{icon:"carly",id:"wrap",title:toggle_line_wrap_text,show:!1},{icon:"expand",id:"expand",title:resize_snippet,show:!1}];function addLines(e){let t=e.textContent;const n=[];t.includes(`
+`)&&e.closest("pre")&&!e.children.length&&(t=t.split(`
+`),t.forEach((t,s)=>{if(t.trim().length){const o=`
+        <span class="line line-flex">
+          <span class="ln">${s+1}</span>
+          <span class="cl">${t.trim()}</span>
+        </span>`.trim();n.push(o),e.closest("pre").className="chroma",pushClass(e,"language-unknown"),e.dataset.lang=not_set}}),e.innerHTML=n.join("").trim(" "))}function wrapOrphanedPreElements(){const e=elems("pre");Array.from(e).forEach(function(e){const t=e.parentNode,n=!containsClass(t,highlight);if(n){const t=createEl();t.className=highlight;const n=createEl();n.className=highlight_wrap,wrapEl(e,t),wrapEl(t,n)}})}wrapOrphanedPreElements();function codeBlocks(){const e=elems("code"),t=Array.from(e).filter(function(e){return addLines(e),e.closest("pre")&&!Array.from(e.classList).includes("noClass")}).map(function(e){return e});return t}function codeBlockFits(e){const t=e.offsetWidth,n=e.closest(`.${highlight}`).offsetWidth;return t<=n}function maxHeightIsSet(e){let t=e.style.maxHeight;return t.includes("px")}function restrainCodeBlockHeight(e){const n=e[max_lines-1];let t=full_height;if(n){const s=n.offsetTop;if(s!==0){t=`${s}px`;const n=e[0].parentNode,o=n.closest(`.${highlight}`),i=containsClass(o,panel_expanded);i||(n.dataset.height=t,n.style.maxHeight=t)}}}const blocks=codeBlocks();function collapseCodeBlock(e){const t=elems(line_class,e),n=t.length;if(n>max_lines){const n=createEl();pushClass(n,panel_expand),pushClass(n,panel_from),n.title="Toggle snippet",n.textContent="...";const s=e.closest(".highlight");window.setTimeout(function(){const e=s.nextElementSibling.lastElementChild;deleteClass(e,panel_hide)},150),restrainCodeBlockHeight(t);const o=e.parentNode.parentNode;o.appendChild(n)}}blocks.forEach(function(e){collapseCodeBlock(e)});function actionPanel(){const e=createEl();return e.className=panel_box,snippet_actions.forEach(function(t){const n=createEl("a");n.href="#",n.title=t.title,n.className=`icon panel_icon panel_${t.id}`,!t.show&&pushClass(n,panel_hide),loadSvg(t.icon,n),e.appendChild(n)}),e}function toggleLineNumbers(e){e&&(e.forEach(e=>modifyClass(e,"pre_nolines")),restrainCodeBlockHeight(e))}function toggleLineWrap(e){modifyClass(e,"pre_wrap");const t=elems(".ln",e);restrainCodeBlockHeight(t)}function copyCode(e){const t=e.parentNode.parentNode.querySelector(`.${copy_id}`),s=t.title;loadSvg("check",t),t.title=copied_text,e=e.cloneNode(!0);const n=elems(".ln",e);!!n.length&&n.forEach(e=>e.remove());let o=elems("span",e);o.forEach(e=>{const t=e.textContent.trim(" ");t.indexOf("$")===0&&(e.textContent=e.textContent.replace("$ ",""))});const i=e.textContent.trim(" ");copyToClipboard(i),setTimeout(function(){t.title=s,loadSvg("copy",t)},2250)}(function(){const n=highlight_wrap;blocks.forEach(function(e){show_lines===!1&&toggleLineNumbers(elems(".ln",e));const o=e.parentNode.parentNode,t=createEl();t.className=n,wrapEl(o,t);const s=actionPanel(),i=elem(`.${wrap_id}`,s);!codeBlockFits(e)&&deleteClass(i,panel_hide),t.appendChild(s)});function t(e,t){return e.matches(`.${t}`)||e.closest(`.${t}`)}function s(e,t){const n=e.matches(`.${t}`)?e:e.closest(`.${t}`);deleteClass(n,active),setTimeout(function(){modifyClass(n,active)},50)}doc.addEventListener("click",function(e){const o=e.target,i=t(o,copy_id),a=t(o,wrap_id),r=t(o,lines_id),c=t(o,panel_expand),l=i||a||r||c;if(l){e.preventDefault(),s(o,"icon");const t=o.closest(`.${n}`).firstElementChild.firstElementChild;let l=elems(".ln",t);if(!!a&&toggleLineWrap(t),!!r&&toggleLineNumbers(l),c){let e=t.firstElementChild;const n=e.closest(".highlight");maxHeightIsSet(e)?(e.style.maxHeight=full_height,pushClass(n,panel_expanded)):(e.style.maxHeight=e.dataset.height,deleteClass(n,panel_expanded))}!!i&&copyCode(t)}}),function(){blocks.forEach(e=>{let t=e.dataset.lang;const n=shell_based.includes(t);if(n){const t=elems(line_class,e);Array.from(t).forEach(e=>{e=e.lastElementChild;let t=e.textContent.trim(" ");!!(t.indexOf("$")!==0&&t.trim(" ").length)&&pushClass(e,"shell")})}if(t=t==="sh"?"shell":t,t!=="fallback"){const n=createEl();n.textContent=t,pushClass(n,"lang"),e.closest(`.${highlight_wrap}`).appendChild(n)}})}()})();function prefersColor(e){return`(prefers-color-scheme: ${e})`}function systemMode(){return window.matchMedia&&window.matchMedia(prefersColor(dark)).matches?dark:light}function currentMode(){let e=light+dark;e=[...e];let t=getComputedStyle(doc).getPropertyValue(key).replace(/"/g,"").trim();return[...t].filter(t=>e.includes(t)).join("")}function changeMode(e){e?(bank.setItem(storageKey,light),elemAttribute(doc,mode_data,light)):(bank.setItem(storageKey,dark),elemAttribute(doc,mode_data,dark))}function pickModePicture(e){elems("picture").forEach(function(t){let o=t.firstElementChild;const n=t.dataset,s=[n.lit,n.dark];o.src=e=="dark"?s[1]:s[0]})}function setMermaidTheme(e){bank.setItem(mermaidThemeKey,e);let t=elem(".color_choice");t.value=e}function setUserColorMode(e=!1){const n=currentMode()==dark,s=bank.getItem(storageKey),o=systemMode();s?e?changeMode(n):elemAttribute(doc,mode_data,s):changeMode(e===!0?n:o!==dark);const t=doc.dataset.mode;doc.dataset.systemmode=o,!!t&&pickModePicture(t),setMermaidTheme(t)}setUserColorMode(),function(){return elem(".nav_header").offsetHeight+25}();function toggleMenu(e){const t=e.target,o=t.matches(`.${toggle_id}`),n=t.closest(`.${toggle_id}`),i=elems(`.${show_id}`)?Array.from(elems(`.${show_id}`)):[],a=t.closest(`.${menu}`);function s(e,t=!1){i.forEach(function(n){!t&&deleteClass(n,show_id),n!==e.closest(`.${menu}`)&&deleteClass(n,show_id)})}if(o||n){const s=n?n.parentNode.parentNode:t.parentNode.parentNode;e.preventDefault(),modifyClass(s,show_id)}else a?s(t,!0):s(t)}(function(){const t=elems("code");t&&t.forEach(function(e){hasClasses(e)||!e.children.length&&pushClass(e,"noClass")})})();function featureHeading(){const t="section_link",n="section_title",e=elem(".aside");if(e){let s=elem(`.${t}.${active}`);s=s||elem(`.${n}.${active}`),e.scroll({top:s.offsetTop,left:0})}}function activeHeading(e,t){let n=Object.create(null);n.active=t.filter(function(e){return containsClass(e,active)})[0],n.new=t[e],n.active!=n.new&&(!!n.active&&deleteClass(n.active,active),pushClass(n.new,active))}setTimeout(()=>{featureHeading()},50);function updateDate(){const t=new Date,e=t.getFullYear().toString,n=elem(".year");!!n&&(e.textContent=e)}function customizeSidebar(){const e="toc_active",n=elem("aside"),t=elems("nav",n);if(t){t.forEach(function(t){if(t.id="",pushClass(t,"toc"),t.children.length>=1){const n=Array.from(t.children[0].children),s=t.previousElementSibling;!!s.matches(`.${active}`)&&pushClass(t,e),n.forEach(function(e){pushClass(e,"toc_item"),pushClass(e.firstElementChild,"toc_link")})}});const n=elem(`.${e}`);if(n){const e=Array.from(elems("a",n)),t=e.map(function(e){return document.getElementById(decodeURIComponent(e.hash.replace("#","")))});window.addEventListener("scroll",function(){let o=window.scrollY+window.innerHeight/2,s=0;for(const[n,e]of t.entries())e.offsetTop<o&&e.offsetTop>t[s].offsetTop&&(s=n);activeHeading(s,e)})}}elems("p").forEach(function(e){const t=elems(".button",e);t.length>1&&pushClass(e,"button_grid")})}function markExternalLinks(){let e=elems("a");e&&Array.from(e).forEach(function(e){let n,o,i,s,a,r,t,c;t=new URL(e.href),c=t.host!==location.host||t.protocol!==location.protocol||t.port!==location.port,c&&(n="target",o="rel",i="_blank",s="noopener",a=elemAttribute(e,n),r=elemAttribute(e,s),!a&&elemAttribute(e,n,i),!r&&elemAttribute(e,o,s))})}function sanitizeURL(e){const t=e.indexOf(hash);if(t>-1){const n=e.substr(t,e.length-1);e=e.replace(n,"")}return e}function copyFeedback(e){const t=document.createElement("div"),n="link_yanked";if(t.classList.add(n),t.innerText=copied_text,!elem(`.${n}`,e)){const n=e.getElementsByTagName("svg")[0],s=n.src;n.src="https://info-tech-io.github.io/icons/check.svg",e.appendChild(t),setTimeout(function(){e.removeChild(t),n.src=s},2250)}}function copyHeadingLink(){let t,n,s,o,e;t="link",n=elems(`.${t}`),n&&document.addEventListener("click",function(n){e=n.target,o=e.parentNode,(e&&containsClass(e,t)||containsClass(o,t))&&(n.preventDefault(),s=e.href!=0[0]?e.href:e.parentNode.href,copyToClipboard(s),copyFeedback(e.href!=0[0]?e:e.parentNode))})}function makeTablesResponsive(){const e=elems("table");e&&e.forEach(function(e){const t=createEl();pushClass(t,"scrollable"),wrapEl(e,t)})}function backToTop(){const e=elem("#toTop");window.addEventListener("scroll",()=>{const t=window.scrollY;t>=200?(e.style.display="flex",pushClass(e,active)):deleteClass(e,active)})}function lazyLoadMedia(e=[]){e.forEach(e=>{let t=elems(e);t&&Array.from(t).forEach(function(e){e.loading="lazy"})})}function loadActions(){updateDate(),customizeSidebar(),markExternalLinks(),copyHeadingLink(),makeTablesResponsive(),backToTop(),lazyLoadMedia(["iframe","img"]),doc.addEventListener("click",e=>{let t=e.target,n="color_choice",s=containsClass(t,n);!!s&&setUserColorMode(!0),toggleMenu(e)})}window.addEventListener("load",loadActions())
+</script>
+
+<script src="https://info-tech-io.github.io/js/search.min.ced9096e00d5ed374b805a5ba6ac7c85f5269f7ba65c8b35482af33128ccdb3d890f44edf7ce462465dc94225c182b77086a3fdabb0f211947a23e32fd4bb82d.js" async></script>
+
+
+</body>
+</html>
