@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/tmp/tmp.97TNgKJ96u/output-0-quiz-docs",
+	"sourceRoot": "/tmp/tmp.dpN90JysTL/output-0-quiz-docs",
 	"sources": [
 		"themes/compose/assets/sass/main.sass",
 		"themes/compose/assets/sass/_variables.sass",

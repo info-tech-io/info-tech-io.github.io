@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/tmp/tmp.97TNgKJ96u/output-1-hugo-templates-docs",
+	"sourceRoot": "/tmp/tmp.dpN90JysTL/output-1-hugo-templates-docs",
 	"sources": [
 		"themes/compose/assets/sass/main.sass",
 		"themes/compose/assets/sass/_variables.sass",
