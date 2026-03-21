@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/tmp/tmp.iuQoBez79G/output-3-info-tech-cli-docs",
+	"sourceRoot": "/tmp/tmp.OHYWuyuv9K/output-3-info-tech-cli-docs",
 	"sources": [
 		"themes/compose/assets/sass/main.sass",
 		"themes/compose/assets/sass/_variables.sass",
